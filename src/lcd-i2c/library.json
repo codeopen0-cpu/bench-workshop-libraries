@@ -1,0 +1,43 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "lcd-i2c",
+  "name": "LCD 16x2 (I2C)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "description": "The classic blue 16x2 character LCD (HD44780) with an I2C backpack (PCF8574): text on 2 lines over just 2 wires. Includes LiquidCrystal_I2C.h for sketches; real firmware using LiquidCrystal_I2C works too.",
+  "category": "Displays",
+  "code": "device.js",
+  "sketch": {
+    "LiquidCrystal_I2C.h": { "classes": ["LiquidCrystal_I2C"], "file": "sketch/LiquidCrystal_I2C.js" }
+  },
+  "parts": [
+    {
+      "id": "lcd1602",
+      "name": "LCD 16x2 (I2C)",
+      "description": "16x2 character display on an I2C backpack (address 0x27, or 0x3F on some). VCC to 5 V, GND, SDA, SCL. In a sketch: #include <LiquidCrystal_I2C.h>, LiquidCrystal_I2C lcd(0x27, 16, 2); lcd.init(); lcd.backlight(); lcd.print(\"Hello\");",
+      "swatch": "#3a6fe0",
+      "mass": 35,
+      "params": [
+        { "key": "addr", "label": "I2C address", "kind": "select", "options": [{ "value": "39", "label": "0x27" }, { "value": "63", "label": "0x3F" }] }
+      ],
+      "defaults": { "addr": "39" },
+      "shape": [
+        { "box": [8.0, 0.16, 3.6], "at": [0, 0.08, 0], "color": "#1d6b3a" },
+        { "box": [7.1, 0.7, 2.4], "at": [0, 0.51, 0], "color": "#1a1a1c" },
+        { "screen": { "id": "lcd", "size": [6.4, 1.45], "px": [16, 2], "mode": "text", "on": "#eef4ff", "off": "#13204a", "bg": "#3a6fe0" }, "at": [0, 0.862, 0] },
+        { "box": [1.9, 0.3, 4.1], "at": [-3.5, -0.15, 0], "color": "#202a24", "collide": false }
+      ],
+      "pinRows": [
+        {
+          "ids": ["GND", "VCC", "SDA", "SCL"],
+          "at": [-4.2, 0.0, -0.381],
+          "dir": "z",
+          "kinds": { "GND": "gnd", "VCC": "vin", "SDA": "i2c", "SCL": "i2c" },
+          "extra": { "VCC": { "label": "VCC (5 V)", "vmin": 2.7, "vmax": 5.5 } }
+        }
+      ],
+      "device": "lcd1602"
+    }
+  ]
+}

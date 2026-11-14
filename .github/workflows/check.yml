@@ -1,0 +1,18 @@
+# Every pull request: read and safety-check every library (tools/check.mjs). Read-only: it can't
+# change anything, and it runs the checker, never the libraries' code.
+name: Library safety check
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # the checker from main, not from the pull request (a pull request can't weaken its own check)
+      - run: git fetch origin main --depth 1 && git checkout origin/main -- tools/
+      - run: node tools/check.mjs

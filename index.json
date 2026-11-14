@@ -1,0 +1,31 @@
+{
+ "format": "bench-library-index",
+ "libraries": [
+  {
+   "id": "lcd-i2c",
+   "name": "LCD 16x2 (I2C)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The classic blue 16x2 character LCD (HD44780) with an I2C backpack (PCF8574): text on 2 lines over just 2 wires. Includes LiquidCrystal_I2C.h for sketches; real firmware using LiquidCrystal_I2C works too.",
+   "category": "Displays",
+   "parts": [
+    "LCD 16x2 (I2C)"
+   ],
+   "url": "libraries/lcd-i2c.benchlib",
+   "size": 8517
+  },
+  {
+   "id": "led-matrix-max7219",
+   "name": "LED matrix 8x8 (MAX7219)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The common red 8x8 LED matrix module with a MAX7219 driver: 64 LEDs from 3 pins (DIN, CS, CLK). Includes LedControl.h for sketches.",
+   "category": "Displays",
+   "parts": [
+    "LED matrix 8x8 (MAX7219)"
+   ],
+   "url": "libraries/led-matrix-max7219.benchlib",
+   "size": 7865
+  }
+ ]
+}

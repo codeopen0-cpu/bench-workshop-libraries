@@ -14,6 +14,9 @@ const newer = (a, b) => {
   return false;
 };
 
+// who opened the pull request, and who maintains the list (set by .github/workflows/check.yml)
+const author = process.env.PR_AUTHOR || '';
+const maintainer = process.env.GITHUB_REPOSITORY_OWNER || '';
 const lines = ['## Library safety check', ''];
 let failed = 0;
 for (const dir of libraryFolders()) {
@@ -32,14 +35,25 @@ for (const dir of libraryFolders()) {
   if (lib.id !== name) problems.push(`BLOCKED: folder: the folder must be named after the library's id (${lib.id})`);
   // a changed library needs a new version, or nobody gets the update
   const listed = join(root, 'libraries', `${lib.id}.benchlib`);
-  if (existsSync(listed)) {
-    const old = JSON.parse(readFileSync(listed, 'utf8'));
-    if (JSON.stringify({ ...old, version: '' }) !== JSON.stringify({ ...lib, version: '' }) && !newer(lib.version, old.version))
-      problems.push(`BLOCKED: version: it changed, so its version must go up from ${old.version}`);
+  const old = existsSync(listed) ? JSON.parse(readFileSync(listed, 'utf8')) : null;
+  const changed = !old || JSON.stringify(old) !== JSON.stringify(lib);
+  if (old && changed && JSON.stringify({ ...old, version: '' }) !== JSON.stringify({ ...lib, version: '' }) && !newer(lib.version, old.version))
+    problems.push(`BLOCKED: version: it changed, so its version must go up from ${old.version}`);
+  // whose it is: a library's "owner" (a GitHub account) is the only one who may change it; the list's
+  // maintainer (the repo's owner) may too. Libraries without an owner are the maintainer's.
+  if (author && changed) {
+    const isMaintainer = maintainer && author.toLowerCase() === maintainer.toLowerCase();
+    const owner = old ? old.owner ?? maintainer : null;
+    if (old && !isMaintainer && owner && owner.toLowerCase() !== author.toLowerCase())
+      problems.push(`BLOCKED: owner: this library belongs to ${owner}; only they (or the list's maintainer) can change it. To build on it, publish your own copy under a new id.`);
+    if (old && (lib.owner ?? null) !== (old.owner ?? null) && !isMaintainer)
+      problems.push(`BLOCKED: owner: a library's owner can't be changed in a pull request (ask the list's maintainer)`);
+    if (!old && !isMaintainer && (lib.owner ?? '').toLowerCase() !== author.toLowerCase())
+      problems.push(`BLOCKED: owner: a new library's "owner" must be your GitHub name (${author}); the app's Publish fills it in`);
   }
   const bad = problems.some((p) => p.startsWith('BLOCKED'));
   if (bad) failed++;
-  lines.push(`- **${lib.name}** (${lib.id} ${lib.version}, by ${lib.author}): ${bad ? 'BLOCKED' : 'passed'}`);
+  lines.push(`- **${lib.name}** (${lib.id} ${lib.version}, by ${lib.author}${lib.owner ? `, owner ${lib.owner}` : ''})${changed ? '' : ' (unchanged)'}: ${bad ? 'BLOCKED' : 'passed'}`);
   for (const p of problems) lines.push(`  - ${p}`);
   if (lib.code) lines.push(`  - has device code (${(lib.code.length / 1024).toFixed(1)} KB): read it before merging`);
   for (const s of Object.keys(lib.sketch ?? {})) lines.push(`  - has sketch library ${s}: read it before merging`);

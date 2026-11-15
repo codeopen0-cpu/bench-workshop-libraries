@@ -16,3 +16,5 @@ jobs:
       # the checker from main, not from the pull request (a pull request can't weaken its own check)
       - run: git fetch origin main --depth 1 && git checkout origin/main -- tools/
       - run: node tools/check.mjs
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}

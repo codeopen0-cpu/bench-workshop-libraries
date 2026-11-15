@@ -226,6 +226,32 @@ will by accident:
 - **Publish...** sends it to this list as a pull request: the app signs you in to GitHub and does
   the rest. Bump `version` for every change (`1.0.0` > `1.0.1`), or people won't get the update.
 
+## 7. Update it
+
+Found a bug, or want to add a function? Updating is the same loop, plus a version number:
+
+1. **Get your working folder.** If you made it, you have it. If you only have the installed
+   library: Libraries > Installed > **Save as file**, then `node tools/unpack.mjs mylib.benchlib`
+   turns the `.benchlib` back into its folder (or download `src/<your-id>/` from this repo).
+2. **Change it and test it:** Install from folder (once), then after each change **Reload**,
+   **Open example**, **Run**.
+3. **Raise the version** in `library.json`. Use the last number for fixes (1.0.0 > 1.0.1), the middle
+   one for new things (1.0.1 > 1.1.0), the first for changes that break benches people already
+   built (1.1.0 > 2.0.0). **Publish...** suggests the next number for you.
+4. **Publish...** again. It opens a new pull request with just your changes; the check runs, and once
+   it's merged everyone sees **Update to 1.0.1** in Libraries > Browse, and the app tells them at
+   start-up that an update is there.
+
+Things that keep other people's benches working:
+
+- **Don't rename part ids or pin names.** A bench stores which part and which pin each wire goes
+  to; renamed, those wires disappear. Need a different part? Add it next to the old one.
+- **Keep the Arduino library's functions** (add new ones freely), so sketches still compile.
+- A library belongs to whoever first published it: its `owner` (the app fills it in from your
+  GitHub sign-in). Only the owner, or the maintainer of this list, can change it: anyone else's pull
+  request is stopped by the check. Want to build on someone else's library? Publish your copy under a
+  new `id`, and say where it came from in the description.
+
 ## Safety
 
 Every library is checked before it's installed, when it's published, on every pull request here,

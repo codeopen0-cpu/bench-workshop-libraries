@@ -81,6 +81,10 @@ Open a pull request adding your folder under `src/` (or use Publish in the app).
 unique and bump `version` for every change: the app offers updates when the version here is newer
 than the installed one.
 
+Each library has an `owner` (a GitHub account, filled in by Publish). The check on pull requests
+stops changes to a library from anyone but its owner or the maintainer of this list. Updating your
+own: see [GUIDE.md](GUIDE.md#7-update-it).
+
 ## Safety
 
 Every library is checked three times: by the app before it installs anything, by

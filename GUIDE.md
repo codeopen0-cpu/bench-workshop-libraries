@@ -282,6 +282,49 @@ a power meter on its supply shows it.
 **Pull-ups:** a pin marked `"pulled": "up"` (or `"down"`) gets that resistor from the very first
 step, to the part's own supply: an encoder's or a DHT's line reads high even before its code runs.
 
+### Sensing the world (app 0.4.0 and newer)
+
+These need `"needsApp": "0.4.0"`. Each reads the real physics of the run, so people can test a part
+by picking things up and moving them (drag a part to carry it; Shift pushes with a small ball).
+
+**How it moves** (`src/motion-sensors`, `src/gps-neo6m`): `part.motion()` gives `accel` [x, y, z] in
+g (a still part feels 1 g up), `gyro` [x, y, z] in deg/s, `up` (which way is up, in its own frame),
+`heading` (0 north, 90 east: the way its +x side faces; north is -z on the bench), `pos` [x, y, z]
+cm, `vel`, `speed` and `quat` (its orientation). Glue the part onto something and it feels that.
+
+**What touches it** (`src/touch-and-force`): mark a solid piece of its shape `"touch": "pad"`, and
+`part.touch('pad')` gives `force` (newtons pressing on it: a 100 g weight is about 1 N), `touching`
+and `hand` (the pushing ball touches it: a finger). A scale, a bumper, a touch button, a limit switch.
+
+**Light** (`src/light-sensors`): `{ "light": { "id": "eye", "look": [0, 1, 0], "fov": 120 } }` in
+its shape, and `part.light('eye').lux`: the room's light (the toolbar's Room button), shaded by
+whatever is over it, plus lit LEDs and screens it can see. A colour sensor uses a small camera
+instead (`src/light-sensors`, the TCS34725); a camera with a range of 20 cm or less lights what it
+looks at, like the LED on a line or colour sensor.
+
+**Sound** (`src/buzzers`, the sound sensor): `"hear": true` on the part, and `part.hear()` gives
+`level` (0..1; closer is louder) and `hz` (the loudest tone) of what parts on the bench play.
+
+**SPI** (`src/rfid-rc522`, `src/nrf24-radio`, `src/tft-displays`, `src/sd-card`): name its SPI pins
+in `library.json`, `"spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "CS" }`, and give
+the device an `spi` handler:
+
+```js
+spi: {
+  // the bytes a board clocked out while this part's CS was LOW; return what it answers on MISO
+  // (one byte for each). pins: the levels of its pins at that moment ({ DC: 1, ... }: a screen's
+  // command / data pin)
+  transfer(bytes, pins) { return bytes.map(() => 0); },
+},
+```
+
+A board's `SPI.transfer(...)` waits for that answer; `SPI.writeBytes(...)` doesn't (fast: a screen's
+pixels). Only the part whose CS is LOW gets the bytes; two at once is reported as a clash.
+
+**Big colour screens** (`src/tft-displays`): a screen with `"mode": "rgb"` (up to 320 x 320) takes
+a colour number per pixel (`s.set(x, y, 0xff8800)`), and `s.pixels(x, y, w, h, colours)` sets a block
+at once. It shows 30 pictures a second at most.
+
 ## 4. The Arduino library: sketch/*.js
 
 People will program your part with the library they'd use on real hardware, so give them the same
@@ -315,6 +358,12 @@ bits(value, n) {
 
 Because it talks to your part only through its pins (or Wire for I2C), the same `device.js` also works
 with real firmware on the RP2040 board, and with any other library someone writes for it.
+
+Out-parameters: when a sketch hands over a variable, `radio.read(&value, sizeof(value))` or
+`sensor.getRawData(&r, &g, &b, &c)`, your function gets that variable itself: `setRef(r, 120)` sets
+it (`isRef(x)` says whether it's one; `x.type` is `'f'` float, `'i'` int, `'u'` unsigned, `'s'` a
+char array, and `x.size` its bytes). Objects and arrays arrive as themselves. `sizeof(x)` of a
+variable the sketch declared is its real size (int 2, long and float 4, as on an UNO).
 
 Tips: C++ `int x = a / b` drops the fraction; in JS write `Math.trunc(a / b)`. Leave out
 microsecond waits that only exist for real silicon (the sim doesn't need them), but keep the ones
@@ -390,7 +439,8 @@ Parts that move, sound or have controls stay within limits the app enforces whil
 checker checks before installing: at most 8 moving pieces a part, 300 kg*cm, 2000 N, 30000 rpm
 (500 cm/s sliding, 100 cm of travel); tones only, volume-capped, muted by the Sound button and
 silent while paused; 32 controls with plain-text labels; 4 distance beams of up to 10 m; messages
-of up to 4096 bytes, 64 a step. Whoever installs a library is told which of its parts move and
-which make sounds.
+of up to 4096 bytes, 64 a step; 8 touch surfaces and 4 light sensors a part; colour screens of up to
+320 x 320. Whoever installs a library is told which of its parts move, make sounds, or hear the
+bench (no part hears a real microphone: only the sounds parts on the bench play).
 
 The full reference for every field is in [README.md](README.md).

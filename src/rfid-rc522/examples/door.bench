@@ -1,0 +1,263 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Door lock",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "reader",
+   "type": "rfid-rc522/rc522",
+   "name": "Reader",
+   "params": {},
+   "parent": null,
+   "pos": [
+    5,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "card",
+   "type": "rfid-rc522/card",
+   "name": "White card",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    14
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "fob",
+   "type": "rfid-rc522/fob",
+   "name": "Key fob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    12,
+    0,
+    12
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "green",
+   "type": "led",
+   "name": "Open",
+   "params": {
+    "color": "green"
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "red",
+   "type": "led",
+   "name": "Locked",
+   "params": {
+    "color": "red"
+   },
+   "parent": null,
+   "pos": [
+    -9,
+    0,
+    8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "3.3V"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "SDA"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "reader",
+    "pin": "RST"
+   },
+   "color": "#f2f2f2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "GP13"
+   },
+   "b": {
+    "uid": "green",
+    "pin": "A"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GP14"
+   },
+   "b": {
+    "uid": "red",
+    "pin": "A"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "green",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "red",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "green",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Door lock: hold a tag to the reader (drag it onto the coil). The key fob is on the list: green.\n// Anything else: red. Each tag also counts its visits in its own memory (block 4).\n#include <SPI.h>\n#include <MFRC522.h>\n\n#define SS_PIN 17    // the reader's SDA\n#define RST_PIN 15\n#define GREEN 13\n#define RED 14\n\nMFRC522 rfid(SS_PIN, RST_PIN);\nMFRC522::MIFARE_Key key;\nbyte allowed[4] = {0xAA, 0xBB, 0xCC, 0xDD};\n\nvoid setup() {\n  Serial.begin(115200);\n  SPI.begin();\n  rfid.PCD_Init();\n  rfid.PCD_DumpVersionToSerial();\n  for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;   // a new tag's key\n  pinMode(GREEN, OUTPUT);\n  pinMode(RED, OUTPUT);\n  Serial.println(\"Hold a tag to the reader\");\n}\n\nvoid loop() {\n  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {\n    delay(50);\n    return;\n  }\n  Serial.print(\"Tag:\");\n  for (byte i = 0; i < rfid.uid.size; i++) {\n    Serial.print(rfid.uid.uidByte[i] < 0x10 ? \" 0\" : \" \");\n    Serial.print(rfid.uid.uidByte[i], HEX);\n  }\n  Serial.println();\n\n  bool ok = true;\n  for (byte i = 0; i < 4; i++) if (rfid.uid.uidByte[i] != allowed[i]) ok = false;\n\n  // its visits, kept in the tag itself\n  byte block = 4;\n  byte buffer[18];\n  byte size = sizeof(buffer);\n  MFRC522::StatusCode status = (MFRC522::StatusCode) rfid.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(rfid.uid));\n  if (status == MFRC522::STATUS_OK) {\n    status = rfid.MIFARE_Read(block, buffer, &size);\n    if (status == MFRC522::STATUS_OK) {\n      buffer[0] = buffer[0] + 1;\n      rfid.MIFARE_Write(block, buffer, 16);\n      Serial.print(\"visits: \");\n      Serial.println(buffer[0]);\n    }\n  } else {\n    Serial.print(\"couldn't open its memory: \");\n    Serial.println(rfid.GetStatusCodeName(status));\n  }\n\n  Serial.println(ok ? \"Welcome in\" : \"Not on the list\");\n  digitalWrite(ok ? GREEN : RED, HIGH);\n  rfid.PICC_HaltA();\n  rfid.PCD_StopCrypto1();\n  delay(1500);\n  digitalWrite(GREEN, LOW);\n  digitalWrite(RED, LOW);\n}\n"
+  }
+ },
+ "boards": []
+}

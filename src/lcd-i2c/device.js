@@ -1,4 +1,4 @@
-// HD44780 16x2 character LCD behind a PCF8574 I2C backpack. Every byte written to the PCF8574 sets
+// HD44780 character LCD (16x2 or 20x4) behind a PCF8574 I2C backpack. Every byte written to the PCF8574 sets
 // its 8 outputs: P0 = RS, P1 = RW, P2 = E, P3 = backlight, P4-P7 = the LCD's D4-D7. The LCD takes
 // D4-D7 when E falls. It starts in 8-bit mode (each E pulse = one whole command, only the top four
 // bits seen) until a "function set" switches it to 4-bit mode (two E pulses per byte, high half first).
@@ -40,7 +40,7 @@ bench.device('lcd1602', (part) => {
   };
   const line = (start) => {
     let s = '';
-    for (let c = 0; c < 16; c++) {
+    for (let c = 0; c < screen.cols; c++) {
       const code = ddram[(start + ((c + shift) % 40 + 40) % 40) & 0x7f];
       s += code >= 0x20 && code < 0x7f ? String.fromCharCode(code) : code < 8 ? '█' : '?';
     }
@@ -64,8 +64,8 @@ bench.device('lcd1602', (part) => {
       const now = io.supply('VCC', 'GND') >= 2.7;
       if (now !== powered) { powered = now; if (!now) reset(); }
       screen.light(powered && !!(port & 0x08));
-      screen.print(0, 0, powered && displayOn ? line(0x00) : ' '.repeat(16));
-      screen.print(0, 1, powered && displayOn ? line(0x40) : ' '.repeat(16));
+      // (lines start at these addresses: 16x2 uses the first two, 20x4 all four)
+      [0x00, 0x40, 0x14, 0x54].slice(0, screen.rows).forEach((start, r) => screen.print(0, r, powered && displayOn ? line(start) : ' '.repeat(screen.cols)));
     },
     status() {
       if (!powered) return ['no power'];

@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "ir-sensors",
   "name": "Line, obstacle, laser and motion sensors",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
   "description": "Sensors robots use: the TCRT5000 line sensor (sees dark lines on a light floor), the FC-51 obstacle sensor (IR, a few cm), the VL53L0X laser distance sensor (I2C, up to 2 m) and the HC-SR501 PIR motion sensor. They really look at the bench. Includes VL53L0X.h and Adafruit_VL53L0X.h.",
@@ -11,8 +11,19 @@
   "needsApp": "0.3.0",
   "code": "device.js",
   "sketch": {
-    "VL53L0X.h": { "classes": ["VL53L0X"], "file": "sketch/VL53L0X.js" },
-    "Adafruit_VL53L0X.h": { "classes": ["Adafruit_VL53L0X", "VL53L0X_RangingMeasurementData_t"], "file": "sketch/Adafruit_VL53L0X.js" }
+    "VL53L0X.h": {
+      "classes": [
+        "VL53L0X"
+      ],
+      "file": "sketch/VL53L0X.js"
+    },
+    "Adafruit_VL53L0X.h": {
+      "classes": [
+        "Adafruit_VL53L0X",
+        "VL53L0X_RangingMeasurementData_t"
+      ],
+      "file": "sketch/Adafruit_VL53L0X.js"
+    }
   },
   "parts": [
     {
@@ -21,19 +32,124 @@
       "description": "Looks straight down (put it 0.5-2 cm above the floor, under a robot): DO is LOW over a light surface and HIGH over a dark line; AO gives more volts the darker it is. VCC (3.3-5 V), GND. Lines: dark plates or blocks on a light one.",
       "swatch": "#1d4fb8",
       "mass": 3,
-      "params": [{ "key": "threshold", "label": "Dark above (%) (its knob)", "kind": "number", "min": 5, "max": 95, "step": 1 }],
-      "defaults": { "threshold": 70 },
+      "params": [
+        {
+          "key": "threshold",
+          "label": "Dark above (%) (its knob)",
+          "kind": "number",
+          "min": 5,
+          "max": 95,
+          "step": 1
+        }
+      ],
+      "defaults": {
+        "threshold": 70
+      },
       "shape": [
-        { "box": [3.0, 0.16, 1.4], "at": [0, 0.5, 0], "color": "#1d4fb8" },
-        { "box": [0.6, 0.5, 1.0], "at": [1.1, 0.17, 0], "color": "#141416" },
-        { "box": [0.5, 0.5, 0.5], "at": [-0.3, 0.83, 0.3], "color": "#2f7fd8", "collide": false },
-        { "camera": { "id": "eye", "px": [4, 4], "fov": 40, "look": [0, -1, 0], "range": 8 }, "at": [1.1, 0.4, 0] }
+        {
+          "box": [
+            3.0,
+            0.16,
+            1.4
+          ],
+          "at": [
+            0,
+            0.5,
+            0
+          ],
+          "color": "#1d4fb8"
+        },
+        {
+          "box": [
+            0.6,
+            0.5,
+            1.0
+          ],
+          "at": [
+            1.1,
+            0.17,
+            0
+          ],
+          "color": "#141416"
+        },
+        {
+          "box": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "at": [
+            -0.3,
+            0.83,
+            0.3
+          ],
+          "color": "#2f7fd8",
+          "collide": false
+        },
+        {
+          "camera": {
+            "id": "eye",
+            "px": [
+              4,
+              4
+            ],
+            "fov": 40,
+            "look": [
+              0,
+              -1,
+              0
+            ],
+            "range": 8
+          },
+          "at": [
+            1.1,
+            0.4,
+            0
+          ]
+        }
       ],
       "pins": [
-        { "id": "VCC", "label": "VCC (3.3-5 V)", "at": [-1.4, 0.66, 0.381], "kind": "vin", "vmin": 3, "vmax": 5.5 },
-        { "id": "GND", "at": [-1.4, 0.66, 0.127], "kind": "gnd" },
-        { "id": "DO", "label": "DO (high = dark)", "at": [-1.4, 0.66, -0.127], "kind": "out" },
-        { "id": "AO", "label": "AO (analog)", "at": [-1.4, 0.66, -0.381], "kind": "out" }
+        {
+          "id": "VCC",
+          "label": "VCC (3.3-5 V)",
+          "at": [
+            -1.4,
+            0.66,
+            0.381
+          ],
+          "kind": "vin",
+          "vmin": 3,
+          "vmax": 5.5
+        },
+        {
+          "id": "GND",
+          "at": [
+            -1.4,
+            0.66,
+            0.127
+          ],
+          "kind": "gnd"
+        },
+        {
+          "id": "DO",
+          "label": "DO (high = dark)",
+          "at": [
+            -1.4,
+            0.66,
+            -0.127
+          ],
+          "kind": "out"
+        },
+        {
+          "id": "AO",
+          "label": "AO (analog)",
+          "at": [
+            -1.4,
+            0.66,
+            -0.381
+          ],
+          "kind": "out"
+        }
       ],
       "device": "tcrt5000"
     },
@@ -43,15 +159,114 @@
       "description": "An IR LED and a receiver looking forward (along +x, the way its LEDs point): OUT goes LOW when something is closer than its range (2-30 cm, its knob), HIGH otherwise. VCC (3.3-5 V), GND.",
       "swatch": "#1d4fb8",
       "mass": 3,
-      "params": [{ "key": "range", "label": "Range (cm) (its knob)", "kind": "number", "min": 2, "max": 30, "step": 1 }],
-      "defaults": { "range": 10 },
-      "shape": [
-        { "box": [3.1, 0.16, 1.4], "at": [0, 0.08, 0], "color": "#1d4fb8" },
-        { "cyl": [0.25, 0.6], "at": [1.6, 0.4, 0.3], "rot": [0, 0, 90], "color": "#d6d6d6" },
-        { "cyl": [0.25, 0.6], "at": [1.6, 0.4, -0.3], "rot": [0, 0, 90], "color": "#141416" },
-        { "ranger": { "id": "beam", "look": [1, 0, 0], "max": 40 }, "at": [1.95, 0.4, 0] }
+      "params": [
+        {
+          "key": "range",
+          "label": "Range (cm) (its knob)",
+          "kind": "number",
+          "min": 2,
+          "max": 30,
+          "step": 1
+        }
       ],
-      "pinRows": [{ "ids": ["OUT", "GND", "VCC"], "at": [-1.5, 0.0, -0.254], "dir": "z", "kinds": { "OUT": "out", "GND": "gnd", "VCC": "vin" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "OUT": { "label": "OUT (low = something there)" } } }],
+      "defaults": {
+        "range": 10
+      },
+      "shape": [
+        {
+          "box": [
+            3.1,
+            0.16,
+            1.4
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1d4fb8"
+        },
+        {
+          "cyl": [
+            0.25,
+            0.6
+          ],
+          "at": [
+            1.6,
+            0.4,
+            0.3
+          ],
+          "rot": [
+            0,
+            0,
+            90
+          ],
+          "color": "#d6d6d6"
+        },
+        {
+          "cyl": [
+            0.25,
+            0.6
+          ],
+          "at": [
+            1.6,
+            0.4,
+            -0.3
+          ],
+          "rot": [
+            0,
+            0,
+            90
+          ],
+          "color": "#141416"
+        },
+        {
+          "ranger": {
+            "id": "beam",
+            "look": [
+              1,
+              0,
+              0
+            ],
+            "max": 40
+          },
+          "at": [
+            1.95,
+            0.4,
+            0
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "OUT",
+            "GND",
+            "VCC"
+          ],
+          "at": [
+            -1.5,
+            0.0,
+            -0.254
+          ],
+          "dir": "z",
+          "kinds": {
+            "OUT": "out",
+            "GND": "gnd",
+            "VCC": "vin"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 3,
+              "vmax": 5.5
+            },
+            "OUT": {
+              "label": "OUT (low = something there)"
+            }
+          }
+        }
+      ],
       "device": "fc51"
     },
     {
@@ -61,11 +276,78 @@
       "swatch": "#7a3ec8",
       "mass": 2,
       "shape": [
-        { "box": [1.3, 0.16, 1.8], "at": [0, 0.08, 0], "color": "#7a3ec8" },
-        { "box": [0.45, 0.2, 0.25], "at": [0.4, 0.26, 0], "color": "#141416" },
-        { "ranger": { "id": "beam", "look": [1, 0, 0], "max": 200 }, "at": [0.7, 0.26, 0] }
+        {
+          "box": [
+            1.3,
+            0.16,
+            1.8
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#7a3ec8"
+        },
+        {
+          "box": [
+            0.45,
+            0.2,
+            0.25
+          ],
+          "at": [
+            0.4,
+            0.26,
+            0
+          ],
+          "color": "#141416"
+        },
+        {
+          "ranger": {
+            "id": "beam",
+            "look": [
+              1,
+              0,
+              0
+            ],
+            "max": 200
+          },
+          "at": [
+            0.7,
+            0.26,
+            0
+          ]
+        }
       ],
-      "pinRows": [{ "ids": ["VIN", "GND", "SCL", "SDA"], "at": [-0.5, 0.0, -0.381], "dir": "z", "kinds": { "VIN": "vin", "GND": "gnd", "SCL": "i2c", "SDA": "i2c" }, "extra": { "VIN": { "label": "VIN (3.3-5 V)", "vmin": 2.6, "vmax": 5.5 } } }],
+      "pinRows": [
+        {
+          "ids": [
+            "VIN",
+            "GND",
+            "SCL",
+            "SDA"
+          ],
+          "at": [
+            -0.5,
+            0.0,
+            -0.381
+          ],
+          "dir": "z",
+          "kinds": {
+            "VIN": "vin",
+            "GND": "gnd",
+            "SCL": "i2c",
+            "SDA": "i2c"
+          },
+          "extra": {
+            "VIN": {
+              "label": "VIN (3.3-5 V)",
+              "vmin": 2.6,
+              "vmax": 5.5
+            }
+          }
+        }
+      ],
       "device": "vl53l0x"
     },
     {
@@ -74,24 +356,127 @@
       "description": "Sees things move in front of it (along +x, a wide cone, a few metres): OUT goes high (3.3 V) for its hold time after it sees movement. VCC (5-12 V), GND. It needs a couple of seconds to settle when it gets power.",
       "swatch": "#f2f2f2",
       "mass": 8,
-      "params": [{ "key": "hold", "label": "Hold time (s)", "kind": "number", "min": 1, "max": 30, "step": 0.5 }],
-      "defaults": { "hold": 3 },
+      "params": [
+        {
+          "key": "hold",
+          "label": "Hold time (s)",
+          "kind": "number",
+          "min": 1,
+          "max": 30,
+          "step": 0.5
+        }
+      ],
+      "defaults": {
+        "hold": 3
+      },
       "shape": [
-        { "box": [0.16, 2.4, 3.2], "at": [0, 1.2, 0], "color": "#1d6b3a" },
-        { "sphere": 1.15, "at": [0.1, 1.2, 0], "color": "#f2f2f2" },
-        { "box": [0.6, 0.4, 3.2], "at": [-0.3, 0.2, 0], "color": "#1d6b3a" },
-        { "camera": { "id": "eye", "px": [16, 12], "fov": 100, "look": [1, 0, 0], "range": 500 }, "at": [1.3, 1.2, 0] }
+        {
+          "box": [
+            0.16,
+            2.4,
+            3.2
+          ],
+          "at": [
+            0,
+            1.2,
+            0
+          ],
+          "color": "#1d6b3a"
+        },
+        {
+          "sphere": 1.15,
+          "at": [
+            0.1,
+            1.2,
+            0
+          ],
+          "color": "#f2f2f2"
+        },
+        {
+          "box": [
+            0.6,
+            0.4,
+            3.2
+          ],
+          "at": [
+            -0.3,
+            0.2,
+            0
+          ],
+          "color": "#1d6b3a"
+        },
+        {
+          "camera": {
+            "id": "eye",
+            "px": [
+              16,
+              12
+            ],
+            "fov": 100,
+            "look": [
+              1,
+              0,
+              0
+            ],
+            "range": 500
+          },
+          "at": [
+            1.3,
+            1.2,
+            0
+          ]
+        }
       ],
       "pins": [
-        { "id": "VCC", "label": "VCC (5-12 V)", "at": [-0.5, 0.4, 0.254], "kind": "vin", "vmin": 4.5, "vmax": 20 },
-        { "id": "OUT", "at": [-0.5, 0.4, 0], "kind": "out" },
-        { "id": "GND", "at": [-0.5, 0.4, -0.254], "kind": "gnd" }
+        {
+          "id": "VCC",
+          "label": "VCC (5-12 V)",
+          "at": [
+            -0.5,
+            0.4,
+            0.254
+          ],
+          "kind": "vin",
+          "vmin": 4.5,
+          "vmax": 20
+        },
+        {
+          "id": "OUT",
+          "at": [
+            -0.5,
+            0.4,
+            0
+          ],
+          "kind": "out"
+        },
+        {
+          "id": "GND",
+          "at": [
+            -0.5,
+            0.4,
+            -0.254
+          ],
+          "kind": "gnd"
+        }
       ],
       "device": "pir"
     }
   ],
   "examples": [
-    { "name": "How far? (VL53L0X)", "description": "A laser distance sensor looking at a block: the distance in the serial monitor. Drag the block while it runs.", "file": "examples/laser.bench" },
-    { "name": "Obstacle and line", "description": "An obstacle sensor and a line sensor lighting LEDs: the line sensor sits over a black strip on white, the obstacle sensor looks at a block. Drag things while it runs.", "file": "examples/obstacle-line.bench" }
+    {
+      "name": "How far? (VL53L0X)",
+      "description": "A laser distance sensor looking at a block: the distance in the serial monitor. Drag the block while it runs.",
+      "file": "examples/laser.bench"
+    },
+    {
+      "name": "Obstacle and line",
+      "description": "An obstacle sensor and a line sensor lighting LEDs: the line sensor sits over a black strip on white, the obstacle sensor looks at a block. Drag things while it runs.",
+      "file": "examples/obstacle-line.bench"
+    },
+    {
+      "name": "Line-following robot",
+      "description": "A two-wheel robot with two line sensors under its nose follows an oval of black tape on paper. Press Run; drag the robot off the line and put it back on.",
+      "file": "examples/line-follower.bench"
+    }
   ]
 }

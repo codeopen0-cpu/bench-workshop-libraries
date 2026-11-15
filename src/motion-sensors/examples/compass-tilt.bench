@@ -1,0 +1,235 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Compass and tilt alarm",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "base",
+   "type": "plate",
+   "name": "Sensor board",
+   "params": {
+    "w": 8,
+    "h": 0.3,
+    "d": 6,
+    "material": "plastic",
+    "color": "#f2c230"
+   },
+   "parent": null,
+   "pos": [
+    6,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "compass",
+   "type": "motion-sensors/compass",
+   "name": "Compass",
+   "params": {},
+   "parent": {
+    "uid": "base",
+    "body": "body"
+   },
+   "pos": [
+    -2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "tilt",
+   "type": "motion-sensors/tilt-switch",
+   "name": "Tilt switch",
+   "params": {},
+   "parent": {
+    "uid": "base",
+    "body": "body"
+   },
+   "pos": [
+    2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led",
+   "type": "led",
+   "name": "Alarm LED",
+   "params": {
+    "color": "red"
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    7
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "compass",
+    "pin": "VCC"
+   },
+   "color": "#e04848",
+   "length": 40
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "compass",
+    "pin": "GND"
+   },
+   "color": "#2b2d33",
+   "length": 40
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "compass",
+    "pin": "SDA"
+   },
+   "color": "#3cb371",
+   "length": 40
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "compass",
+    "pin": "SCL"
+   },
+   "color": "#f2f2f2",
+   "length": 40
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "compass",
+    "pin": "VCC"
+   },
+   "b": {
+    "uid": "tilt",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "compass",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "tilt",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "tilt",
+    "pin": "DO"
+   },
+   "color": "#e8c547",
+   "length": 40
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Compass and tilt alarm. Pick the yellow sensor board up (drag it), turn it with Q / E: the heading\n// changes. Tip it over (or drop it on its side) and the alarm LED lights.\n#include <Wire.h>\n#include <QMC5883LCompass.h>\n\n#define TILT 2\n#define ALARM 15\n\nQMC5883LCompass compass;\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  compass.init();\n  pinMode(TILT, INPUT);\n  pinMode(ALARM, OUTPUT);\n}\n\nvoid loop() {\n  compass.read();\n  int heading = compass.getAzimuth();\n  if (heading < 0) heading += 360;\n  char dir[3];\n  compass.getDirection(dir, heading);\n\n  bool tipped = digitalRead(TILT) == HIGH;\n  digitalWrite(ALARM, tipped ? HIGH : LOW);\n\n  Serial.print(\"heading \");\n  Serial.print(heading);\n  Serial.print(\" deg (\");\n  Serial.print(dir[0]);\n  Serial.print(dir[1]);\n  Serial.print(dir[2]);\n  Serial.print(\")\");\n  if (tipped) Serial.print(\"  TIPPED OVER!\");\n  Serial.println();\n  delay(300);\n}\n"
+  }
+ },
+ "boards": []
+}

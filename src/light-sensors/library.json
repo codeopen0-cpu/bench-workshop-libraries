@@ -1,0 +1,69 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "light-sensors",
+  "name": "Light and colour sensors",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A light-dependent resistor module (LDR), a BH1750 light meter (lux, I2C) and a TCS34725 colour sensor (I2C). They see the bench: the room light (the toolbar's Room button), anything held over them, and lit LEDs and screens. Includes BH1750.h and Adafruit_TCS34725.h.",
+  "category": "Sensors",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "BH1750.h": { "classes": ["BH1750"], "file": "sketch/BH1750.js" },
+    "Adafruit_TCS34725.h": { "classes": ["Adafruit_TCS34725"], "exports": ["TCS34725_INTEGRATIONTIME_2_4MS", "TCS34725_INTEGRATIONTIME_24MS", "TCS34725_INTEGRATIONTIME_50MS", "TCS34725_INTEGRATIONTIME_101MS", "TCS34725_INTEGRATIONTIME_154MS", "TCS34725_INTEGRATIONTIME_614MS", "TCS34725_GAIN_1X", "TCS34725_GAIN_4X", "TCS34725_GAIN_16X", "TCS34725_GAIN_60X"], "file": "sketch/Adafruit_TCS34725.js" }
+  },
+  "parts": [
+    {
+      "id": "ldr",
+      "name": "Light sensor module (LDR)",
+      "description": "A photoresistor with a comparator: AO rises as it gets darker (about 0.2 V in a lit room, near VCC in the dark), DO goes HIGH when it's darker than the blue pot's setting. VCC (3.3-5 V), GND, DO, AO. Switch the room dark (toolbar), or hold something over it.",
+      "swatch": "#1f5fbf",
+      "mass": 2,
+      "params": [{ "key": "threshold", "label": "Pot: dark below (lux)", "kind": "number", "min": 1, "max": 1000, "step": 1 }],
+      "defaults": { "threshold": 60 },
+      "shape": [
+        { "box": [1.5, 0.16, 3.2], "at": [0, 0.08, 0], "color": "#1f5fbf" },
+        { "cyl": [0.25, 0.3], "at": [0, 0.31, 1.2], "color": "#c8a050" },
+        { "box": [0.6, 0.4, 0.6], "at": [0.3, 0.36, -0.2], "color": "#3a70e0" },
+        { "light": { "id": "eye", "look": [0, 1, 0], "fov": 120 }, "at": [0, 0.5, 1.2] }
+      ],
+      "pinRows": [{ "ids": ["VCC", "GND", "DO", "AO"], "at": [-0.381, 0.0, -1.45], "kinds": { "VCC": "vin", "GND": "gnd", "DO": "out", "AO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.5, "vmax": 5.5 }, "DO": { "label": "DO (HIGH = dark)" }, "AO": { "label": "AO (higher = darker)", "analog": true } } }],
+      "device": "ldr"
+    },
+    {
+      "id": "bh1750",
+      "name": "Light meter (BH1750)",
+      "description": "Measures light in lux (I2C at 0x23, or 0x5C with ADDR high). VCC (3.3-5 V), GND, SCL, SDA. #include <BH1750.h>; BH1750 lightMeter; lightMeter.begin(); lightMeter.readLightLevel().",
+      "swatch": "#1f5fbf",
+      "mass": 2,
+      "shape": [
+        { "box": [1.4, 0.16, 1.9], "at": [0, 0.08, 0], "color": "#1f5fbf" },
+        { "box": [0.35, 0.12, 0.25], "at": [0, 0.22, 0.4], "color": "#141416" },
+        { "light": { "id": "eye", "look": [0, 1, 0], "fov": 120 }, "at": [0, 0.35, 0.4] }
+      ],
+      "pinRows": [{ "ids": ["VCC", "GND", "SCL", "SDA", "ADDR"], "at": [-0.508, 0.0, -0.8], "kinds": { "VCC": "vin", "GND": "gnd", "SCL": "i2c", "SDA": "i2c", "ADDR": "in" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.4, "vmax": 5.5 }, "ADDR": { "pulled": "down" } } }],
+      "device": "bh1750"
+    },
+    {
+      "id": "tcs34725",
+      "name": "Colour sensor (TCS34725)",
+      "description": "Sees the colour of what's in front of its face (a few cm), lit by its white LED (LED pin: HIGH or unwired = on). I2C at 0x29. VIN (3.3-5 V), GND, SCL, SDA, LED. #include <Adafruit_TCS34725.h>; tcs.begin(); tcs.getRawData(&r, &g, &b, &c); or tcs.getRGB(&r, &g, &b). Glue it face down over where things pass.",
+      "swatch": "#2a2d8f",
+      "mass": 2,
+      "shape": [
+        { "box": [2.0, 0.16, 2.0], "at": [0, 0.08, 0], "color": "#2a2d8f" },
+        { "box": [0.3, 0.1, 0.3], "at": [0, 0.21, 0.2], "color": "#e8e8e8" },
+        { "box": [0.3, 0.12, 0.3], "at": [0.55, 0.22, 0.2], "color": "#ffffff", "collide": false },
+        { "camera": { "id": "eye", "px": [8, 8], "fov": 50, "look": [0, 1, 0], "range": 12 }, "at": [0, 0.3, 0.2] }
+      ],
+      "pinRows": [{ "ids": ["LED", "INT", "SDA", "SCL", "GND", "VIN"], "at": [-0.635, 0.0, -0.8], "kinds": { "LED": "in", "INT": "out", "SDA": "i2c", "SCL": "i2c", "GND": "gnd", "VIN": "vin" }, "extra": { "VIN": { "label": "VIN (3.3-5 V)", "vmin": 2.7, "vmax": 5.5 }, "LED": { "pulled": "up" } } }],
+      "device": "tcs34725"
+    }
+  ],
+  "examples": [
+    { "name": "Night light", "description": "An LED that comes on when it gets dark, and a light meter printing lux. Press Run, then press the toolbar's Room button to dim the room (or hold something over the sensors: drag a block over them).", "file": "examples/night-light.bench" },
+    { "name": "Colour names", "description": "A colour sensor on an arm looks down at what's under it and prints the colour's name. Drag the coloured blocks under it one by one.", "file": "examples/colours.bench" }
+  ]
+}

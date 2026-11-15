@@ -1,0 +1,41 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "clock-ds3231",
+  "name": "Real-time clock (DS3231)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The DS3231 clock module: it keeps the date and time (starting from this PC's clock when the run starts, and running with the simulation: pausing pauses it) and has a thermometer. I2C at 0x68 (the same as an MPU-6050: they can't share a bus). Includes RTClib.h.",
+  "category": "Sensors",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "RTClib.h": { "classes": ["RTC_DS3231", "RTC_DS1307", "DateTime", "TimeSpan"], "exports": ["__DATE__", "__TIME__", "F", "DS3231_SquareWave1Hz", "DS3231_OFF"], "file": "sketch/RTClib.js" }
+  },
+  "parts": [
+    {
+      "id": "ds3231",
+      "name": "Clock (DS3231 module)",
+      "description": "Keeps the time with its coin cell, even with the board off. VCC (3.3-5 V), GND, SDA, SCL (SQW: a 1 Hz square wave if asked). #include <RTClib.h>; RTC_DS3231 rtc; rtc.begin(); DateTime now = rtc.now(); now.hour()... Set it once with rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));",
+      "swatch": "#1d4fb8",
+      "mass": 8,
+      "params": [
+        { "key": "cell", "label": "Coin cell fitted", "kind": "bool" },
+        { "key": "offset", "label": "Its time is off by (minutes)", "kind": "number", "min": -100000, "max": 100000, "step": 1 }
+      ],
+      "defaults": { "cell": true, "offset": 0 },
+      "shape": [
+        { "box": [3.8, 0.16, 2.2], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [0.8, 0.2, 0.8], "at": [-0.6, 0.26, 0.2], "color": "#141416" },
+        { "cyl": [0.85, 0.35], "at": [0.9, 0.34, 0.15], "color": "#c9cdd4" }
+      ],
+      "pinRows": [{ "ids": ["32K", "SQW", "SCL", "SDA", "VCC", "GND"], "at": [-1.85, 0.0, -0.635], "dir": "z", "kinds": { "32K": "out", "SQW": "out", "SCL": "i2c", "SDA": "i2c", "VCC": "vin", "GND": "gnd" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.3, "vmax": 5.5 } } }],
+      "controls": [{ "id": "temp", "kind": "slider", "label": "Room temperature (C)", "min": -20, "max": 60, "step": 0.25, "value": 22 }],
+      "device": "ds3231"
+    }
+  ],
+  "examples": [
+    { "name": "Clock and thermometer", "description": "A board reads the clock every second and prints the date, the time and the temperature. Press Run and open the board's serial monitor.", "file": "examples/clock.bench" }
+  ]
+}

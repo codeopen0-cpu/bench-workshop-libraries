@@ -1,0 +1,1787 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Line-following robot",
+ "parts": [
+  {
+   "uid": "chassis",
+   "type": "plate",
+   "name": "Chassis",
+   "params": {
+    "w": 12,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    4.550000000000001,
+    35
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "motorR",
+   "type": "motor-tt",
+   "name": "Right motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    -0.15,
+    3.55
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "motorL",
+   "type": "motor-tt",
+   "name": "Left motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    3.2,
+    -0.15,
+    -3.55
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelR",
+   "type": "wheel",
+   "name": "Right wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorR",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelL",
+   "type": "wheel",
+   "name": "Left wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorL",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "battery",
+   "type": "battery-18650",
+   "name": "Batteries",
+   "params": {
+    "count": "2",
+    "charge": 100
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -2.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "brain",
+   "type": "maker-board",
+   "name": "Brain",
+   "params": {
+    "usb": false
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ]
+  },
+  {
+   "uid": "driver",
+   "type": "drv8833",
+   "name": "Motor driver",
+   "params": {},
+   "parent": {
+    "uid": "battery",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "caster",
+   "type": "caster",
+   "name": "Caster",
+   "params": {
+    "r": 1.57
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -4.6,
+    -0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "bracket",
+   "type": "block",
+   "name": "Sensor bracket",
+   "params": {
+    "w": 1.4,
+    "h": 3.1,
+    "d": 5,
+    "material": "plastic",
+    "color": "#d8dce4"
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    5.0,
+    -3.25,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "lineL",
+   "type": "ir-sensors/tcrt5000",
+   "name": "Left line sensor",
+   "params": {
+    "threshold": 35
+   },
+   "parent": {
+    "uid": "bracket",
+    "body": "body"
+   },
+   "pos": [
+    0.2,
+    -2.15,
+    -0.75
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "lineR",
+   "type": "ir-sensors/tcrt5000",
+   "name": "Right line sensor",
+   "params": {
+    "threshold": 35
+   },
+   "parent": {
+    "uid": "bracket",
+    "body": "body"
+   },
+   "pos": [
+    0.2,
+    -2.15,
+    0.75
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "paper",
+   "type": "plate",
+   "name": "Paper",
+   "params": {
+    "w": 150,
+    "h": 0.3,
+    "d": 100,
+    "material": "cardboard",
+    "color": "#f4f4f2"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "t1",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 51,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0.3,
+    35
+   ],
+   "rot": [
+    0,
+    0.0,
+    0,
+    1.0
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "t2",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 51,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0.3,
+    -35
+   ],
+   "rot": [
+    0,
+    0.0,
+    0,
+    1.0
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e0",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    27.289109523055007,
+    0.3,
+    34.92506231335112
+   ],
+   "rot": [
+    0,
+    0.03271908282177614,
+    0,
+    0.9994645874763657
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e1",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    31.82816127056449,
+    0.3,
+    34.32748481411306
+   ],
+   "rot": [
+    0,
+    0.0980171403295606,
+    0,
+    0.9951847266721969
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e2",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    36.25038128561066,
+    0.3,
+    33.1425545323287
+   ],
+   "rot": [
+    0,
+    0.16289547339458874,
+    0,
+    0.986643332084879
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e3",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    40.480104157665046,
+    0.3,
+    31.39054595364409
+   ],
+   "rot": [
+    0,
+    0.22707626303437323,
+    0,
+    0.9738769792773336
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e4",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    44.44495815568608,
+    0.3,
+    29.101436430589082
+   ],
+   "rot": [
+    0,
+    0.29028467725446233,
+    0,
+    0.9569403357322088
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e5",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    48.077103528502406,
+    0.3,
+    26.31439326176421
+   ],
+   "rot": [
+    0,
+    0.3522500479212335,
+    0,
+    0.9359059267573258
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e6",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    51.31439326176421,
+    0.3,
+    23.077103528502413
+   ],
+   "rot": [
+    0,
+    0.41270702980439467,
+    0,
+    0.9108638249211758
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e7",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    54.10143643058908,
+    0.3,
+    19.44495815568608
+   ],
+   "rot": [
+    0,
+    0.47139673682599764,
+    0,
+    0.881921264348355
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e8",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    56.39054595364409,
+    0.3,
+    15.480104157665044
+   ],
+   "rot": [
+    0,
+    0.528067850650368,
+    0,
+    0.8492021815265789
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e9",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    58.142554532328695,
+    0.3,
+    11.25038128561066
+   ],
+   "rot": [
+    0,
+    0.5824776968678022,
+    0,
+    0.8128466845916152
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e10",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    59.32748481411306,
+    0.3,
+    6.828161270564491
+   ],
+   "rot": [
+    0,
+    0.6343932841636455,
+    0,
+    0.773010453362737
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e11",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    59.92506231335112,
+    0.3,
+    2.2891095230550067
+   ],
+   "rot": [
+    0,
+    0.6835923020228712,
+    0,
+    0.7298640726978356
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e12",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    59.92506231335112,
+    0.3,
+    -2.2891095230550103
+   ],
+   "rot": [
+    0,
+    0.7298640726978357,
+    0,
+    0.6835923020228712
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e13",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    59.32748481411306,
+    0.3,
+    -6.828161270564487
+   ],
+   "rot": [
+    0,
+    0.7730104533627369,
+    0,
+    0.6343932841636455
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e14",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    58.1425545323287,
+    0.3,
+    -11.250381285610647
+   ],
+   "rot": [
+    0,
+    0.8128466845916151,
+    0,
+    0.5824776968678023
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e15",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    56.39054595364409,
+    0.3,
+    -15.480104157665039
+   ],
+   "rot": [
+    0,
+    0.8492021815265789,
+    0,
+    0.5280678506503681
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e16",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    54.10143643058909,
+    0.3,
+    -19.44495815568607
+   ],
+   "rot": [
+    0,
+    0.8819212643483549,
+    0,
+    0.4713967368259978
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e17",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    51.31439326176421,
+    0.3,
+    -23.07710352850241
+   ],
+   "rot": [
+    0,
+    0.9108638249211758,
+    0,
+    0.4127070298043947
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e18",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    48.07710352850241,
+    0.3,
+    -26.314393261764206
+   ],
+   "rot": [
+    0,
+    0.9359059267573256,
+    0,
+    0.3522500479212336
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e19",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    44.44495815568608,
+    0.3,
+    -29.101436430589086
+   ],
+   "rot": [
+    0,
+    0.9569403357322089,
+    0,
+    0.29028467725446233
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e20",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    40.480104157665046,
+    0.3,
+    -31.39054595364409
+   ],
+   "rot": [
+    0,
+    0.9738769792773336,
+    0,
+    0.22707626303437323
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e21",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    36.25038128561066,
+    0.3,
+    -33.142554532328695
+   ],
+   "rot": [
+    0,
+    0.986643332084879,
+    0,
+    0.16289547339458882
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e22",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    31.8281612705645,
+    0.3,
+    -34.32748481411306
+   ],
+   "rot": [
+    0,
+    0.9951847266721968,
+    0,
+    0.09801714032956077
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "e23",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    27.28910952305501,
+    0.3,
+    -34.92506231335112
+   ],
+   "rot": [
+    0,
+    0.9994645874763657,
+    0,
+    0.032719082821776165
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w0",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -27.289109523055007,
+    0.3,
+    -34.92506231335112
+   ],
+   "rot": [
+    0,
+    0.03271908282177614,
+    0,
+    0.9994645874763657
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w1",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -31.82816127056449,
+    0.3,
+    -34.32748481411306
+   ],
+   "rot": [
+    0,
+    0.0980171403295606,
+    0,
+    0.9951847266721969
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w2",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -36.25038128561066,
+    0.3,
+    -33.1425545323287
+   ],
+   "rot": [
+    0,
+    0.16289547339458874,
+    0,
+    0.986643332084879
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w3",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -40.480104157665046,
+    0.3,
+    -31.39054595364409
+   ],
+   "rot": [
+    0,
+    0.22707626303437323,
+    0,
+    0.9738769792773336
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w4",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -44.44495815568608,
+    0.3,
+    -29.101436430589082
+   ],
+   "rot": [
+    0,
+    0.29028467725446233,
+    0,
+    0.9569403357322088
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w5",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -48.077103528502406,
+    0.3,
+    -26.31439326176421
+   ],
+   "rot": [
+    0,
+    0.3522500479212335,
+    0,
+    0.9359059267573258
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w6",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -51.31439326176421,
+    0.3,
+    -23.077103528502413
+   ],
+   "rot": [
+    0,
+    0.41270702980439467,
+    0,
+    0.9108638249211758
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w7",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -54.10143643058908,
+    0.3,
+    -19.44495815568608
+   ],
+   "rot": [
+    0,
+    0.47139673682599764,
+    0,
+    0.881921264348355
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w8",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -56.39054595364409,
+    0.3,
+    -15.480104157665044
+   ],
+   "rot": [
+    0,
+    0.528067850650368,
+    0,
+    0.8492021815265789
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w9",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -58.142554532328695,
+    0.3,
+    -11.25038128561066
+   ],
+   "rot": [
+    0,
+    0.5824776968678022,
+    0,
+    0.8128466845916152
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w10",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -59.32748481411306,
+    0.3,
+    -6.828161270564491
+   ],
+   "rot": [
+    0,
+    0.6343932841636455,
+    0,
+    0.773010453362737
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w11",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -59.92506231335112,
+    0.3,
+    -2.2891095230550067
+   ],
+   "rot": [
+    0,
+    0.6835923020228712,
+    0,
+    0.7298640726978356
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w12",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -59.92506231335112,
+    0.3,
+    2.2891095230550103
+   ],
+   "rot": [
+    0,
+    0.7298640726978357,
+    0,
+    0.6835923020228712
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w13",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -59.32748481411306,
+    0.3,
+    6.828161270564487
+   ],
+   "rot": [
+    0,
+    0.7730104533627369,
+    0,
+    0.6343932841636455
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w14",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -58.1425545323287,
+    0.3,
+    11.250381285610647
+   ],
+   "rot": [
+    0,
+    0.8128466845916151,
+    0,
+    0.5824776968678023
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w15",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -56.39054595364409,
+    0.3,
+    15.480104157665039
+   ],
+   "rot": [
+    0,
+    0.8492021815265789,
+    0,
+    0.5280678506503681
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w16",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -54.10143643058909,
+    0.3,
+    19.44495815568607
+   ],
+   "rot": [
+    0,
+    0.8819212643483549,
+    0,
+    0.4713967368259978
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w17",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -51.31439326176421,
+    0.3,
+    23.07710352850241
+   ],
+   "rot": [
+    0,
+    0.9108638249211758,
+    0,
+    0.4127070298043947
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w18",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -48.07710352850241,
+    0.3,
+    26.314393261764206
+   ],
+   "rot": [
+    0,
+    0.9359059267573256,
+    0,
+    0.3522500479212336
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w19",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -44.44495815568608,
+    0.3,
+    29.101436430589086
+   ],
+   "rot": [
+    0,
+    0.9569403357322089,
+    0,
+    0.29028467725446233
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w20",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -40.480104157665046,
+    0.3,
+    31.39054595364409
+   ],
+   "rot": [
+    0,
+    0.9738769792773336,
+    0,
+    0.22707626303437323
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w21",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -36.25038128561066,
+    0.3,
+    33.142554532328695
+   ],
+   "rot": [
+    0,
+    0.986643332084879,
+    0,
+    0.16289547339458882
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w22",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -31.8281612705645,
+    0.3,
+    34.32748481411306
+   ],
+   "rot": [
+    0,
+    0.9951847266721968,
+    0,
+    0.09801714032956077
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "w23",
+   "type": "plate",
+   "name": "Tape",
+   "params": {
+    "w": 4.831489286485115,
+    "h": 0.06,
+    "d": 2.5,
+    "material": "plastic",
+    "color": "#151515"
+   },
+   "parent": null,
+   "pos": [
+    -27.28910952305501,
+    0.3,
+    34.92506231335112
+   ],
+   "rot": [
+    0,
+    0.9994645874763657,
+    0,
+    0.032719082821776165
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "VM"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "VIN"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "brain",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN1"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "brain",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN2"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "brain",
+    "pin": "GP5"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN1"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "brain",
+    "pin": "GP6"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN2"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT1"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT2"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT1"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT2"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "brain",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "lineL",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "lineL",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w15",
+   "a": {
+    "uid": "brain",
+    "pin": "GP10"
+   },
+   "b": {
+    "uid": "lineL",
+    "pin": "DO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w16",
+   "a": {
+    "uid": "brain",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "lineR",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w17",
+   "a": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "lineR",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w18",
+   "a": {
+    "uid": "brain",
+    "pin": "GP11"
+   },
+   "b": {
+    "uid": "lineR",
+    "pin": "DO"
+   },
+   "color": "#4a90e2"
+  }
+ ],
+ "programs": {
+  "brain": {
+   "lang": "arduino",
+   "source": "#define AIN1 2    // right motor (through the DRV8833)\n#define AIN2 3\n#define BIN1 5    // left motor\n#define BIN2 6\n\nvoid motor(int in1, int in2, int speed) {\n  if (speed >= 0) { analogWrite(in1, speed); analogWrite(in2, 0); }\n  else            { analogWrite(in1, 0);     analogWrite(in2, -speed); }\n}\n\nvoid drive(int left, int right) {   // -255 .. 255\n  motor(BIN1, BIN2, left);\n  motor(AIN2, AIN1, right);         // the right motor faces the other way\n}\n\n// Line-following robot: two line sensors under its nose, close together, look at the paper. Over\n// the line both see black: straight on. When one slides off the edge, it steers back; if it loses\n// the line altogether it turns back the way it last saw it.\n#define LEFT 10    // left sensor's DO: HIGH over the black line\n#define RIGHT 11   // right sensor's DO\n\nint lastSide = 0;  // where the line was last: -1 left, 1 right\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(LEFT, INPUT);\n  pinMode(RIGHT, INPUT);\n  Serial.println(\"following the line\");\n}\n\nvoid loop() {\n  bool left = digitalRead(LEFT) == HIGH;\n  bool right = digitalRead(RIGHT) == HIGH;\n  if (left && right) drive(90, 90);                         // on the line\n  else if (left) { drive(50, 120); lastSide = -1; }         // the line is going left\n  else if (right) { drive(120, 50); lastSide = 1; }         // going right\n  else if (lastSide < 0) drive(-30, 90);                    // lost it: turn back to it\n  else if (lastSide > 0) drive(90, -30);\n  else drive(100, 100);\n  delay(5);\n}\n"
+  }
+ },
+ "boards": []
+}

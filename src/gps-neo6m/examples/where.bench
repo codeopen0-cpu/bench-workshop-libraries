@@ -1,0 +1,106 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Where am I",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "gps",
+   "type": "gps-neo6m/neo6m",
+   "name": "GPS",
+   "params": {},
+   "parent": null,
+   "pos": [
+    5,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "gps",
+    "pin": "VCC"
+   },
+   "color": "#e04848",
+   "length": 80
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "gps",
+    "pin": "GND"
+   },
+   "color": "#2b2d33",
+   "length": 80
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "gps",
+    "pin": "TX"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GP1"
+   },
+   "color": "#e8c547",
+   "length": 80
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP0"
+   },
+   "b": {
+    "uid": "gps",
+    "pin": "RX"
+   },
+   "color": "#4a90e2",
+   "length": 80
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Where am I: reads the GPS on Serial1 and prints where it is. Wait for the fix, then pick the GPS\n// up (drag it) and carry it about: 1 m on the bench is 1 m on Earth.\n#include <TinyGPSPlus.h>\n\nTinyGPSPlus gps;\ndouble startLat = 0, startLng = 0;\nbool haveStart = false;\nunsigned long lastPrint = 0;\n\nvoid setup() {\n  Serial.begin(115200);\n  Serial1.begin(9600);   // the GPS's TX goes to RX1 (GP1)\n  Serial.println(\"waiting for a fix...\");\n}\n\nvoid loop() {\n  while (Serial1.available()) gps.encode(Serial1.read());\n  if (millis() - lastPrint < 1000) return;\n  lastPrint = millis();\n  if (!gps.location.isValid()) {\n    Serial.print(\"no fix yet, satellites: \");\n    Serial.println(gps.satellites.value());\n    return;\n  }\n  double lat = gps.location.lat(), lng = gps.location.lng();\n  if (!haveStart) { startLat = lat; startLng = lng; haveStart = true; }\n  double moved = TinyGPSPlus::distanceBetween(startLat, startLng, lat, lng);\n  Serial.print(lat, 6);\n  Serial.print(\", \");\n  Serial.print(lng, 6);\n  Serial.print(\"  \");\n  Serial.print(gps.speed.kmph(), 1);\n  Serial.print(\" km/h  moved \");\n  Serial.print(moved * 100, 0);\n  Serial.println(\" cm\");\n}\n"
+  }
+ },
+ "boards": []
+}

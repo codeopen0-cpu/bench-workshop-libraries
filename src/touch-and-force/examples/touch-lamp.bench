@@ -1,0 +1,245 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Touch lamp and dimmer",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "pad",
+   "type": "touch-and-force/ttp223",
+   "name": "Touch pad",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    -6
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "pot",
+   "type": "touch-and-force/slide-pot",
+   "name": "Dimmer",
+   "params": {},
+   "parent": null,
+   "pos": [
+    6,
+    0,
+    2
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "fsr",
+   "type": "touch-and-force/fsr",
+   "name": "Force pad",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "led",
+   "type": "led",
+   "name": "Lamp",
+   "params": {
+    "color": "yellow"
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "pad",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "pad",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "pad",
+    "pin": "SIG"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "pot",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "pot",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "pot",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "fsr",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "fsr",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "A1"
+   },
+   "b": {
+    "uid": "fsr",
+    "pin": "AO"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "board",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Touch lamp: touch the pad (hold Shift and touch it with the ball, or press Touch in the run panel)\n// to switch the lamp; drag the slide pot's knob to dim it; press the force pad and see how hard.\n#define PAD 2\n#define LAMP 15\n#define DIMMER A0\n#define FORCE A1\n\nbool on = false;\nbool wasTouched = false;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(PAD, INPUT);\n  pinMode(LAMP, OUTPUT);\n}\n\nvoid loop() {\n  bool touched = digitalRead(PAD) == HIGH;\n  if (touched && !wasTouched) {\n    on = !on;\n    Serial.println(on ? \"lamp on\" : \"lamp off\");\n  }\n  wasTouched = touched;\n\n  int level = analogRead(DIMMER);          // 0 .. 4095\n  int brightness = map(level, 0, 4095, 0, 255);\n  analogWrite(LAMP, on ? brightness : 0);\n\n  int force = analogRead(FORCE);\n  if (force > 100) {\n    Serial.print(\"squeeze:\");\n    Serial.println(force);\n  }\n  delay(50);\n}\n"
+  }
+ },
+ "boards": []
+}

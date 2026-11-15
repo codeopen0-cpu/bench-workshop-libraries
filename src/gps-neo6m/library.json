@@ -1,0 +1,187 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "gps-neo6m",
+  "name": "GPS module (NEO-6M)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A GPS receiver: after a few seconds it gets a fix and sends its position as NMEA sentences on its TX pin (9600 baud), once a second. Its position is where it is on the bench (the bench sits at a latitude and longitude you choose; north is -z): carry it about and the position follows. Includes TinyGPSPlus.h (and TinyGPS++.h).",
+  "category": "Sensors",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "TinyGPSPlus.h": {
+      "classes": [
+        "TinyGPSPlus"
+      ],
+      "file": "sketch/TinyGPSPlus.js"
+    },
+    "TinyGPS++.h": {
+      "classes": [
+        "TinyGPSPlus"
+      ],
+      "file": "sketch/TinyGPSPlus.js"
+    }
+  },
+  "parts": [
+    {
+      "id": "neo6m",
+      "name": "GPS (NEO-6M module)",
+      "description": "VCC (3.3-5 V), GND, TX to the board's RX (Serial1, or SoftwareSerial), RX from its TX (not needed to read it). 9600 baud. Its LED blinks once a second when it has a fix.",
+      "swatch": "#2a6b3a",
+      "mass": 12,
+      "params": [
+        {
+          "key": "lat",
+          "label": "Bench latitude",
+          "kind": "number",
+          "min": -89.9,
+          "max": 89.9,
+          "step": 0.0001
+        },
+        {
+          "key": "lon",
+          "label": "Bench longitude",
+          "kind": "number",
+          "min": -180,
+          "max": 180,
+          "step": 0.0001
+        },
+        {
+          "key": "alt",
+          "label": "Bench altitude (m)",
+          "kind": "number",
+          "min": -400,
+          "max": 9000,
+          "step": 1
+        },
+        {
+          "key": "fix",
+          "label": "Seconds to a fix",
+          "kind": "number",
+          "min": 0,
+          "max": 60,
+          "step": 1
+        }
+      ],
+      "defaults": {
+        "lat": 51.5007,
+        "lon": -0.1246,
+        "alt": 12,
+        "fix": 4
+      },
+      "shape": [
+        {
+          "box": [
+            3.6,
+            0.16,
+            2.6
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#2a6b3a"
+        },
+        {
+          "box": [
+            1.6,
+            0.25,
+            1.2
+          ],
+          "at": [
+            -0.6,
+            0.285,
+            0
+          ],
+          "color": "#c9cdd4"
+        },
+        {
+          "box": [
+            2.5,
+            0.4,
+            2.5
+          ],
+          "at": [
+            0,
+            0.75,
+            4.0
+          ],
+          "color": "#c8a050"
+        },
+        {
+          "box": [
+            1.8,
+            0.05,
+            1.8
+          ],
+          "at": [
+            0,
+            0.975,
+            4.0
+          ],
+          "color": "#d8d0c0",
+          "collide": false
+        },
+        {
+          "box": [
+            0.25,
+            0.1,
+            0.25
+          ],
+          "at": [
+            1.3,
+            0.21,
+            -0.8
+          ],
+          "color": "#30e030",
+          "collide": false
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "RX",
+            "TX",
+            "GND"
+          ],
+          "at": [
+            -0.381,
+            0.0,
+            -1.1
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "RX": "in",
+            "TX": "out",
+            "GND": "gnd"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.7,
+              "vmax": 5.5
+            },
+            "TX": {
+              "label": "TX (to the board's RX)"
+            },
+            "RX": {
+              "label": "RX (from the board's TX)"
+            }
+          }
+        }
+      ],
+      "device": "neo6m"
+    }
+  ],
+  "examples": [
+    {
+      "name": "Where am I",
+      "description": "A board reads the GPS (Serial1) and prints its position, speed and how far it has moved. Press Run, wait for the fix, then pick the GPS up and carry it: the position changes (1 m on the bench = 1 m on Earth).",
+      "file": "examples/where.bench"
+    }
+  ]
+}

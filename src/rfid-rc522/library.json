@@ -1,0 +1,66 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "rfid-rc522",
+  "name": "RFID reader (RC522) and tags",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The RC522 RFID reader (SPI) with MIFARE Classic tags: a white card and a blue key fob. Hold a tag up to the reader (drag it within a few cm of the coil) and the program reads its ID, and can read and write its 1 KB memory. Includes MFRC522.h.",
+  "category": "Sensors",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "MFRC522.h": { "classes": ["MFRC522"], "file": "sketch/MFRC522.js" }
+  },
+  "parts": [
+    {
+      "id": "rc522",
+      "name": "RFID reader (RC522)",
+      "description": "SPI: SDA is its chip select (to any pin), SCK, MOSI, MISO to the board's SPI pins, RST to a pin, 3.3V (not 5 V!), GND. It reads a tag held within about 4 cm of its coil. #include <SPI.h> and <MFRC522.h>; MFRC522 rfid(SS_PIN, RST_PIN); SPI.begin(); rfid.PCD_Init(); then rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial(): rfid.uid.uidByte[0..3]. The run panel can hold up a tag too.",
+      "swatch": "#1d4fb8",
+      "mass": 6,
+      "shape": [
+        { "box": [4.0, 0.16, 6.0], "at": [0, 0.08, 0.3], "color": "#1d4fb8" },
+        { "box": [3.0, 0.02, 3.6], "at": [0, 0.17, 0.9], "color": "#c9a050", "collide": false },
+        { "box": [2.6, 0.03, 3.2], "at": [0, 0.175, 0.9], "color": "#1d4fb8", "collide": false },
+        { "box": [0.5, 0.12, 0.5], "at": [0, 0.22, -1.6], "color": "#141416" }
+      ],
+      "pinRows": [{ "ids": ["SDA", "SCK", "MOSI", "MISO", "IRQ", "GND", "RST", "3.3V"], "at": [-0.889, 0.0, -2.5], "kinds": { "SDA": "in", "SCK": "in", "MOSI": "in", "MISO": "out", "IRQ": "out", "GND": "gnd", "RST": "in", "3.3V": "vin" }, "extra": { "SDA": { "label": "SDA (chip select)" }, "3.3V": { "label": "3.3V (not 5 V)", "vmin": 2.5, "vmax": 3.6 }, "RST": { "label": "RST (LOW = off)", "pulled": "up" } } }],
+      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "SDA" },
+      "controls": [{ "id": "hold", "kind": "keys", "label": "Hold up a tag", "keys": ["Card 1", "Card 2", "Take away"], "cols": 3 }],
+      "device": "rc522"
+    },
+    {
+      "id": "card",
+      "name": "RFID card (MIFARE 1K)",
+      "description": "A white card with a chip and a coil. Drag it onto the reader's coil to read it. Each card has its own 4-byte ID (set it below, as hex).",
+      "swatch": "#f4f4f2",
+      "mass": 5,
+      "params": [{ "key": "uid", "label": "ID (8 hex digits)", "kind": "number", "min": 0, "max": 4294967295, "step": 1 }],
+      "defaults": { "uid": 3735928559 },
+      "shape": [
+        { "box": [5.4, 0.08, 8.6], "at": [0, 0.04, 0], "color": "#f4f4f2" },
+        { "box": [1.0, 0.01, 1.0], "at": [1.5, 0.085, -2.8], "color": "#c9a050", "collide": false }
+      ],
+      "device": "tag"
+    },
+    {
+      "id": "fob",
+      "name": "RFID key fob (MIFARE 1K)",
+      "description": "A blue key fob: the same chip as the card, in a little case. Drag it onto the reader's coil.",
+      "swatch": "#2a5fd0",
+      "mass": 4,
+      "params": [{ "key": "uid", "label": "ID (as a number)", "kind": "number", "min": 0, "max": 4294967295, "step": 1 }],
+      "defaults": { "uid": 2864434397 },
+      "shape": [
+        { "box": [3.0, 0.5, 3.6], "at": [0, 0.25, 0], "color": "#2a5fd0" },
+        { "cyl": [0.35, 0.52], "at": [0, 0.26, -1.4], "color": "#1d3f90" }
+      ],
+      "device": "tag"
+    }
+  ],
+  "examples": [
+    { "name": "Door lock", "description": "Drag the key fob onto the reader: the green LED says it's let in. The white card isn't on the list: red. Its serial monitor shows each tag's ID and counts its visits in the tag's own memory (block 4).", "file": "examples/door.bench" }
+  ]
+}

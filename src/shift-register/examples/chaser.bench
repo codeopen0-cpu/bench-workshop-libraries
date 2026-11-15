@@ -1,0 +1,466 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Light chaser",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    -2
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "sr",
+   "type": "shift-register/hc595",
+   "name": "74HC595",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    -4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led0",
+   "type": "led",
+   "name": "LED 0",
+   "params": {
+    "color": "red"
+   },
+   "parent": null,
+   "pos": [
+    -2.6,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led1",
+   "type": "led",
+   "name": "LED 1",
+   "params": {
+    "color": "red"
+   },
+   "parent": null,
+   "pos": [
+    -1.3,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led2",
+   "type": "led",
+   "name": "LED 2",
+   "params": {
+    "color": "yellow"
+   },
+   "parent": null,
+   "pos": [
+    0.0,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led3",
+   "type": "led",
+   "name": "LED 3",
+   "params": {
+    "color": "yellow"
+   },
+   "parent": null,
+   "pos": [
+    1.3000000000000003,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led4",
+   "type": "led",
+   "name": "LED 4",
+   "params": {
+    "color": "green"
+   },
+   "parent": null,
+   "pos": [
+    2.6,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led5",
+   "type": "led",
+   "name": "LED 5",
+   "params": {
+    "color": "green"
+   },
+   "parent": null,
+   "pos": [
+    3.9,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led6",
+   "type": "led",
+   "name": "LED 6",
+   "params": {
+    "color": "blue"
+   },
+   "parent": null,
+   "pos": [
+    5.200000000000001,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led7",
+   "type": "led",
+   "name": "LED 7",
+   "params": {
+    "color": "blue"
+   },
+   "parent": null,
+   "pos": [
+    6.5,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "sr",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "sr",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "sr",
+    "pin": "DS"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "sr",
+    "pin": "SHCP"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "GP4"
+   },
+   "b": {
+    "uid": "sr",
+    "pin": "STCP"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "sr",
+    "pin": "Q0"
+   },
+   "b": {
+    "uid": "led0",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "led0",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "sr",
+    "pin": "Q1"
+   },
+   "b": {
+    "uid": "led1",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "led1",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led0",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "sr",
+    "pin": "Q2"
+   },
+   "b": {
+    "uid": "led2",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "led2",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led1",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "sr",
+    "pin": "Q3"
+   },
+   "b": {
+    "uid": "led3",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "led3",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led2",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "sr",
+    "pin": "Q4"
+   },
+   "b": {
+    "uid": "led4",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w15",
+   "a": {
+    "uid": "led4",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led3",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w16",
+   "a": {
+    "uid": "sr",
+    "pin": "Q5"
+   },
+   "b": {
+    "uid": "led5",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w17",
+   "a": {
+    "uid": "led5",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led4",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w18",
+   "a": {
+    "uid": "sr",
+    "pin": "Q6"
+   },
+   "b": {
+    "uid": "led6",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w19",
+   "a": {
+    "uid": "led6",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led5",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w20",
+   "a": {
+    "uid": "sr",
+    "pin": "Q7"
+   },
+   "b": {
+    "uid": "led7",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w21",
+   "a": {
+    "uid": "led7",
+    "pin": "K"
+   },
+   "b": {
+    "uid": "led6",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Light chaser: eight LEDs on a 74HC595, from three pins. One light runs back and forth.\n#define DATA 2    // DS\n#define CLOCK 3   // SHCP\n#define LATCH 4   // STCP\n\nvoid show(byte pattern) {\n  digitalWrite(LATCH, LOW);\n  shiftOut(DATA, CLOCK, MSBFIRST, pattern);\n  digitalWrite(LATCH, HIGH);   // the outputs change now, all at once\n}\n\nvoid setup() {\n  pinMode(DATA, OUTPUT);\n  pinMode(CLOCK, OUTPUT);\n  pinMode(LATCH, OUTPUT);\n  Serial.begin(115200);\n}\n\nvoid loop() {\n  for (int i = 0; i < 8; i++) { show(1 << i); delay(80); }\n  for (int i = 6; i > 0; i--) { show(1 << i); delay(80); }\n}\n"
+  }
+ },
+ "boards": []
+}

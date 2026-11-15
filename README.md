@@ -51,6 +51,11 @@ is towards you.
   `speed` rpm or cm/s, `volts`, `min`/`max`). Pins can sit on one: `"on": "shaft"`.
 - `controls`: run-panel controls: `slider`, `button`, `switch`, `text`, `keys`.
 - `sound: true`: it can play tones. `ranger` (in `shape`): a distance-measuring beam.
+- `"touch": "id"` on a solid shape piece: it feels what presses on it. `light` (in `shape`): a
+  light sensor's eye. `hear: true`: it hears the bench's sounds. `spi`: its SPI pins
+  (`{ "sck", "mosi", "miso", "cs" }`). A screen's `"mode": "rgb"`: full colour (TFTs).
+- Parts using `touch`, `light`, `hear`, `spi`, an rgb screen or `part.motion()` need
+  `"needsApp": "0.4.0"`. See GUIDE.md, "Sensing the world".
 - Parts using `moving`, `controls`, `sound` or `ranger` (or messages, below) need
   `"needsApp": "0.3.0"`. See GUIDE.md, "More a part can do".
 - `device`: the name its code registers (below).
@@ -86,22 +91,33 @@ Also (app 0.3.0): `part.motor(id)` (`to`, `power`, `limp`, `angle`, `speed`, `st
 `pixels`, `data`, `ir`...), `io.pwm(pin)`, `io.connect(a, b, on)` to join two of its pins,
 `io.draw(amps)` for the current it takes.
 
+And (app 0.4.0): `part.motion()` (`accel`, `gyro`, `up`, `heading`, `pos`, `vel`, `speed`, `quat`),
+`part.touch(id)` (`force`, `touching`, `hand`), `part.light(id).lux`, `part.hear()` (`level`, `hz`),
+an `spi: { transfer(bytes, pins) { return answers } }` handler, and `s.pixels(x, y, w, h, colours)`
+on an rgb screen.
+
 ### Sketch libraries (sketch/*.js)
 
 Plain JavaScript run inside the program's thread, where the Arduino functions (`pinMode`,
 `digitalWrite`, `shiftOut`, `Wire`, `delay`...) are in scope. List the classes it defines under
 `classes`, so a C++-style `LedControl lc(12, 11, 10, 1);` works in Arduino programs, and constants
 or functions under `exports`. `linkSend(pin, proto, bytes)` / `linkReceive(pin, proto)` send and
-receive messages along a wire (an LED strip's pixels, a sensor's answer).
+receive messages along a wire (an LED strip's pixels, a sensor's answer). `SPI` is there too
+(`transfer`, `transfer16`, `writeBytes`), and `setRef(x, v)` / `isRef(x)` fill in variables a sketch
+hands over with `&x`.
 
 ## What's on the list
 
-Displays: LCD 16x2 (I2C and parallel), LED matrix 8x8 (MAX7219), OLED (SSD1306), 4-digit
-(TM1637), NeoPixel LEDs. Sensors: colour camera, DHT11/DHT22/BME280, line (TCRT5000), obstacle
-(FC-51), laser distance (VL53L0X), PIR motion. Motion: steppers (28BYJ-48 + ULN2003, NEMA 17 +
-A4988), TT motor with encoder. Input: keypads, joystick, rotary encoder. Wireless: HC-05
-Bluetooth, IR remote and receiver. Sound: buzzers. Power: relay module. Each comes with a ready-wired
-example bench.
+Displays: LCD 16x2 and 20x4 (I2C), LCD 16x2 (parallel), LED matrix 8x8 (MAX7219), OLED (SSD1306),
+4-digit (TM1637), NeoPixel LEDs, colour TFTs (ST7735, ILI9341). Sensors: colour camera,
+DHT11/DHT22/BME280, line (TCRT5000), obstacle (FC-51), laser distance (VL53L0X), PIR motion, tilt
+switch, compass (QMC5883L), accelerometer (ADXL345), light (LDR, BH1750), colour (TCS34725), sound
+(KY-038), touch pad (TTP223), force pad (FSR), limit switch, bumper, scale (HX711), GPS (NEO-6M),
+real-time clock (DS3231), RFID (RC522 and tags). Motion: steppers (28BYJ-48 + ULN2003, NEMA 17 +
+A4988), TT motor with encoder, slide potentiometer. Input: keypads, joystick, rotary encoder.
+Wireless: HC-05 Bluetooth, IR remote and receiver, nRF24L01 radios. Storage: SD card. Sound:
+buzzers. Power and logic: relay module, 74HC595 shift register. Each comes with a ready-wired
+example bench; robots to build on: a self-balancing robot, a line follower and a bumper rover.
 
 ## Adding yours to the list
 
@@ -125,8 +141,9 @@ never runs them, and blocks:
   escaped text, encoded blobs, `atob`)
 - 3D models that load anything from outside their own file
 - web markup in names and descriptions, non-hex colours, oversized files
-- parts beyond the app's limits (motor torque and speed, travel, controls, distance beams), and it
-  tells installers which parts move or make sounds
+- parts beyond the app's limits (motor torque and speed, travel, controls, distance beams, touch
+  surfaces, light sensors, screen size), and it tells installers which parts move, make sounds or
+  hear the bench
 
 And when a library runs, its code is in a sealed-off thread with no network, no storage and no
 access to the app; one that stops responding is shut down. A person still reads every pull request

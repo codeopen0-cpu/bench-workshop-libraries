@@ -1,0 +1,217 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Colour dashboard",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "tft",
+   "type": "tft-displays/ili9341",
+   "name": "Screen",
+   "params": {},
+   "parent": null,
+   "pos": [
+    5,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Knob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "LED"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "CS"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "GP14"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "DC"
+   },
+   "color": "#9b59b6"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "RESET"
+   },
+   "color": "#f2f2f2"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "tft",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Colour dashboard on a 2.8\" ILI9341: a title bar, the knob as a gauge and a scrolling graph.\n#include <SPI.h>\n#include <Adafruit_GFX.h>\n#include <Adafruit_ILI9341.h>\n\n#define TFT_CS 17\n#define TFT_DC 14\n#define TFT_RST 15\n#define KNOB A0\n\nAdafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);\nint x = 0;\nint lastY = -1;\n\nvoid setup() {\n  Serial.begin(115200);\n  tft.begin();\n  tft.setRotation(1);                  // landscape: 320 x 240\n  tft.fillScreen(ILI9341_BLACK);\n  tft.fillRect(0, 0, 320, 30, ILI9341_NAVY);\n  tft.setTextColor(ILI9341_WHITE);\n  tft.setTextSize(2);\n  tft.setCursor(10, 8);\n  tft.print(\"Bench dashboard\");\n  tft.drawRect(10, 40, 300, 40, ILI9341_LIGHTGREY);\n  tft.drawRect(10, 100, 300, 130, ILI9341_DARKGREY);\n  Serial.println(\"drawn\");\n}\n\nvoid loop() {\n  int raw = analogRead(KNOB);                  // 0 .. 4095\n  int pct = map(raw, 0, 4095, 0, 100);\n  // the gauge: a bar and the number\n  int w = map(pct, 0, 100, 0, 296);\n  uint16_t colour = pct < 50 ? ILI9341_GREEN : pct < 80 ? ILI9341_YELLOW : ILI9341_RED;\n  tft.fillRect(12, 42, w, 36, colour);\n  tft.fillRect(12 + w, 42, 296 - w, 36, ILI9341_BLACK);\n  tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);\n  tft.setCursor(250, 52);\n  tft.setTextSize(2);\n  tft.print(pct);\n  tft.print(\"% \");\n  // the graph: a column at a time, wrapping round\n  int y = map(pct, 0, 100, 227, 103);\n  tft.drawFastVLine(12 + x, 102, 126, ILI9341_BLACK);\n  if (lastY >= 0) tft.drawLine(11 + x, lastY, 12 + x, y, ILI9341_CYAN);\n  lastY = y;\n  x = (x + 2) % 296;\n  if (x == 0) lastY = -1;\n  delay(50);\n}\n"
+  }
+ },
+ "boards": []
+}

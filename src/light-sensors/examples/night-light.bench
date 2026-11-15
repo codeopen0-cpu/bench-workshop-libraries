@@ -1,0 +1,236 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Night light",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "ldr",
+   "type": "light-sensors/ldr",
+   "name": "Light sensor",
+   "params": {},
+   "parent": null,
+   "pos": [
+    3,
+    0,
+    -4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "meter",
+   "type": "light-sensors/bh1750",
+   "name": "Light meter",
+   "params": {},
+   "parent": null,
+   "pos": [
+    3,
+    0,
+    5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "led",
+   "type": "led",
+   "name": "Night light",
+   "params": {
+    "color": "white"
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "cover",
+   "type": "block",
+   "name": "Box (drag it over a sensor)",
+   "params": {
+    "w": 5,
+    "h": 3,
+    "d": 5,
+    "material": "cardboard",
+    "color": "#b98b55"
+   },
+   "parent": null,
+   "pos": [
+    12,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "ldr",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "ldr",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "ldr",
+    "pin": "DO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "ldr",
+    "pin": "AO"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "meter",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "meter",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "meter",
+    "pin": "SDA"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "meter",
+    "pin": "SCL"
+   },
+   "color": "#f2f2f2"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "A"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "led",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Night light: the LED comes on when the light sensor says it's dark. Press the toolbar's Room\n// button to dim the room, or drag the box over the sensor. The light meter prints lux (Plot them).\n#include <Wire.h>\n#include <BH1750.h>\n\n#define DARK 2      // the LDR module's DO: HIGH when dark\n#define LEVEL A0    // its AO: higher when darker\n#define LAMP 15\n\nBH1750 meter;\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  meter.begin();\n  pinMode(DARK, INPUT);\n  pinMode(LAMP, OUTPUT);\n}\n\nvoid loop() {\n  bool dark = digitalRead(DARK) == HIGH;\n  digitalWrite(LAMP, dark ? HIGH : LOW);\n  float lux = meter.readLightLevel();\n  Serial.print(\"lux:\");\n  Serial.print(lux, 0);\n  Serial.print(\" ldr:\");\n  Serial.println(analogRead(LEVEL));\n  delay(400);\n}\n"
+  }
+ },
+ "boards": []
+}

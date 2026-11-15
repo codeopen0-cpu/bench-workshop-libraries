@@ -1,0 +1,54 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "tft-displays",
+  "name": "Colour TFT screens",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h.",
+  "category": "Displays",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "Adafruit_ST7735.h": { "classes": ["Adafruit_ST7735"], "exports": ["ST77XX_BLACK", "ST77XX_WHITE", "ST77XX_RED", "ST77XX_GREEN", "ST77XX_BLUE", "ST77XX_CYAN", "ST77XX_MAGENTA", "ST77XX_YELLOW", "ST77XX_ORANGE", "ST7735_BLACK", "ST7735_WHITE", "ST7735_RED", "ST7735_GREEN", "ST7735_BLUE", "ST7735_CYAN", "ST7735_MAGENTA", "ST7735_YELLOW", "ST7735_ORANGE", "INITR_GREENTAB", "INITR_REDTAB", "INITR_BLACKTAB", "INITR_144GREENTAB", "INITR_MINI160x80"], "file": "sketch/Adafruit_TFT.js" },
+    "Adafruit_ST7789.h": { "classes": ["Adafruit_ST7789"], "exports": ["ST77XX_BLACK", "ST77XX_WHITE", "ST77XX_RED", "ST77XX_GREEN", "ST77XX_BLUE", "ST77XX_CYAN", "ST77XX_MAGENTA", "ST77XX_YELLOW", "ST77XX_ORANGE"], "file": "sketch/Adafruit_TFT.js" },
+    "Adafruit_ILI9341.h": { "classes": ["Adafruit_ILI9341"], "exports": ["ILI9341_BLACK", "ILI9341_NAVY", "ILI9341_DARKGREEN", "ILI9341_DARKCYAN", "ILI9341_MAROON", "ILI9341_PURPLE", "ILI9341_OLIVE", "ILI9341_LIGHTGREY", "ILI9341_DARKGREY", "ILI9341_BLUE", "ILI9341_GREEN", "ILI9341_CYAN", "ILI9341_RED", "ILI9341_MAGENTA", "ILI9341_YELLOW", "ILI9341_WHITE", "ILI9341_ORANGE", "ILI9341_GREENYELLOW", "ILI9341_PINK"], "file": "sketch/Adafruit_TFT.js" },
+    "Adafruit_GFX.h": { "exports": [], "file": "sketch/Adafruit_GFX.js" }
+  },
+  "parts": [
+    {
+      "id": "st7735",
+      "name": "Colour TFT 1.8\" (ST7735, 128x160)",
+      "description": "SPI: SCK and SDA (its MOSI) to the board's SPI pins, CS, A0 (DC: command or data) and RESET to any pins, VCC (3.3-5 V), GND, LED (backlight: to 3.3 V). #include <Adafruit_ST7735.h>; Adafruit_ST7735 tft = Adafruit_ST7735(CS, DC, RST); tft.initR(INITR_BLACKTAB); tft.fillScreen(ST77XX_BLACK);",
+      "swatch": "#141416",
+      "mass": 15,
+      "shape": [
+        { "box": [4.4, 0.16, 5.8], "at": [0, 0.08, -0.25], "color": "#c83030" },
+        { "box": [3.6, 0.3, 4.6], "at": [0, 0.31, 0], "color": "#141416" },
+        { "screen": { "id": "tft", "size": [2.85, 3.55], "px": [128, 160], "mode": "rgb", "bg": "#000000" }, "at": [0, 0.462, 0] }
+      ],
+      "pinRows": [{ "ids": ["LED", "SCK", "SDA", "A0", "RESET", "CS", "GND", "VCC"], "at": [-0.889, 0.0, -2.8], "kinds": { "LED": "in", "SCK": "in", "SDA": "in", "A0": "in", "RESET": "in", "CS": "in", "GND": "gnd", "VCC": "vin" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 }, "SDA": { "label": "SDA (its MOSI)" }, "A0": { "label": "A0 (DC: data / command)" }, "RESET": { "pulled": "up" }, "LED": { "label": "LED (backlight)", "pulled": "up" } } }],
+      "spi": { "sck": "SCK", "mosi": "SDA", "cs": "CS" },
+      "device": "st7735"
+    },
+    {
+      "id": "ili9341",
+      "name": "Colour TFT 2.8\" (ILI9341, 240x320)",
+      "description": "SPI: SCK, MOSI (and MISO) to the board's SPI pins, CS, DC and RESET to any pins, VCC (3.3-5 V), GND, LED (backlight: to 3.3 V). #include <Adafruit_ILI9341.h>; Adafruit_ILI9341 tft = Adafruit_ILI9341(CS, DC, RST); tft.begin(); tft.fillScreen(ILI9341_BLACK);",
+      "swatch": "#141416",
+      "mass": 40,
+      "shape": [
+        { "box": [5.0, 0.16, 8.6], "at": [0, 0.08, -0.4], "color": "#c83030" },
+        { "box": [4.6, 0.35, 6.6], "at": [0, 0.335, 0], "color": "#141416" },
+        { "screen": { "id": "tft", "size": [4.32, 5.76], "px": [240, 320], "mode": "rgb", "bg": "#000000" }, "at": [0, 0.512, 0] }
+      ],
+      "pinRows": [{ "ids": ["VCC", "GND", "CS", "RESET", "DC", "MOSI", "SCK", "LED", "MISO"], "at": [-1.016, 0.0, -4.4], "kinds": { "VCC": "vin", "GND": "gnd", "CS": "in", "RESET": "in", "DC": "in", "MOSI": "in", "SCK": "in", "LED": "in", "MISO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 }, "DC": { "label": "DC (data / command)" }, "RESET": { "pulled": "up" }, "LED": { "label": "LED (backlight)", "pulled": "up" } } }],
+      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "CS" },
+      "device": "ili9341"
+    }
+  ],
+  "examples": [
+    { "name": "Colour dashboard", "description": "A 2.8\" ILI9341 shows a dashboard: a title bar, the knob's value as a gauge and a moving graph. Press Run and turn the knob (its slider in the run panel).", "file": "examples/dashboard.bench" }
+  ]
+}

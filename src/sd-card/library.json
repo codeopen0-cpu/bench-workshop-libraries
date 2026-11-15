@@ -1,0 +1,38 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "sd-card",
+  "name": "SD card module",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A micro-SD card module (SPI) for keeping data: log readings to a file, read them back. The card holds its files while the run lasts (stop the run and it's a fresh card; its files are listed in the run panel). Includes SD.h.",
+  "category": "Storage",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "SD.h": { "classes": ["File"], "exports": ["SD", "FILE_READ", "FILE_WRITE", "O_READ", "O_WRITE", "O_APPEND", "O_CREAT"], "file": "sketch/SD.js" }
+  },
+  "parts": [
+    {
+      "id": "sd",
+      "name": "SD card module",
+      "description": "SPI: CS to any pin (SD.begin(CS)), SCK, MOSI, MISO to the board's SPI pins; VCC (5 V, it has its own 3.3 V regulator) and GND. #include <SD.h>; File f = SD.open(\"log.txt\", FILE_WRITE); f.println(value); f.close();",
+      "swatch": "#1d4fb8",
+      "mass": 4,
+      "params": [{ "key": "card", "label": "Card in it", "kind": "bool" }],
+      "defaults": { "card": true },
+      "shape": [
+        { "box": [2.4, 0.16, 4.2], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [1.5, 0.2, 1.6], "at": [0, 0.26, 1.2], "color": "#c9cdd4" },
+        { "box": [1.1, 0.06, 1.5], "at": [0, 0.39, 1.3], "color": "#1a1a1c", "collide": false }
+      ],
+      "pinRows": [{ "ids": ["GND", "VCC", "MISO", "MOSI", "SCK", "CS"], "at": [-0.635, 0.0, -1.85], "kinds": { "GND": "gnd", "VCC": "vin", "MISO": "out", "MOSI": "in", "SCK": "in", "CS": "in" }, "extra": { "VCC": { "label": "VCC (4.5-5.5 V)", "vmin": 3.2, "vmax": 5.5 } } }],
+      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "CS" },
+      "device": "sd"
+    }
+  ],
+  "examples": [
+    { "name": "Data logger", "description": "Logs the knob's reading to log.csv twice a second; every 10 lines it reads the whole file back and prints it. Press Run and turn the knob.", "file": "examples/logger.bench" }
+  ]
+}

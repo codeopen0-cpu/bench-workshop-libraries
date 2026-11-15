@@ -57,7 +57,13 @@ export function abilities(lib) {
   if (parts.some((p) => p.sound)) out.push('make sounds');
   if (parts.some((p) => p.controls?.length)) out.push('have controls in the run panel');
   if (parts.some((p) => [...(p.shape ?? []), ...(p.moving ?? []).flatMap((m) => m.shape ?? [])].some((s) => s.camera))) out.push('see (camera)');
-  if (parts.some((p) => [...(p.shape ?? []), ...(p.moving ?? []).flatMap((m) => m.shape ?? [])].some((s) => s.ranger))) out.push('measure distance');
+  const items = (p) => [...(p.shape ?? []), ...(p.moving ?? []).flatMap((m) => m.shape ?? [])];
+  if (parts.some((p) => items(p).some((s) => s.ranger))) out.push('measure distance');
+  if (parts.some((p) => items(p).some((s) => s.touch !== undefined))) out.push('feel touch');
+  if (parts.some((p) => items(p).some((s) => s.light))) out.push('sense light');
+  if (parts.some((p) => p.hear)) out.push('hear sounds');
+  if (/\bpart\s*\.\s*motion\s*\(/.test(lib.code ?? '')) out.push('feel motion');
+  if (parts.some((p) => p.spi)) out.push('talk SPI');
   return out;
 }
 

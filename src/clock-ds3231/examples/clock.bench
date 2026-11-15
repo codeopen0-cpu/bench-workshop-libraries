@@ -1,0 +1,102 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Clock and thermometer",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -8,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "rtc",
+   "type": "clock-ds3231/ds3231",
+   "name": "Clock",
+   "params": {},
+   "parent": null,
+   "pos": [
+    5,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "rtc",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "rtc",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "rtc",
+    "pin": "SDA"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "rtc",
+    "pin": "SCL"
+   },
+   "color": "#f2f2f2"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Clock and thermometer: the DS3231 keeps the date and time; this prints them every second.\n#include <Wire.h>\n#include <RTClib.h>\n\nRTC_DS3231 rtc;\nchar daysOfTheWeek[7][12] = {\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"};\n\nvoid print2(int n) {   // two digits: 7 -> 07\n  if (n < 10) Serial.print('0');\n  Serial.print(n, DEC);\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!rtc.begin()) {\n    Serial.println(\"No DS3231: check its wires\");\n    while (true) delay(100);\n  }\n  if (rtc.lostPower()) {\n    Serial.println(\"The clock lost power: setting it to when this sketch was built\");\n    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));\n  }\n}\n\nvoid loop() {\n  DateTime now = rtc.now();\n  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);\n  Serial.print(\" \");\n  Serial.print(now.year(), DEC);\n  Serial.print(\"-\");\n  print2(now.month());\n  Serial.print(\"-\");\n  print2(now.day());\n  Serial.print(\"  \");\n  print2(now.hour());\n  Serial.print(\":\");\n  print2(now.minute());\n  Serial.print(\":\");\n  print2(now.second());\n  Serial.print(\"   \");\n  Serial.print(rtc.getTemperature());\n  Serial.println(\" C\");\n  delay(1000);\n}\n"
+  }
+ },
+ "boards": []
+}

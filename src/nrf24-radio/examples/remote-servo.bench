@@ -1,0 +1,372 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Radio remote servo",
+ "parts": [
+  {
+   "uid": "tx",
+   "type": "maker-board",
+   "name": "Sender",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -16,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "radio1",
+   "type": "nrf24-radio/nrf24l01",
+   "name": "Radio 1",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -16,
+    0,
+    -9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Knob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -16,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "rx",
+   "type": "maker-board",
+   "name": "Receiver",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    16,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "radio2",
+   "type": "nrf24-radio/nrf24l01",
+   "name": "Radio 2",
+   "params": {},
+   "parent": null,
+   "pos": [
+    16,
+    0,
+    -9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "servo",
+   "type": "servo-sg90",
+   "name": "Servo",
+   "params": {},
+   "parent": null,
+   "pos": [
+    16,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "tx",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "tx",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "tx",
+    "pin": "GP14"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "CE"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "tx",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "CSN"
+   },
+   "color": "#9b59b6"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "tx",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "tx",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "tx",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "radio1",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "rx",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "rx",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "rx",
+    "pin": "GP14"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "CE"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "rx",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "CSN"
+   },
+   "color": "#9b59b6"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "rx",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "rx",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "rx",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "radio2",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w15",
+   "a": {
+    "uid": "tx",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w16",
+   "a": {
+    "uid": "tx",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w17",
+   "a": {
+    "uid": "tx",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w18",
+   "a": {
+    "uid": "rx",
+    "pin": "5V"
+   },
+   "b": {
+    "uid": "servo",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w19",
+   "a": {
+    "uid": "rx",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "servo",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w20",
+   "a": {
+    "uid": "rx",
+    "pin": "GP15"
+   },
+   "b": {
+    "uid": "servo",
+    "pin": "SIG"
+   },
+   "color": "#e8c547"
+  }
+ ],
+ "programs": {
+  "tx": {
+   "lang": "arduino",
+   "source": "// Radio remote, the sending end: turn the knob (its slider in the run panel); the angle goes out by\n// radio 20 times a second. radio.write() says whether the other end got it.\n#include <SPI.h>\n#include <RF24.h>\n\nRF24 radio(14, 17);            // CE, CSN\nconst byte address[6] = \"00001\";\nint sent = 0, lost = 0;\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!radio.begin()) {\n    Serial.println(\"The radio isn't answering: check its wires (and 3.3 V)\");\n    while (true) delay(100);\n  }\n  radio.openWritingPipe(address);\n  radio.setPALevel(RF24_PA_LOW);\n  radio.stopListening();\n}\n\nvoid loop() {\n  int angle = map(analogRead(A0), 0, 4095, 0, 180);\n  bool ok = radio.write(&angle, sizeof(angle));\n  if (ok) sent++; else lost++;\n  if ((sent + lost) % 20 == 0) {\n    Serial.print(\"angle \");\n    Serial.print(angle);\n    Serial.print(\"   got there: \");\n    Serial.print(sent);\n    Serial.print(\"   lost: \");\n    Serial.println(lost);\n  }\n  delay(50);\n}\n"
+  },
+  "rx": {
+   "lang": "arduino",
+   "source": "// Radio remote, the receiving end: each angle that arrives turns the servo.\n#include <SPI.h>\n#include <RF24.h>\n#include <Servo.h>\n\nRF24 radio(14, 17);            // CE, CSN\nconst byte address[6] = \"00001\";\nServo servo;\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!radio.begin()) {\n    Serial.println(\"The radio isn't answering: check its wires (and 3.3 V)\");\n    while (true) delay(100);\n  }\n  radio.openReadingPipe(0, address);\n  radio.setPALevel(RF24_PA_LOW);\n  radio.startListening();\n  servo.attach(15);\n}\n\nint last = -1;\n\nvoid loop() {\n  if (radio.available()) {\n    int angle = 0;\n    radio.read(&angle, sizeof(angle));\n    servo.write(angle);\n    if (angle != last) {\n      Serial.print(\"angle: \");\n      Serial.println(angle);\n      last = angle;\n    }\n  }\n}\n"
+  }
+ },
+ "boards": []
+}

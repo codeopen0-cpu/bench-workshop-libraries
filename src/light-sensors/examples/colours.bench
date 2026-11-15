@@ -1,0 +1,306 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Colour names",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -14,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "post",
+   "type": "block",
+   "name": "Post",
+   "params": {
+    "w": 2,
+    "h": 6,
+    "d": 2,
+    "material": "wood",
+    "color": "#c98a4b"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    -6
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "arm",
+   "type": "block",
+   "name": "Arm",
+   "params": {
+    "w": 2,
+    "h": 1,
+    "d": 8,
+    "material": "wood",
+    "color": "#c98a4b"
+   },
+   "parent": {
+    "uid": "post",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    6,
+    3
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "tcs",
+   "type": "light-sensors/tcs34725",
+   "name": "Colour sensor",
+   "params": {},
+   "parent": {
+    "uid": "arm",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    0,
+    3
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "paper",
+   "type": "plate",
+   "name": "White paper",
+   "params": {
+    "w": 16,
+    "h": 0.3,
+    "d": 14,
+    "material": "cardboard",
+    "color": "#f4f4f2"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "bred",
+   "type": "block",
+   "name": "Red block",
+   "params": {
+    "w": 3.5,
+    "h": 2.5,
+    "d": 3.5,
+    "material": "plastic",
+    "color": "#d02020"
+   },
+   "parent": null,
+   "pos": [
+    12,
+    0,
+    4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "bgreen",
+   "type": "block",
+   "name": "Green block",
+   "params": {
+    "w": 3.5,
+    "h": 2.5,
+    "d": 3.5,
+    "material": "plastic",
+    "color": "#20a040"
+   },
+   "parent": null,
+   "pos": [
+    17,
+    0,
+    4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "bblue",
+   "type": "block",
+   "name": "Blue block",
+   "params": {
+    "w": 3.5,
+    "h": 2.5,
+    "d": 3.5,
+    "material": "plastic",
+    "color": "#2050d0"
+   },
+   "parent": null,
+   "pos": [
+    22,
+    0,
+    4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "byellow",
+   "type": "block",
+   "name": "Yellow block",
+   "params": {
+    "w": 3.5,
+    "h": 2.5,
+    "d": 3.5,
+    "material": "plastic",
+    "color": "#e8c820"
+   },
+   "parent": null,
+   "pos": [
+    27,
+    0,
+    4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "bwhite",
+   "type": "block",
+   "name": "White block",
+   "params": {
+    "w": 3.5,
+    "h": 2.5,
+    "d": 3.5,
+    "material": "plastic",
+    "color": "#f2f2f2"
+   },
+   "parent": null,
+   "pos": [
+    32,
+    0,
+    4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "tcs",
+    "pin": "VIN"
+   },
+   "color": "#e04848",
+   "length": 30
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "tcs",
+    "pin": "GND"
+   },
+   "color": "#2b2d33",
+   "length": 30
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "tcs",
+    "pin": "SDA"
+   },
+   "color": "#3cb371",
+   "length": 30
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "tcs",
+    "pin": "SCL"
+   },
+   "color": "#f2f2f2",
+   "length": 30
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Colour names: the TCS34725 looks down from the arm at the white paper. Drag a coloured block\n// under it.\n#include <Wire.h>\n#include <Adafruit_TCS34725.h>\n\nAdafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);\n\nString nameOf(float r, float g, float b, uint16_t c) {\n  if (c < 300) return \"nothing (too dark)\";\n  if (r > 0.33 && g > 0.33 && b < 0.25) return \"yellow\";   // (red and green together, little blue)\n  if (r > 0.27 && g > 0.27 && b > 0.27 && max(r, max(g, b)) < 0.42) return \"white (just the paper?)\";\n  if (r > g && r > b) return \"red\";\n  if (g > r && g > b) return \"green\";\n  return \"blue\";\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  if (!tcs.begin()) {\n    Serial.println(\"No TCS34725: check its wires\");\n    while (true) delay(100);\n  }\n}\n\nString last = \"\";\n\nvoid loop() {\n  uint16_t r, g, b, c;\n  tcs.getRawData(&r, &g, &b, &c);\n  float sum = r + g + b;\n  if (sum < 1) sum = 1;\n  String name = nameOf(r / sum, g / sum, b / sum, c);\n  if (name != last) {\n    Serial.print(\"I see \");\n    Serial.print(name);\n    Serial.print(\"  (r \");\n    Serial.print(r);\n    Serial.print(\", g \");\n    Serial.print(g);\n    Serial.print(\", b \");\n    Serial.print(b);\n    Serial.println(\")\");\n    last = name;\n  }\n  delay(200);\n}\n"
+  }
+ },
+ "boards": []
+}

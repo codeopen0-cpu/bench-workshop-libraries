@@ -48,3 +48,31 @@ bench.device('passive-buzzer', (part) => {
     },
   };
 });
+
+// Sound sensor (KY-038): a microphone and an amplifier. It hears what parts on the bench play
+// (part.hear(): 0..1 loudness, closer is louder). AO sits at VCC/2 in quiet and swings with the sound
+// (here: its average swing, rising with loudness); DO is HIGH while louder than the pot's setting.
+bench.device('sound-sensor', (part) => {
+  const ear = part.hear();
+  const threshold = Number(part.params.threshold ?? 20) / 100;
+  let powered = false, level = 0, loud = false, hz = 0, peaks = 0;
+  return {
+    step(io) {
+      const v = io.supply('VCC', 'GND');
+      powered = v >= 2.5;
+      level = ear.level;
+      hz = ear.hz;
+      const now = level > threshold;
+      if (now && !loud) peaks++;
+      loud = now;
+      if (!powered) { io.release('AO'); io.release('DO'); io.draw(0); return; }
+      io.drive('AO', v * Math.min(1, 0.5 + level * 0.5), 1);
+      io.drive('DO', loud ? v : 0, 1);
+      io.draw(0.004 + (loud ? 0.002 : 0));
+    },
+    status() {
+      if (!powered) return ['no power'];
+      return [level > 0.002 ? `hears ${Math.round(level * 100)} %${hz ? ` (${hz} Hz)` : ''}${loud ? ': DO HIGH' : ''}` : 'quiet', `${peaks} loud moments`];
+    },
+  };
+});

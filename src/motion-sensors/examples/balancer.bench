@@ -1,0 +1,494 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Self-balancing robot",
+ "parts": [
+  {
+   "uid": "chassis",
+   "type": "plate",
+   "name": "Chassis",
+   "params": {
+    "w": 7,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    4.4,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "motorR",
+   "type": "motor-tt",
+   "name": "Right motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -1.6,
+    -0.15,
+    3.55
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "motorL",
+   "type": "motor-tt",
+   "name": "Left motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    1.6,
+    -0.15,
+    -3.55
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelR",
+   "type": "wheel",
+   "name": "Right wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.4
+   },
+   "parent": {
+    "uid": "motorR",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelL",
+   "type": "wheel",
+   "name": "Left wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.4
+   },
+   "parent": {
+    "uid": "motorL",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "mastF",
+   "type": "block",
+   "name": "Mast",
+   "params": {
+    "w": 1.2,
+    "h": 12,
+    "d": 0.8,
+    "material": "plastic",
+    "color": "#d8dce4"
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    0.15,
+    3.9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "mastB",
+   "type": "block",
+   "name": "Mast 2",
+   "params": {
+    "w": 1.2,
+    "h": 12,
+    "d": 0.8,
+    "material": "plastic",
+    "color": "#d8dce4"
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    0.15,
+    -3.9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "deck",
+   "type": "plate",
+   "name": "Top deck",
+   "params": {
+    "w": 7,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": {
+    "uid": "mastF",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    12.15,
+    -3.9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "battery",
+   "type": "battery-18650",
+   "name": "Batteries",
+   "params": {
+    "count": "2",
+    "charge": 100
+   },
+   "parent": {
+    "uid": "deck",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "brain",
+   "type": "maker-board",
+   "name": "Brain",
+   "params": {
+    "usb": false
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ]
+  },
+  {
+   "uid": "driver",
+   "type": "drv8833",
+   "name": "Motor driver",
+   "params": {},
+   "parent": {
+    "uid": "battery",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "imu",
+   "type": "mpu6050",
+   "name": "MPU-6050",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    0.15,
+    2.4
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "VM"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "VIN"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "brain",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN1"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "brain",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN2"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "brain",
+    "pin": "GP5"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN1"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "brain",
+    "pin": "GP6"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN2"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT1"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT2"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT1"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT2"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "brain",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "imu",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "imu",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w15",
+   "a": {
+    "uid": "brain",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "imu",
+    "pin": "SDA"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w16",
+   "a": {
+    "uid": "brain",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "imu",
+    "pin": "SCL"
+   },
+   "color": "#f2f2f2"
+  }
+ ],
+ "programs": {
+  "brain": {
+   "lang": "arduino",
+   "source": "// Self-balancing robot. It would fall over on its own: the MPU-6050 feels which way it leans and how\n// fast, and the wheels drive under it to catch it (a PD loop). Push it with Shift + the ball and watch\n// it catch itself. Open the serial monitor and press Plot to see the angle and the motor power.\n#include <Wire.h>\n#include <Adafruit_MPU6050.h>\n\n#define AIN1 2   // right motor (through the DRV8833)\n#define AIN2 3\n#define BIN1 5   // left motor\n#define BIN2 6\n\nAdafruit_MPU6050 mpu;\n\nfloat Kp = 35;     // power per degree of lean\nfloat Kd = 1.4;    // power per degree/second of falling\nfloat Ks = 10;     // rolling away: lean against it (so it comes back instead of speeding off)\nfloat angle = 0;   // lean, degrees: + = leaning back\nfloat speed = 0;   // how fast it's rolling (a guess from the power it gives)\nunsigned long last;\nint n = 0;\n\nvoid motor(int in1, int in2, int p) {\n  p = constrain(p, -255, 255);\n  if (p >= 0) { analogWrite(in1, p); analogWrite(in2, 0); }\n  else        { analogWrite(in1, 0); analogWrite(in2, -p); }\n}\n\nvoid drive(int p) {\n  motor(BIN1, BIN2, p);\n  motor(AIN2, AIN1, p);   // the right motor faces the other way\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  if (!mpu.begin()) {\n    Serial.println(\"No MPU-6050: check its wires\");\n    while (true) delay(100);\n  }\n  mpu.setGyroRange(MPU6050_RANGE_500_DEG);\n  last = micros();\n  Serial.println(\"balancing\");\n}\n\nvoid loop() {\n  sensors_event_t a, g, temp;\n  mpu.getEvent(&a, &g, &temp);\n  float dt = (micros() - last) / 1000000.0;\n  last = micros();\n\n  // the lean from gravity (steady, but fooled while the wheels speed up) and from the gyro (fast but\n  // drifts): mostly the gyro, nudged by gravity\n  float accAngle = atan2(a.acceleration.x, a.acceleration.z) * 180 / PI;\n  float rate = -g.gyro.y * 180 / PI;\n  angle = 0.995 * (angle + rate * dt) + 0.005 * accAngle;\n\n  if (abs(angle) > 40) {   // fallen over: stop the wheels\n    drive(0);\n    speed = 0;\n    return;\n  }\n  float target = Ks * speed * 0.01;   // (lean against rolling off)\n  float power = -(Kp * (angle - target) + Kd * rate);\n  speed = 0.95 * speed + 0.05 * power;\n  drive(power);\n\n  if (++n % 10 == 0) {\n    Serial.print(\"angle:\");\n    Serial.print(angle);\n    Serial.print(\" power:\");\n    Serial.println(power / 10);\n  }\n  delay(4);\n}\n"
+  }
+ },
+ "boards": []
+}

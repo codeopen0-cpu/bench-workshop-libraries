@@ -1,0 +1,650 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "touch-and-force",
+  "name": "Touch, force and weight",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Parts that feel what presses on them, from the real physics: a touch pad (TTP223), a force pad (FSR), a limit switch and a robot bumper, a slide potentiometer you push with the ball or drag, and a kitchen scale (load cell + HX711) that weighs what you put on it. Includes HX711.h.",
+  "category": "Sensors",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "HX711.h": {
+      "classes": [
+        "HX711"
+      ],
+      "file": "sketch/HX711.js"
+    }
+  },
+  "parts": [
+    {
+      "id": "ttp223",
+      "name": "Touch pad (TTP223)",
+      "description": "A capacitive touch button: touch its round pad with the ball (hold Shift) or press Touch in the run panel and SIG goes HIGH (while touched; or, with the toggle jumper, each touch flips it). VCC (2-5.5 V), GND, SIG.",
+      "swatch": "#d93a3a",
+      "mass": 1,
+      "params": [
+        {
+          "key": "mode",
+          "label": "Jumper",
+          "kind": "select",
+          "options": [
+            {
+              "value": "momentary",
+              "label": "HIGH while touched"
+            },
+            {
+              "value": "toggle",
+              "label": "each touch flips it"
+            }
+          ]
+        }
+      ],
+      "defaults": {
+        "mode": "momentary"
+      },
+      "shape": [
+        {
+          "box": [
+            1.5,
+            0.12,
+            2.4
+          ],
+          "at": [
+            0,
+            0.06,
+            0
+          ],
+          "color": "#d93a3a"
+        },
+        {
+          "cyl": [
+            0.6,
+            0.04
+          ],
+          "at": [
+            0,
+            0.14,
+            0.35
+          ],
+          "color": "#e8e1d2",
+          "touch": "pad"
+        },
+        {
+          "box": [
+            0.15,
+            0.08,
+            0.15
+          ],
+          "at": [
+            0.5,
+            0.16,
+            -0.5
+          ],
+          "color": "#e33030",
+          "collide": false
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "GND",
+            "SIG",
+            "VCC"
+          ],
+          "at": [
+            -0.254,
+            0.0,
+            -1.05
+          ],
+          "kinds": {
+            "GND": "gnd",
+            "SIG": "out",
+            "VCC": "vin"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (2-5.5 V)",
+              "vmin": 2,
+              "vmax": 5.5
+            },
+            "SIG": {
+              "pulled": "down"
+            }
+          }
+        }
+      ],
+      "controls": [
+        {
+          "id": "touch",
+          "kind": "button",
+          "label": "Touch"
+        }
+      ],
+      "device": "ttp223"
+    },
+    {
+      "id": "fsr",
+      "name": "Force pad (FSR 402 module)",
+      "description": "A force-sensing resistor on a little board with its 10k resistor: the harder something presses its round pad, the higher AO (0 V: nothing; about VCC/2 at 1 N; near VCC at 10 N). Press it with the ball, or set a weight on it. VCC, GND, AO (to an analog pin).",
+      "swatch": "#2b2b2e",
+      "mass": 2,
+      "shape": [
+        {
+          "box": [
+            2.0,
+            0.12,
+            3.2
+          ],
+          "at": [
+            0,
+            0.06,
+            0
+          ],
+          "color": "#1d4fb8"
+        },
+        {
+          "cyl": [
+            0.9,
+            0.06
+          ],
+          "at": [
+            0,
+            0.15,
+            0.5
+          ],
+          "color": "#2b2b2e",
+          "touch": "pad"
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "AO"
+          ],
+          "at": [
+            -0.254,
+            0.0,
+            -1.45
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "AO": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2,
+              "vmax": 5.5
+            },
+            "AO": {
+              "analog": true
+            }
+          }
+        }
+      ],
+      "controls": [
+        {
+          "id": "press",
+          "kind": "slider",
+          "label": "Press by hand (N)",
+          "min": 0,
+          "max": 20,
+          "step": 0.1,
+          "value": 0
+        }
+      ],
+      "device": "fsr"
+    },
+    {
+      "id": "limit-switch",
+      "name": "Limit switch (lever, roller)",
+      "description": "A micro switch with a roller lever: when something pushes the roller (about 0.5 N), COM joins NO; otherwise COM joins NC. Robots and 3D printers use them to know they've reached the end. Wire COM to GND and NO to a pin with INPUT_PULLUP: LOW = pressed.",
+      "swatch": "#2b2b2e",
+      "mass": 3,
+      "shape": [
+        {
+          "box": [
+            2.0,
+            1.0,
+            1.0
+          ],
+          "at": [
+            0,
+            0.5,
+            0
+          ],
+          "color": "#2b2b2e"
+        },
+        {
+          "box": [
+            0.2,
+            0.15,
+            0.25
+          ],
+          "at": [
+            0.6,
+            1.07,
+            0
+          ],
+          "color": "#d03030",
+          "collide": false
+        },
+        {
+          "box": [
+            2.2,
+            0.06,
+            0.4
+          ],
+          "at": [
+            0.4,
+            1.35,
+            0
+          ],
+          "rot": [
+            0,
+            0,
+            8
+          ],
+          "color": "#c9cdd4",
+          "collide": false
+        },
+        {
+          "cyl": [
+            0.25,
+            0.4
+          ],
+          "at": [
+            1.5,
+            1.55,
+            0
+          ],
+          "rot": [
+            90,
+            0,
+            0
+          ],
+          "color": "#e0e0e0",
+          "touch": "roller"
+        }
+      ],
+      "pins": [
+        {
+          "id": "COM",
+          "at": [
+            -0.7,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "NO",
+          "label": "NO (closed when pressed)",
+          "at": [
+            0,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "NC",
+          "label": "NC (closed when not pressed)",
+          "at": [
+            0.7,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        }
+      ],
+      "controls": [
+        {
+          "id": "press",
+          "kind": "button",
+          "label": "Press"
+        }
+      ],
+      "device": "limit"
+    },
+    {
+      "id": "bumper",
+      "name": "Bumper switch (robot front)",
+      "description": "A limit switch with a wide bumper bar in front: when the robot runs into something, COM joins NO. Glue it to the front of a robot, its bar facing forward (+x). COM to GND, NO to a pin with INPUT_PULLUP: LOW = bumped.",
+      "swatch": "#f2c230",
+      "mass": 6,
+      "shape": [
+        {
+          "box": [
+            1.2,
+            1.0,
+            1.0
+          ],
+          "at": [
+            0,
+            0.5,
+            0
+          ],
+          "color": "#2b2b2e"
+        },
+        {
+          "box": [
+            1.4,
+            0.15,
+            0.25
+          ],
+          "at": [
+            0.9,
+            0.5,
+            0
+          ],
+          "color": "#c9cdd4",
+          "collide": false
+        },
+        {
+          "box": [
+            0.4,
+            1.2,
+            7.0
+          ],
+          "at": [
+            1.8,
+            0.6,
+            0
+          ],
+          "color": "#f2c230",
+          "touch": "bar"
+        }
+      ],
+      "pins": [
+        {
+          "id": "COM",
+          "at": [
+            -0.45,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "NO",
+          "label": "NO (closed when bumped)",
+          "at": [
+            0,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "NC",
+          "label": "NC (closed when not bumped)",
+          "at": [
+            0.45,
+            0.05,
+            -0.55
+          ],
+          "kind": "io"
+        }
+      ],
+      "device": "limit"
+    },
+    {
+      "id": "slide-pot",
+      "name": "Slide potentiometer (10k)",
+      "description": "A sliding knob: drag its knob (or push it with the ball), or set it with the slider in the run panel. W is between GND (knob at the left) and VCC (at the right): read it with analogRead. VCC, GND, W.",
+      "swatch": "#2b2b2e",
+      "mass": 12,
+      "shape": [
+        {
+          "box": [
+            8.5,
+            0.8,
+            1.6
+          ],
+          "at": [
+            0,
+            0.4,
+            0
+          ],
+          "color": "#2b2b2e"
+        },
+        {
+          "box": [
+            6.4,
+            0.02,
+            0.2
+          ],
+          "at": [
+            0,
+            0.81,
+            0
+          ],
+          "color": "#555a62",
+          "collide": false
+        }
+      ],
+      "pins": [
+        {
+          "id": "GND",
+          "at": [
+            -3.9,
+            0.05,
+            -0.95
+          ],
+          "kind": "gnd"
+        },
+        {
+          "id": "W",
+          "label": "W (wiper)",
+          "at": [
+            0,
+            0.05,
+            -0.95
+          ],
+          "kind": "out",
+          "analog": true
+        },
+        {
+          "id": "VCC",
+          "at": [
+            3.9,
+            0.05,
+            -0.95
+          ],
+          "kind": "vin"
+        }
+      ],
+      "moving": [
+        {
+          "id": "knob",
+          "mass": 2,
+          "shape": [
+            {
+              "box": [
+                0.4,
+                0.5,
+                0.4
+              ],
+              "at": [
+                0,
+                1.05,
+                0
+              ],
+              "color": "#c9cdd4"
+            },
+            {
+              "box": [
+                0.9,
+                0.6,
+                1.3
+              ],
+              "at": [
+                0,
+                1.55,
+                0
+              ],
+              "color": "#e8e8e8"
+            }
+          ],
+          "joint": {
+            "type": "slide",
+            "at": [
+              0,
+              1.0,
+              0
+            ],
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "motor": "servo",
+            "force": 3,
+            "speed": 30,
+            "min": -3.0,
+            "max": 3.0
+          }
+        }
+      ],
+      "controls": [
+        {
+          "id": "set",
+          "kind": "slider",
+          "label": "Knob (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "value": 50
+        }
+      ],
+      "device": "slidepot"
+    },
+    {
+      "id": "scale",
+      "name": "Kitchen scale (load cell + HX711)",
+      "description": "A 5 kg load cell under a 12 x 12 cm pan, read by an HX711. Put things on the pan (drag them there) and it weighs them: about 420 counts per gram. VCC (2.6-5.5 V), GND, DT and SCK to any two pins. #include <HX711.h>; HX711 scale; scale.begin(DT, SCK); scale.tare(); scale.set_scale(420); scale.get_units(5) (grams).",
+      "swatch": "#c9cdd4",
+      "mass": 300,
+      "params": [
+        {
+          "key": "capacity",
+          "label": "Load cell",
+          "kind": "select",
+          "options": [
+            {
+              "value": "1",
+              "label": "1 kg"
+            },
+            {
+              "value": "5",
+              "label": "5 kg"
+            },
+            {
+              "value": "20",
+              "label": "20 kg"
+            }
+          ]
+        }
+      ],
+      "defaults": {
+        "capacity": "5"
+      },
+      "shape": [
+        {
+          "box": [
+            12,
+            1.6,
+            12
+          ],
+          "at": [
+            0,
+            0.8,
+            0
+          ],
+          "color": "#2b2d33"
+        },
+        {
+          "box": [
+            12.4,
+            0.3,
+            12.4
+          ],
+          "at": [
+            0,
+            1.85,
+            0
+          ],
+          "color": "#c9cdd4",
+          "touch": "pan"
+        },
+        {
+          "box": [
+            2.0,
+            0.12,
+            2.6
+          ],
+          "at": [
+            0,
+            1.66,
+            -6.9
+          ],
+          "color": "#2a6b3a",
+          "collide": false
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "GND",
+            "DT",
+            "SCK",
+            "VCC"
+          ],
+          "at": [
+            -0.381,
+            0.0,
+            -7.6
+          ],
+          "kinds": {
+            "GND": "gnd",
+            "DT": "out",
+            "SCK": "in",
+            "VCC": "vin"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (2.6-5.5 V)",
+              "vmin": 2.6,
+              "vmax": 5.5
+            }
+          }
+        }
+      ],
+      "device": "hx711"
+    }
+  ],
+  "examples": [
+    {
+      "name": "Kitchen scale",
+      "description": "A scale and some weights: press Run, then drag a weight onto the pan. The board tares it at the start and prints grams; press the pan with the ball (Shift) and watch the reading.",
+      "file": "examples/scale.bench"
+    },
+    {
+      "name": "Touch lamp and dimmer",
+      "description": "Touch the pad (Shift + the ball, or Touch in the run panel) to switch the LED on and off; drag the slide pot's knob to dim it; squeeze the force pad and its reading is printed.",
+      "file": "examples/touch-lamp.bench"
+    },
+    {
+      "name": "Bumper rover",
+      "description": "A rover with a bumper: it drives until it runs into the wall, backs up and turns. Press Run; drag the wall somewhere else.",
+      "file": "examples/bumper-rover.bench"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Data logger",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "sd",
+   "type": "sd-card/sd",
+   "name": "SD card",
+   "params": {},
+   "parent": null,
+   "pos": [
+    5,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Knob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -10,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "5V"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "CS"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "sd",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Data logger: the knob's reading goes into log.csv on the SD card twice a second; every 10 lines\n// the whole file is read back and printed. Turn the knob (its slider in the run panel).\n#include <SPI.h>\n#include <SD.h>\n\n#define SD_CS 17\nint lines = 0;\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!SD.begin(SD_CS)) {\n    Serial.println(\"No SD card: check the module's wires (and that a card is in it)\");\n    while (true) delay(100);\n  }\n  if (SD.exists(\"log.csv\")) SD.remove(\"log.csv\");\n  File f = SD.open(\"log.csv\", FILE_WRITE);\n  f.println(\"time_ms,knob\");\n  f.close();\n  Serial.println(\"logging to log.csv\");\n}\n\nvoid loop() {\n  File f = SD.open(\"log.csv\", FILE_WRITE);\n  if (f) {\n    f.print(millis());\n    f.print(\",\");\n    f.println(analogRead(A0));\n    f.close();\n    lines++;\n  }\n  if (lines % 10 == 0) {\n    Serial.println(\"--- log.csv so far ---\");\n    File r = SD.open(\"log.csv\");\n    while (r.available()) Serial.write(r.read());\n    r.close();\n  }\n  delay(500);\n}\n"
+  }
+ },
+ "boards": []
+}

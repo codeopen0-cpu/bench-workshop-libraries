@@ -19,7 +19,7 @@ bench.device('tcrt5000', (part) => {
     step(io) {
       const v = io.supply('VCC', 'GND');
       powered = v >= 3;
-      eye.want(powered ? 15 : 0);
+      eye.want(powered ? 60 : 0); // (a real one answers in microseconds: as often as the app allows)
       const f = eye.frame;
       if (f) { dark = 1 - lightness(f); seen = true; }
       if (!powered) { io.release('DO'); io.release('AO'); io.draw(0); return; }

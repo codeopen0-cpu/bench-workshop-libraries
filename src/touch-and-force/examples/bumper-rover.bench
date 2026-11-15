@@ -1,0 +1,512 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Bumper rover",
+ "parts": [
+  {
+   "uid": "chassis",
+   "type": "plate",
+   "name": "Chassis",
+   "params": {
+    "w": 12,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    4.4,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "motorR",
+   "type": "motor-tt",
+   "name": "Right motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    -0.15,
+    3.55
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "motorL",
+   "type": "motor-tt",
+   "name": "Left motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    3.2,
+    -0.15,
+    -3.55
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelR",
+   "type": "wheel",
+   "name": "Right wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorR",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelL",
+   "type": "wheel",
+   "name": "Left wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorL",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "battery",
+   "type": "battery-18650",
+   "name": "Batteries",
+   "params": {
+    "count": "2",
+    "charge": 100
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -2.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "brain",
+   "type": "maker-board",
+   "name": "Brain",
+   "params": {
+    "usb": false
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ]
+  },
+  {
+   "uid": "driver",
+   "type": "drv8833",
+   "name": "Motor driver",
+   "params": {},
+   "parent": {
+    "uid": "battery",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "caster",
+   "type": "caster",
+   "name": "Caster",
+   "params": {
+    "r": 1.57
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -4.6,
+    -0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "bumper",
+   "type": "touch-and-force/bumper",
+   "name": "Bumper",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    5.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "wallE",
+   "type": "block",
+   "name": "Wall (east)",
+   "params": {
+    "w": 2,
+    "h": 12,
+    "d": 82,
+    "material": "wood",
+    "color": "#9b7b5b"
+   },
+   "parent": null,
+   "pos": [
+    40,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "wallW",
+   "type": "block",
+   "name": "Wall (west)",
+   "params": {
+    "w": 2,
+    "h": 12,
+    "d": 82,
+    "material": "wood",
+    "color": "#9b7b5b"
+   },
+   "parent": null,
+   "pos": [
+    -40,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "wallN",
+   "type": "block",
+   "name": "Wall (north)",
+   "params": {
+    "w": 78,
+    "h": 12,
+    "d": 2,
+    "material": "wood",
+    "color": "#9b7b5b"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    -40
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "wallS",
+   "type": "block",
+   "name": "Wall (south)",
+   "params": {
+    "w": 78,
+    "h": 12,
+    "d": 2,
+    "material": "wood",
+    "color": "#9b7b5b"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    40
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "VM"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "VIN"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "brain",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN1"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "brain",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN2"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "brain",
+    "pin": "GP5"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN1"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "brain",
+    "pin": "GP6"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN2"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT1"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT2"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT1"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT2"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "bumper",
+    "pin": "COM"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "bumper",
+    "pin": "NO"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GP10"
+   },
+   "color": "#e8c547"
+  }
+ ],
+ "programs": {
+  "brain": {
+   "lang": "arduino",
+   "source": "#define AIN1 2    // right motor (through the DRV8833)\n#define AIN2 3\n#define BIN1 5    // left motor\n#define BIN2 6\n\nvoid motor(int in1, int in2, int speed) {\n  if (speed >= 0) { analogWrite(in1, speed); analogWrite(in2, 0); }\n  else            { analogWrite(in1, 0);     analogWrite(in2, -speed); }\n}\n\nvoid drive(int left, int right) {   // -255 .. 255\n  motor(BIN1, BIN2, left);\n  motor(AIN2, AIN1, right);         // the right motor faces the other way\n}\n\n// Bumper rover: drives ahead until its bumper hits something, then backs up and turns away.\n#define BUMPER 10   // the bumper's NO; its COM is on GND, so LOW = bumped\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(BUMPER, INPUT_PULLUP);\n  Serial.println(\"bumper rover ready\");\n}\n\nvoid loop() {\n  if (digitalRead(BUMPER) == LOW) {\n    Serial.println(\"bump! backing up\");\n    drive(-200, -200);\n    delay(500);\n    drive(200, -200);    // turn\n    delay(400);\n  } else {\n    drive(200, 200);\n  }\n  delay(20);\n}\n"
+  }
+ },
+ "boards": []
+}

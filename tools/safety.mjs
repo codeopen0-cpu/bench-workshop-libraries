@@ -29,8 +29,12 @@ const LIMITS = {
   keys: 64,
   rangers: 4,
   range: 1000, // cm
+  touches: 8,
+  lights: 4,
+  screenPixels: 320 * 320,
 };
 const NEW_FEATURES_APP = '0.3.0'; // the first app with moving parts, sounds, controls, distance sensors, messages
+const SENSING_APP = '0.4.0'; // the first with motion, touch, light, hearing, SPI chips and colour screens
 const older = (a, b) => {
   const pa = String(a).split('.').map(Number), pb = String(b).split('.').map(Number);
   for (let i = 0; i < 3; i++) if ((pa[i] ?? 0) !== (pb[i] ?? 0)) return (pa[i] ?? 0) < (pb[i] ?? 0);
@@ -167,7 +171,7 @@ export function checkLibrarySafety(lib, sizeBytes) {
   if (codeSize > LIMITS.codeBytes) out.push({ level: 'block', where: 'code', what: `${Math.round(codeSize / 1024)} KB of code is more than can be reviewed (most is ${LIMITS.codeBytes / 1024} KB)` });
   checkCode(lib.code, 'device code', out, true);
   for (const [name, f] of Object.entries(lib.sketch ?? {})) {
-    if (!/^[\w.-]+\.(h|hpp)$/.test(name)) out.push({ level: 'block', where: `sketch ${name}`, what: 'its name must look like Name.h (or Name.hpp)' });
+    if (!/^[\w.+-]+\.(h|hpp)$/.test(name)) out.push({ level: 'block', where: `sketch ${name}`, what: 'its name must look like Name.h (or Name.hpp)' });
     for (const c of [...(f?.classes ?? []), ...(f?.exports ?? [])]) if (!/^[A-Za-z_]\w*$/.test(c)) out.push({ level: 'block', where: `sketch ${name}`, what: `"${c}" is not a name` });
     checkCode(f?.code, `sketch ${name}`, out, false);
   }
@@ -192,6 +196,21 @@ export function checkLibrarySafety(lib, sizeBytes) {
     for (const s of p?.shape ?? []) for (const k of ['color']) if (s?.[k] && !/^#[0-9a-f]{3,8}$/i.test(s[k])) out.push({ level: 'block', where, what: `colour "${String(s[k]).slice(0, 30)}" is not a #hex colour` });
     if (p?.glb) checkGlb(p.glb, where, out);
   }
+  let sensing = /\bpart\s*\.\s*(motion|touch|light|hear)\s*\(|\bspi\s*:\s*\{|\.pixels\s*\(/.test(stripComments(lib.code ?? ''))
+    || Object.values(lib.sketch ?? {}).some((f) => /\bSPI\s*\.|\bsetRef\b|\bisRef\b/.test(f?.code ?? ''));
+  for (const p of parts) {
+    const where = `part ${p?.id}`;
+    const items = [...(p?.shape ?? []), ...(p?.moving ?? []).flatMap((m) => m?.shape ?? [])];
+    const touches = items.filter((x) => x?.touch !== undefined), lights = items.filter((x) => x?.light);
+    if (touches.length > LIMITS.touches) out.push({ level: 'block', where, what: `${touches.length} touch surfaces (most is ${LIMITS.touches})` });
+    if (lights.length > LIMITS.lights) out.push({ level: 'block', where, what: `${lights.length} light sensors (most is ${LIMITS.lights})` });
+    for (const sc of items.filter((x) => x?.screen?.mode === 'rgb'))
+      if (!(sc.screen.px?.[0] * sc.screen.px?.[1] <= LIMITS.screenPixels)) out.push({ level: 'block', where, what: `screen ${sc.screen.id}: at most 320 x 320 pixels` });
+    if (touches.length || lights.length || p?.spi || p?.hear || items.some((x) => x?.screen?.mode === 'rgb')) sensing = true;
+    if (p?.hear) out.push({ level: 'warn', where, what: 'hears the sounds parts on the bench make (no real microphone)' });
+  }
+  if (sensing && (!lib.needsApp || older(lib.needsApp, SENSING_APP)))
+    out.push({ level: 'block', where: 'needsApp', what: `it uses motion, touch, light, hearing, SPI or colour screens: set "needsApp": "${SENSING_APP}" (older apps can't run it)` });
   if (newFeatures && (!lib.needsApp || older(lib.needsApp, NEW_FEATURES_APP)))
     out.push({ level: 'block', where: 'needsApp', what: `it uses moving parts, sounds, controls, distance sensors or messages: set "needsApp": "${NEW_FEATURES_APP}" (older apps can't run it)` });
   return { ok: !out.some((x) => x.level === 'block'), problems: out };

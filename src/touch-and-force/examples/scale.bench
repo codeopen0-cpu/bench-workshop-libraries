@@ -1,0 +1,172 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Kitchen scale",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -14,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "scale",
+   "type": "touch-and-force/scale",
+   "name": "Scale",
+   "params": {},
+   "parent": null,
+   "pos": [
+    4,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "w100",
+   "type": "block",
+   "name": "100 g weight",
+   "params": {
+    "w": 2.6,
+    "h": 2,
+    "d": 2.45,
+    "material": "steel",
+    "color": "#9aa3ad"
+   },
+   "parent": null,
+   "pos": [
+    -4,
+    0,
+    12
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "w250",
+   "type": "block",
+   "name": "250 g weight",
+   "params": {
+    "w": 3.4,
+    "h": 3,
+    "d": 3.13,
+    "material": "steel",
+    "color": "#7f8893"
+   },
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    13
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "apple",
+   "type": "ball",
+   "name": "Apple",
+   "params": {
+    "r": 3.4,
+    "material": "wood",
+    "color": "#c8312b"
+   },
+   "parent": null,
+   "pos": [
+    9,
+    0,
+    13
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "scale",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "scale",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "scale",
+    "pin": "DT"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "scale",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Kitchen scale: a load cell and an HX711. Press Run, then drag a weight onto the pan: the grams\n// show in the serial monitor (press Plot to graph them).\n#include <HX711.h>\n\n#define DT 2\n#define SCK 3\n\nHX711 scale;\n\nvoid setup() {\n  Serial.begin(115200);\n  scale.begin(DT, SCK);\n  Serial.println(\"Taring: keep the pan empty...\");\n  scale.tare(10);          // what the empty pan reads is zero\n  scale.set_scale(420);    // counts per gram (found by weighing something known)\n  Serial.println(\"Ready: put something on the pan\");\n}\n\nvoid loop() {\n  float grams = scale.get_units(5);\n  if (abs(grams) < 0.5) grams = 0;\n  Serial.print(\"weight:\");\n  Serial.println(grams, 1);\n  delay(500);\n}\n"
+  }
+ },
+ "boards": []
+}

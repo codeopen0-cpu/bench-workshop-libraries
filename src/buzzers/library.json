@@ -2,13 +2,13 @@
   "format": "bench-library",
   "formatVersion": 1,
   "id": "buzzers",
-  "name": "Buzzers",
-  "version": "1.0.0",
+  "name": "Buzzers and a microphone",
+  "version": "1.1.0",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
-  "description": "An active buzzer (beeps by itself when powered) and a passive buzzer (plays the note you give it with tone()). You hear them: the toolbar's Sound button turns part sounds on and off.",
+  "description": "An active buzzer (beeps by itself when powered), a passive buzzer (plays the note you give it with tone()) and a sound sensor (KY-038 microphone module) that hears what parts on the bench play. You hear the buzzers too: the toolbar's Sound button turns part sounds on and off (the microphone hears them either way).",
   "category": "Sound",
-  "needsApp": "0.3.0",
+  "needsApp": "0.4.0",
   "code": "device.js",
   "parts": [
     {
@@ -19,13 +19,67 @@
       "mass": 2,
       "sound": true,
       "shape": [
-        { "cyl": [0.6, 0.9], "at": [0, 0.45, 0], "color": "#1c1c1e" },
-        { "cyl": [0.12, 0.02], "at": [0, 0.91, 0], "color": "#0a0a0a", "collide": false },
-        { "box": [0.5, 0.01, 0.12], "at": [0, 0.905, -0.3], "color": "#f2f2f2", "collide": false }
+        {
+          "cyl": [
+            0.6,
+            0.9
+          ],
+          "at": [
+            0,
+            0.45,
+            0
+          ],
+          "color": "#1c1c1e"
+        },
+        {
+          "cyl": [
+            0.12,
+            0.02
+          ],
+          "at": [
+            0,
+            0.91,
+            0
+          ],
+          "color": "#0a0a0a",
+          "collide": false
+        },
+        {
+          "box": [
+            0.5,
+            0.01,
+            0.12
+          ],
+          "at": [
+            0,
+            0.905,
+            -0.3
+          ],
+          "color": "#f2f2f2",
+          "collide": false
+        }
       ],
       "pins": [
-        { "id": "+", "label": "+ (long leg)", "at": [-0.25, 0, 0], "kind": "in" },
-        { "id": "-", "label": "- (short leg)", "at": [0.25, 0, 0], "kind": "gnd" }
+        {
+          "id": "+",
+          "label": "+ (long leg)",
+          "at": [
+            -0.25,
+            0,
+            0
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "-",
+          "label": "- (short leg)",
+          "at": [
+            0.25,
+            0,
+            0
+          ],
+          "kind": "gnd"
+        }
       ],
       "device": "active-buzzer"
     },
@@ -37,18 +91,190 @@
       "mass": 2,
       "sound": true,
       "shape": [
-        { "cyl": [0.6, 0.8], "at": [0, 0.4, 0], "color": "#1c1c1e" },
-        { "box": [1.3, 0.08, 1.3], "at": [0, 0.04, 0], "color": "#1d6b3a" },
-        { "cyl": [0.15, 0.02], "at": [0, 0.81, 0], "color": "#0a0a0a", "collide": false }
+        {
+          "cyl": [
+            0.6,
+            0.8
+          ],
+          "at": [
+            0,
+            0.4,
+            0
+          ],
+          "color": "#1c1c1e"
+        },
+        {
+          "box": [
+            1.3,
+            0.08,
+            1.3
+          ],
+          "at": [
+            0,
+            0.04,
+            0
+          ],
+          "color": "#1d6b3a"
+        },
+        {
+          "cyl": [
+            0.15,
+            0.02
+          ],
+          "at": [
+            0,
+            0.81,
+            0
+          ],
+          "color": "#0a0a0a",
+          "collide": false
+        }
       ],
       "pins": [
-        { "id": "+", "label": "+ (signal)", "at": [-0.25, 0, 0], "kind": "in" },
-        { "id": "-", "label": "-", "at": [0.25, 0, 0], "kind": "gnd" }
+        {
+          "id": "+",
+          "label": "+ (signal)",
+          "at": [
+            -0.25,
+            0,
+            0
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "-",
+          "label": "-",
+          "at": [
+            0.25,
+            0,
+            0
+          ],
+          "kind": "gnd"
+        }
       ],
       "device": "passive-buzzer"
+    },
+    {
+      "id": "sound-sensor",
+      "name": "Sound sensor (KY-038)",
+      "description": "A microphone with an amplifier: AO follows how loud it is (about VCC/2 when quiet, swinging wider when loud), DO goes HIGH while it's louder than the pot's setting. It hears the buzzers and speakers on the bench: closer is louder. VCC (3.3-5 V), GND, DO, AO.",
+      "swatch": "#c83030",
+      "mass": 3,
+      "params": [
+        {
+          "key": "threshold",
+          "label": "Pot: loud above (0-100)",
+          "kind": "number",
+          "min": 1,
+          "max": 100,
+          "step": 1
+        }
+      ],
+      "defaults": {
+        "threshold": 20
+      },
+      "hear": true,
+      "shape": [
+        {
+          "box": [
+            1.5,
+            0.16,
+            3.6
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#c83030"
+        },
+        {
+          "cyl": [
+            0.5,
+            0.5
+          ],
+          "at": [
+            0,
+            0.41,
+            1.3
+          ],
+          "color": "#9aa0a8"
+        },
+        {
+          "cyl": [
+            0.4,
+            0.02
+          ],
+          "at": [
+            0,
+            0.67,
+            1.3
+          ],
+          "color": "#2b2b2e",
+          "collide": false
+        },
+        {
+          "box": [
+            0.6,
+            0.45,
+            0.6
+          ],
+          "at": [
+            0.3,
+            0.38,
+            -0.3
+          ],
+          "color": "#3a70e0"
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "AO",
+            "GND",
+            "VCC",
+            "DO"
+          ],
+          "at": [
+            -0.381,
+            0.0,
+            -1.65
+          ],
+          "kinds": {
+            "AO": "out",
+            "GND": "gnd",
+            "VCC": "vin",
+            "DO": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.5,
+              "vmax": 5.5
+            },
+            "AO": {
+              "label": "AO (loudness)",
+              "analog": true
+            },
+            "DO": {
+              "label": "DO (HIGH = loud)"
+            }
+          }
+        }
+      ],
+      "device": "sound-sensor"
     }
   ],
   "examples": [
-    { "name": "Play a tune", "description": "A board playing a short tune on a passive buzzer with tone(), and beeping an active buzzer between the notes. Press Run (and turn Sound on).", "file": "examples/tune.bench" }
+    {
+      "name": "Play a tune",
+      "description": "A board playing a short tune on a passive buzzer with tone(), and beeping an active buzzer between the notes. Press Run (and turn Sound on).",
+      "file": "examples/tune.bench"
+    },
+    {
+      "name": "Hears the buzzer",
+      "description": "One board beeps a buzzer now and then; a sound sensor beside it hears each beep and lights an LED. Drag the buzzer further away and the beeps get too quiet to hear.",
+      "file": "examples/hear.bench"
+    }
   ]
 }

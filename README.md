@@ -36,6 +36,10 @@ is towards you.
   `[radius, height]`, `sphere` radius, `header` `{ "n": 5, "dir": "x" }`, and
   `screen` `{ "id", "size": [w, d], "px": [cols, rows], "mode": "pixels" | "text", "on", "off", "bg" }`.
   Boxes, cylinders and spheres make its physical shape unless `"collide": false`.
+  A `screen` with `"dots": false` draws square pixels (an image) instead of LED dots.
+- `camera` (in `shape`): `{ "id", "px": [w, h], "fov", "look": [x, y, z], "range" }` at `at`: its
+  code gets pictures of the bench from there (`part.camera(id)`, see GUIDE.md). Parts with a camera
+  need app 0.2.1 or newer: add `"needsApp": "0.2.1"` to the library.
 - `pinRows`: pins on a header: `{ "ids": [...], "at": [x, y, z], "dir": "x" | "z", "kinds": {...} }`
   (kinds: `gnd`, `vin`, `vout`, `io`, `in`, `out`, `motor`, `i2c`). For a `vin` pin, `vmin`/`vmax`
   in `extra` make it burn out above its rating, as in real life, and let Check warn before it does.

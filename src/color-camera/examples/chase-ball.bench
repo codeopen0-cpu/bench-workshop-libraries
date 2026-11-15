@@ -1,0 +1,467 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Rover chases a red ball",
+ "libraries": [
+  {
+   "id": "color-camera",
+   "name": "Colour-tracking camera",
+   "version": "1.0.0"
+  }
+ ],
+ "parts": [
+  {
+   "uid": "chassis",
+   "type": "plate",
+   "name": "Chassis",
+   "params": {
+    "w": 12,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    4.4,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "motorR",
+   "type": "motor-tt",
+   "name": "Right motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    -0.15,
+    3.55
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "motorL",
+   "type": "motor-tt",
+   "name": "Left motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    3.2,
+    -0.15,
+    -3.55
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelR",
+   "type": "wheel",
+   "name": "Right wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorR",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelL",
+   "type": "wheel",
+   "name": "Left wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorL",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "caster",
+   "type": "caster",
+   "name": "Caster",
+   "params": {
+    "r": 1.57
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -4.6,
+    -0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "battery",
+   "type": "battery-18650",
+   "name": "Batteries (2x 18650, 7.4 V)",
+   "params": {
+    "count": "2",
+    "charge": 100
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -2.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "brain",
+   "type": "maker-board",
+   "name": "Brain",
+   "params": {
+    "usb": false
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ]
+  },
+  {
+   "uid": "driver",
+   "type": "drv8833",
+   "name": "Motor driver",
+   "params": {},
+   "parent": {
+    "uid": "battery",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "camera",
+   "type": "color-camera/blobcam",
+   "name": "Camera",
+   "params": {
+    "addr": "84"
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    5.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "ball",
+   "type": "ball",
+   "name": "Red ball",
+   "params": {
+    "r": 3,
+    "material": "plastic",
+    "color": "#e02828"
+   },
+   "parent": null,
+   "pos": [
+    55,
+    0,
+    -28
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "VM"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "VIN"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "brain",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN1"
+   },
+   "color": "#4f9cff"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "brain",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN2"
+   },
+   "color": "#4f9cff"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "brain",
+    "pin": "GP5"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN1"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "brain",
+    "pin": "GP6"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN2"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT1"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M+"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT2"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M-"
+   },
+   "color": "#ff9d3a"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT1"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M+"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT2"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M-"
+   },
+   "color": "#ff9d3a"
+  },
+  {
+   "id": "c1",
+   "a": {
+    "uid": "brain",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "camera",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "c2",
+   "a": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "camera",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "c3",
+   "a": {
+    "uid": "brain",
+    "pin": "SDA"
+   },
+   "b": {
+    "uid": "camera",
+    "pin": "SDA"
+   },
+   "color": "#4f9cff"
+  },
+  {
+   "id": "c4",
+   "a": {
+    "uid": "brain",
+    "pin": "SCL"
+   },
+   "b": {
+    "uid": "camera",
+    "pin": "SCL"
+   },
+   "color": "#e8c547"
+  }
+ ],
+ "programs": {
+  "brain": {
+   "lang": "arduino",
+   "source": "// Rover chases a red ball: the colour-tracking camera on its nose says where red is in its view;\n// the rover turns towards it, drives up to it and stops when it fills the view. Drag the ball\n// somewhere else while it runs and it goes after it. Nothing red in view: it turns on the spot to look.\n#include <BlobCam.h>\n\n#define AIN1 2    // right motor, through the DRV8833\n#define AIN2 3\n#define BIN1 5    // left motor\n#define BIN2 6\n\nBlobCam cam;\n\nvoid motor(int in1, int in2, int speed) {\n  speed = constrain(speed, -255, 255);\n  if (speed >= 0) { analogWrite(in1, speed); analogWrite(in2, 0); }\n  else            { analogWrite(in1, 0);     analogWrite(in2, -speed); }\n}\n\nvoid drive(int left, int right) {   // -255 .. 255\n  motor(BIN1, BIN2, left);\n  motor(AIN2, AIN1, right);         // the right motor faces the other way\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!cam.begin()) Serial.println(\"no camera on I2C: check its wires\");\n  cam.setColor(255, 0, 0);          // look for red\n  Serial.println(\"looking for red\");\n}\n\nvoid loop() {\n  if (cam.read() && cam.found) {\n    int err = cam.x - 128;              // how far from the middle (left: negative)\n    if (cam.size > 140) {\n      drive(0, 0);                      // it fills the view: we are there\n      Serial.println(\"got it!\");\n    } else if (abs(err) > 40) {\n      // off to one side: turn on the spot towards it, slower as it nears the middle\n      // (turning fast overshoots: the camera only looks 15 times a second)\n      int t = constrain(err / 2, -75, 75);\n      if (t > 0 && t < 55) t = 55;      // below this the gearbox won't turn\n      if (t < 0 && t > -55) t = -55;\n      drive(t, -t);\n    } else {\n      int speed = 160 - cam.size * 3 / 4; // slower as it gets closer (bigger in the view)\n      if (speed < 70) speed = 70;\n      drive(speed + err / 2, speed - err / 2); // roughly ahead: drive, steering a little\n    }\n  } else {\n    drive(60, -60);                     // nothing red in view: turn slowly and look\n  }\n  delay(30);\n}\n"
+  }
+ },
+ "boards": []
+}

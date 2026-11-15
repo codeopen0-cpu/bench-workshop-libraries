@@ -1,0 +1,185 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "color-camera",
+  "name": "Colour-tracking camera",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "needsApp": "0.2.1",
+  "description": "A small camera that finds the biggest patch of one colour (red, green, blue, yellow...) in what it sees and tells a board where it is over I2C, like the Pixy or HuskyLens cameras robots use. A screen on its back shows what it sees. Includes BlobCam.h for sketches.",
+  "category": "Sensors",
+  "code": "device.js",
+  "sketch": {
+    "BlobCam.h": {
+      "classes": [
+        "BlobCam"
+      ],
+      "file": "sketch/BlobCam.js"
+    }
+  },
+  "parts": [
+    {
+      "id": "blobcam",
+      "name": "Colour-tracking camera",
+      "description": "Looks along its lens (the +x side). VCC 3.3-5 V, GND, SDA, SCL; I2C address 0x54. In a sketch: #include <BlobCam.h>, BlobCam cam; cam.begin(); cam.setColor(255, 0, 0); then if (cam.read() && cam.found) use cam.x (0 = left edge, 255 = right), cam.y, cam.size. The screen on its back shows its view, with a cross on what it found.",
+      "swatch": "#2a6fd6",
+      "mass": 8,
+      "params": [
+        {
+          "key": "addr",
+          "label": "I2C address",
+          "kind": "select",
+          "options": [
+            {
+              "value": "84",
+              "label": "0x54"
+            },
+            {
+              "value": "85",
+              "label": "0x55"
+            }
+          ]
+        }
+      ],
+      "defaults": {
+        "addr": "84"
+      },
+      "shape": [
+        {
+          "box": [
+            1.0,
+            2.6,
+            3.0
+          ],
+          "at": [
+            0,
+            1.3,
+            0
+          ],
+          "color": "#2a6fd6"
+        },
+        {
+          "cyl": [
+            0.55,
+            0.5
+          ],
+          "at": [
+            0.75,
+            1.6,
+            0
+          ],
+          "rot": [
+            0,
+            0,
+            90
+          ],
+          "color": "#151618"
+        },
+        {
+          "cyl": [
+            0.35,
+            0.52
+          ],
+          "at": [
+            0.77,
+            1.6,
+            0
+          ],
+          "rot": [
+            0,
+            0,
+            90
+          ],
+          "color": "#3a4a7a",
+          "collide": false
+        },
+        {
+          "screen": {
+            "id": "view",
+            "size": [
+              2.6,
+              1.95
+            ],
+            "px": [
+              32,
+              24
+            ],
+            "dots": false,
+            "bg": "#000000",
+            "off": "#000000"
+          },
+          "at": [
+            -0.505,
+            1.4,
+            0
+          ],
+          "rot": [
+            90,
+            0,
+            90
+          ]
+        },
+        {
+          "camera": {
+            "id": "eye",
+            "px": [
+              80,
+              60
+            ],
+            "fov": 55,
+            "look": [
+              1,
+              0,
+              0
+            ],
+            "range": 600
+          },
+          "at": [
+            1.05,
+            1.6,
+            0
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "SDA",
+            "SCL"
+          ],
+          "at": [
+            -0.75,
+            0.0,
+            -0.381
+          ],
+          "dir": "z",
+          "header": false,
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "SDA": "i2c",
+            "SCL": "i2c"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 3.0,
+              "vmax": 5.5
+            }
+          }
+        }
+      ],
+      "device": "blobcam"
+    }
+  ],
+  "examples": [
+    {
+      "name": "Rover chases a red ball",
+      "description": "A rover with the camera on its nose turns towards a red ball, drives to it and stops in front of it. Move the ball (drag it while running) and it follows.",
+      "file": "examples/chase-ball.bench"
+    }
+  ]
+}

@@ -106,6 +106,7 @@ export function checkLibrarySafety(lib, sizeBytes) {
   if (sizeBytes > LIMITS.fileBytes) out.push({ level: 'block', where: 'file', what: `${(sizeBytes / 1048576).toFixed(1)} MB is too big (most is ${LIMITS.fileBytes / 1048576} MB)` });
   for (const k of ['id', 'name', 'version', 'author', 'description', 'category', 'homepage'])
     if (typeof lib[k] === 'string' && MARKUP.test(lib[k])) out.push({ level: 'block', where: k, what: 'has web markup or script in it' });
+ if (lib.needsApp !== undefined && !/^\d+\.\d+\.\d+$/.test(String(lib.needsApp))) out.push({ level: 'block', where: 'needsApp', what: 'is not a version like 0.2.1' });
   if (lib.owner !== undefined && !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/.test(String(lib.owner))) out.push({ level: 'block', where: 'owner', what: 'is not a GitHub account name' });
   if (lib.homepage && !/^https:\/\/[\w.-]+\//i.test(lib.homepage)) out.push({ level: 'warn', where: 'homepage', what: 'is not an https:// address' });
   const codeSize = (lib.code?.length ?? 0) + Object.values(lib.sketch ?? {}).reduce((s, f) => s + (f?.code?.length ?? 0), 0);

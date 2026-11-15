@@ -160,6 +160,50 @@ the part is doing *and what's wrong*: "contrast too low to read: turn the knob t
 `part.log('...')` writes to the developer console (Ctrl+Shift+I) for your own debugging.
 `part.params` are the settings from the inspector (an I2C address, say).
 
+### A part that sees: cameras
+
+A part can have a **camera**: the app renders the bench from where it sits, and its code gets the
+pictures. The colour-tracking camera (`src/color-camera`) is a working example: it finds a colour
+and reports where it is over I2C, and a rover in its test bench drives itself to a red ball.
+
+In `library.json`, put the camera where its lens is:
+
+```json
+{ "camera": { "id": "eye", "px": [80, 60], "fov": 55, "look": [1, 0, 0], "range": 600 }, "at": [1.05, 1.6, 0] }
+```
+
+`px` is the picture size (160 x 120 at most: small is faster, and plenty for most jobs), `fov` the
+angle it sees top to bottom, `look` which way it faces in the part's frame (here +x, out of the
+lens), `range` how far it sees (cm). It's invisible: draw the lens with a cylinder.
+
+In `device.js`:
+
+```js
+const eye = part.camera('eye');
+eye.want(15);                        // pictures, 15 a second (the most; 0 stops them)
+// ... then in step(io):
+const f = eye.frame;                 // the newest picture, or null before the first
+if (f && f.time !== lastTime) {      // a new one
+  lastTime = f.time;
+  const [r, g, b] = f.get(40, 30);   // the pixel in the middle (0-255 each)
+  // f.data holds them all: RGBA, top row first, f.width x f.height
+}
+```
+
+Ask for pictures only while the part has power (`want(0)` otherwise): each one costs a render.
+Turning the pictures into something a board can use is your part's job, like a real camera
+module's chip: find a colour, a line on the floor, a bright light, motion... and report it on pins,
+I2C or Wi-Fi. A screen with `"dots": false` shows square pixels, good for showing what it sees
+(the colour camera draws its view on its back, with a cross on what it found).
+
+A camera's code needs Bench Workshop 0.2.1 or newer: say so with `"needsApp": "0.2.1"` in
+`library.json`, and an older app asks people to update instead of failing.
+
+One thing real camera robots teach fast: **the camera is slow compared to the motors**. 15
+pictures a second means a rover turning fast moves 15 degrees between two looks and overshoots.
+The test bench's sketch turns slower as the target nears the middle, and drives slower as it
+gets close. Test your part with something that moves.
+
 ## 4. The Arduino library: sketch/*.js
 
 People will program your part with the library they'd use on real hardware, so give them the same

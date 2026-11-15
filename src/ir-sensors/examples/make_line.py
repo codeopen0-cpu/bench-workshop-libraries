@@ -4,10 +4,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from benchgen import *
 H = here(__file__)
 parts, ws0 = rover_base()
-# a bracket under its nose, holding the two line sensors 0.5 cm over the paper (glued positions
-# are from the middle of what they're glued to)
+# a bracket under its nose, holding the two line sensors 0.8 cm over the paper (glued positions
+# are from the middle of what they're glued to). Not lower: when it brakes hard or swings round,
+# the robot dips its nose, and at 0.5 cm the sensors caught on the tape and stopped it.
 parts += [
-    part('bracket', 'block', 'Sensor bracket', (5.0, -3.25, 0), parent=('chassis', 'body'), params={"w": 1.4, "h": 3.1, "d": 5, "material": "plastic", "color": "#d8dce4"}),
+    part('bracket', 'block', 'Sensor bracket', (5.0, -2.95, 0), parent=('chassis', 'body'), params={"w": 1.4, "h": 3.1, "d": 5, "material": "plastic", "color": "#d8dce4"}),
     part('lineL', 'ir-sensors/tcrt5000', 'Left line sensor', (0.2, -2.15, -0.75), parent=("bracket", "body"), params={"threshold": 35}),
     part('lineR', 'ir-sensors/tcrt5000', 'Right line sensor', (0.2, -2.15, 0.75), parent=("bracket", "body"), params={"threshold": 35}),
 ]

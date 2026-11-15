@@ -321,6 +321,11 @@ spi: {
 A board's `SPI.transfer(...)` waits for that answer; `SPI.writeBytes(...)` doesn't (fast: a screen's
 pixels). Only the part whose CS is LOW gets the bytes; two at once is reported as a clash.
 
+**Multi-turn servos** (`src/servos`, app 0.4.3): a moving piece with `"motor": "servo"` and
+`"multiturn": true` goes to any angle, any number of turns away (`part.motor('horn').to(1260)` is
+three and a half turns), and never loses its place: a winch, a smart servo. Overloaded, it stalls
+and keeps trying, as a servo does.
+
 **Big colour screens** (`src/tft-displays`): a screen with `"mode": "rgb"` (up to 320 x 320) takes
 a colour number per pixel (`s.set(x, y, 0xff8800)`), and `s.pixels(x, y, w, h, colours)` sets a block
 at once. It shows 30 pictures a second at most.

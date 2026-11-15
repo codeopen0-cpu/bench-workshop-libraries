@@ -114,7 +114,9 @@ DHT11/DHT22/BME280, line (TCRT5000), obstacle (FC-51), laser distance (VL53L0X),
 switch, compass (QMC5883L), accelerometer (ADXL345), light (LDR, BH1750), colour (TCS34725), sound
 (KY-038), touch pad (TTP223), force pad (FSR), limit switch, bumper, scale (HX711), GPS (NEO-6M),
 real-time clock (DS3231), RFID (RC522 and tags). Motion: steppers (28BYJ-48 + ULN2003, NEMA 17 +
-A4988), TT motor with encoder, slide potentiometer. Input: keypads, joystick, rotary encoder.
+A4988), TT motor with encoder, slide potentiometer, servos beyond 180 degrees (continuous FS90R
+and MG996R 360, 270 and 360 degree positional, HS-785HB sail winch, STS3215 and Dynamixel XL430
+smart servos). Input: keypads, joystick, rotary encoder.
 Wireless: HC-05 Bluetooth, IR remote and receiver, nRF24L01 radios. Storage: SD card. Sound:
 buzzers. Power and logic: relay module, 74HC595 shift register. Each comes with a ready-wired
 example bench; robots to build on: a self-balancing robot, a line follower and a bumper rover.

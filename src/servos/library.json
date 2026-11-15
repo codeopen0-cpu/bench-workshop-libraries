@@ -1,0 +1,1416 @@
+{
+ "format": "bench-library",
+ "formatVersion": 1,
+ "id": "servos",
+ "name": "More servos: 360, continuous, winch and smart",
+ "version": "1.0.0",
+ "author": "Bench Workshop",
+ "owner": "codeopen0-cpu",
+ "description": "Servos beyond 180 degrees. Continuous ones that spin round and round (FS90R, MG996R 360: the signal sets speed and direction), positional ones with 270 and 360 degrees of travel, a sail winch servo that turns three and a half turns, and two smart serial-bus servos that turn to any angle and report back (Feetech STS3215 with SCServo.h, Dynamixel XL430 with Dynamixel2Arduino.h).",
+ "category": "Motion",
+ "needsApp": "0.4.3",
+ "code": "device.js",
+ "sketch": {
+  "SCServo.h": {
+   "classes": [
+    "SMS_STS",
+    "SCSCL"
+   ],
+   "file": "sketch/SCServo.js"
+  },
+  "Dynamixel2Arduino.h": {
+   "classes": [
+    "Dynamixel2Arduino"
+   ],
+   "exports": [
+    "OP_POSITION",
+    "OP_EXTENDED_POSITION",
+    "OP_VELOCITY",
+    "OP_PWM",
+    "OP_CURRENT",
+    "OP_CURRENT_BASED_POSITION",
+    "UNIT_RAW",
+    "UNIT_PERCENT",
+    "UNIT_RPM",
+    "UNIT_DEGREE",
+    "UNIT_MILLI_AMPERE",
+    "TORQUE_ENABLE",
+    "LED",
+    "GOAL_POSITION",
+    "GOAL_VELOCITY",
+    "PROFILE_VELOCITY",
+    "PROFILE_ACCELERATION",
+    "PRESENT_POSITION",
+    "PRESENT_VELOCITY",
+    "PRESENT_LOAD",
+    "PRESENT_INPUT_VOLTAGE",
+    "PRESENT_TEMPERATURE",
+    "MOVING",
+    "OPERATING_MODE",
+    "ID",
+    "BAUD_RATE",
+    "MODEL_NUMBER"
+   ],
+   "file": "sketch/Dynamixel2Arduino.js"
+  }
+ },
+ "parts": [
+  {
+   "id": "fs90r",
+   "name": "Servo FS90R (continuous, micro)",
+   "description": "A micro servo that spins round and round: write(90) stops it, write(0) and write(180) are full speed each way, in between slower (no angle: it doesn't know where it is). 1.3 kg*cm, about 110 rpm at 4.8 V. Real ones stop a little off 90: the trim setting copies that.",
+   "swatch": "#1d1d20",
+   "mass": 9,
+   "shape": [
+    {
+     "box": [
+      2.3,
+      2.25,
+      1.22
+     ],
+     "at": [
+      0,
+      1.125,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "box": [
+      3.5,
+      0.22,
+      1.22
+     ],
+     "at": [
+      0,
+      1.665,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "cyl": [
+      0.4026,
+      0.35
+     ],
+     "at": [
+      0.55,
+      2.425,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "box": [
+      1.265,
+      0.01,
+      0.854
+     ],
+     "at": [
+      -0.345,
+      1.125,
+      0.616
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#2c5fd1",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "label": "GND (brown)",
+     "at": [
+      -1.75,
+      0.45,
+      -0.25
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (red)",
+     "at": [
+      -1.75,
+      0.45,
+      0
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 6.5
+    },
+    {
+     "id": "SIG",
+     "label": "Signal (orange)",
+     "at": [
+      -1.75,
+      0.45,
+      0.25
+     ],
+     "kind": "in"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 1,
+     "shape": [
+      {
+       "cyl": [
+        0.5124,
+        0.18
+       ],
+       "at": [
+        0.55,
+        2.69,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        1.6,
+        0.18,
+        0.4392
+       ],
+       "at": [
+        1.35,
+        2.69,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        0.855,
+        2.79,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       0.55,
+       2.6,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "motor",
+      "torque": 1.3,
+      "speed": 110,
+      "volts": 4.8
+     }
+    }
+   ],
+   "device": "cr-servo",
+   "params": [
+    {
+     "key": "trim",
+     "label": "Stop point trim (us)",
+     "kind": "number",
+     "min": -100,
+     "max": 100,
+     "step": 1
+    }
+   ],
+   "defaults": {
+    "trim": 0
+   }
+  },
+  {
+   "id": "mg996r-360",
+   "name": "Servo MG996R 360 (continuous)",
+   "description": "The metal-gear MG996R made to spin round and round: write(90) stops it, 0 and 180 are full speed each way (no angle: it doesn't know where it is). 10 kg*cm, about 55 rpm at 6 V: a good wheel motor.",
+   "swatch": "#202226",
+   "mass": 55,
+   "shape": [
+    {
+     "box": [
+      4.07,
+      3.78,
+      1.97
+     ],
+     "at": [
+      0,
+      1.89,
+      0
+     ],
+     "color": "#202226"
+    },
+    {
+     "box": [
+      5.2700000000000005,
+      0.22,
+      1.97
+     ],
+     "at": [
+      0,
+      2.7971999999999997,
+      0
+     ],
+     "color": "#202226"
+    },
+    {
+     "cyl": [
+      0.6501,
+      0.35
+     ],
+     "at": [
+      1.0,
+      3.9549999999999996,
+      0
+     ],
+     "color": "#202226"
+    },
+    {
+     "box": [
+      2.2385,
+      0.01,
+      1.379
+     ],
+     "at": [
+      -0.6105,
+      1.89,
+      0.991
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#2c5fd1",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "label": "GND (brown)",
+     "at": [
+      -2.6350000000000002,
+      0.45,
+      -0.25
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (red)",
+     "at": [
+      -2.6350000000000002,
+      0.45,
+      0
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 7.4
+    },
+    {
+     "id": "SIG",
+     "label": "Signal (orange)",
+     "at": [
+      -2.6350000000000002,
+      0.45,
+      0.25
+     ],
+     "kind": "in"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 3.3,
+     "shape": [
+      {
+       "cyl": [
+        0.8273999999999999,
+        0.18
+       ],
+       "at": [
+        1.0,
+        4.22,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        2.4,
+        0.18,
+        0.7091999999999999
+       ],
+       "at": [
+        2.2,
+        4.22,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        1.4925,
+        4.32,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       1.0,
+       4.13,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "motor",
+      "torque": 10,
+      "speed": 55,
+      "volts": 6
+     }
+    }
+   ],
+   "device": "cr-servo",
+   "params": [
+    {
+     "key": "trim",
+     "label": "Stop point trim (us)",
+     "kind": "number",
+     "min": -100,
+     "max": 100,
+     "step": 1
+    }
+   ],
+   "defaults": {
+    "trim": 0
+   }
+  },
+  {
+   "id": "ds3218-270",
+   "name": "Servo DS3218 (270 deg)",
+   "description": "A 20 kg*cm digital servo with 270 degrees of travel: pulses 500-2500 us go from -135 to +135 deg. With Servo: write(0..180) covers the whole 270 (write(90) is the middle), or writeMicroseconds(). About 60 rpm at 6.8 V.",
+   "swatch": "#1a1a1c",
+   "mass": 60,
+   "shape": [
+    {
+     "box": [
+      4.0,
+      3.9,
+      2.0
+     ],
+     "at": [
+      0,
+      1.95,
+      0
+     ],
+     "color": "#1a1a1c"
+    },
+    {
+     "box": [
+      5.2,
+      0.22,
+      2.0
+     ],
+     "at": [
+      0,
+      2.886,
+      0
+     ],
+     "color": "#1a1a1c"
+    },
+    {
+     "cyl": [
+      0.66,
+      0.35
+     ],
+     "at": [
+      1.0,
+      4.075,
+      0
+     ],
+     "color": "#1a1a1c"
+    },
+    {
+     "box": [
+      2.2,
+      0.01,
+      1.4
+     ],
+     "at": [
+      -0.6,
+      1.95,
+      1.006
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#d03030",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "label": "GND (brown)",
+     "at": [
+      -2.6,
+      0.45,
+      -0.25
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (red)",
+     "at": [
+      -2.6,
+      0.45,
+      0
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 7.4
+    },
+    {
+     "id": "SIG",
+     "label": "Signal (orange)",
+     "at": [
+      -2.6,
+      0.45,
+      0.25
+     ],
+     "kind": "in"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 3.5999999999999996,
+     "shape": [
+      {
+       "cyl": [
+        0.84,
+        0.18
+       ],
+       "at": [
+        1.0,
+        4.34,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        2.4,
+        0.18,
+        0.72
+       ],
+       "at": [
+        2.2,
+        4.34,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        1.5,
+        4.44,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       1.0,
+       4.25,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "servo",
+      "torque": 20,
+      "speed": 60,
+      "volts": 6.8,
+      "min": -135,
+      "max": 135
+     }
+    }
+   ],
+   "device": "pwm-servo",
+   "params": [
+    {
+     "key": "range",
+     "label": "Travel",
+     "kind": "select",
+     "options": [
+      {
+       "value": "270",
+       "label": "270 deg"
+      }
+     ]
+    }
+   ],
+   "defaults": {
+    "range": "270"
+   }
+  },
+  {
+   "id": "servo-360",
+   "name": "Servo 360 deg positional (25 kg)",
+   "description": "A positional servo with a full circle of travel: pulses 500-2500 us go from -180 to +180 deg (write(0..180) covers the whole circle, write(90) is the middle). It knows its angle, unlike a continuous servo. 25 kg*cm, about 50 rpm at 6.8 V.",
+   "swatch": "#24262b",
+   "mass": 65,
+   "shape": [
+    {
+     "box": [
+      4.0,
+      3.9,
+      2.0
+     ],
+     "at": [
+      0,
+      1.95,
+      0
+     ],
+     "color": "#24262b"
+    },
+    {
+     "box": [
+      5.2,
+      0.22,
+      2.0
+     ],
+     "at": [
+      0,
+      2.886,
+      0
+     ],
+     "color": "#24262b"
+    },
+    {
+     "cyl": [
+      0.66,
+      0.35
+     ],
+     "at": [
+      1.0,
+      4.075,
+      0
+     ],
+     "color": "#24262b"
+    },
+    {
+     "box": [
+      2.2,
+      0.01,
+      1.4
+     ],
+     "at": [
+      -0.6,
+      1.95,
+      1.006
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#e0a020",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "label": "GND (brown)",
+     "at": [
+      -2.6,
+      0.45,
+      -0.25
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (red)",
+     "at": [
+      -2.6,
+      0.45,
+      0
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 7.4
+    },
+    {
+     "id": "SIG",
+     "label": "Signal (orange)",
+     "at": [
+      -2.6,
+      0.45,
+      0.25
+     ],
+     "kind": "in"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 3.9,
+     "shape": [
+      {
+       "cyl": [
+        0.84,
+        0.18
+       ],
+       "at": [
+        1.0,
+        4.34,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        2.4,
+        0.18,
+        0.72
+       ],
+       "at": [
+        2.2,
+        4.34,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        1.5,
+        4.44,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       1.0,
+       4.25,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "servo",
+      "torque": 25,
+      "speed": 50,
+      "volts": 6.8,
+      "min": -180,
+      "max": 180
+     }
+    }
+   ],
+   "device": "pwm-servo",
+   "params": [
+    {
+     "key": "range",
+     "label": "Travel",
+     "kind": "select",
+     "options": [
+      {
+       "value": "360",
+       "label": "360 deg"
+      }
+     ]
+    }
+   ],
+   "defaults": {
+    "range": "360"
+   }
+  },
+  {
+   "id": "hs785hb",
+   "name": "Sail winch servo HS-785HB (3.5 turns)",
+   "description": "A multi-turn winch servo: pulses 600-2400 us go from -630 to +630 deg, three and a half turns end to end, and it holds there. writeMicroseconds(600..2400) (write(0..180) gives about two turns). 13 kg*cm, about 36 rpm at 6 V. Wind a line on its drum.",
+   "swatch": "#2a2a2e",
+   "mass": 110,
+   "shape": [
+    {
+     "box": [
+      5.9,
+      5.0,
+      2.9
+     ],
+     "at": [
+      0,
+      2.5,
+      0
+     ],
+     "color": "#2a2a2e"
+    },
+    {
+     "box": [
+      7.1000000000000005,
+      0.22,
+      2.9
+     ],
+     "at": [
+      0,
+      3.7,
+      0
+     ],
+     "color": "#2a2a2e"
+    },
+    {
+     "cyl": [
+      0.957,
+      0.35
+     ],
+     "at": [
+      1.6,
+      5.175,
+      0
+     ],
+     "color": "#2a2a2e"
+    },
+    {
+     "box": [
+      3.2450000000000006,
+      0.01,
+      2.03
+     ],
+     "at": [
+      -0.885,
+      2.5,
+      1.456
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#3060c0",
+     "collide": false
+    },
+    {
+     "cyl": [
+      1.3,
+      0.1
+     ],
+     "at": [
+      1.6,
+      5.36,
+      0
+     ],
+     "color": "#c9cdd4",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "label": "GND (brown)",
+     "at": [
+      -3.5500000000000003,
+      0.45,
+      -0.25
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (red)",
+     "at": [
+      -3.5500000000000003,
+      0.45,
+      0
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 7.4
+    },
+    {
+     "id": "SIG",
+     "label": "Signal (orange)",
+     "at": [
+      -3.5500000000000003,
+      0.45,
+      0.25
+     ],
+     "kind": "in"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 6.6,
+     "shape": [
+      {
+       "cyl": [
+        1.218,
+        0.18
+       ],
+       "at": [
+        1.6,
+        5.4399999999999995,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        1.2,
+        0.18,
+        1.044
+       ],
+       "at": [
+        2.2,
+        5.4399999999999995,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        2.325,
+        5.54,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       1.6,
+       5.35,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "servo",
+      "torque": 13.2,
+      "speed": 36,
+      "volts": 6,
+      "multiturn": true
+     }
+    }
+   ],
+   "device": "winch-servo"
+  },
+  {
+   "id": "sts3215",
+   "name": "Smart servo Feetech STS3215",
+   "description": "A serial-bus smart servo: it knows its angle (0-4095 = one turn), and turns to a position or spins as a wheel; it reports where it is, its speed, load, voltage and temperature. 19.5 kg*cm, about 45 rpm at 7.4 V (6-8.4 V). Its DATA wire is one half-duplex serial line at 1,000,000 baud: wire both the board's TX and RX to it. Chain several on one bus (each its own ID). #include <SCServo.h>; SMS_STS st; Serial1.begin(1000000); st.pSerial = &Serial1; st.WritePosEx(1, 2048, 2000, 50);",
+   "swatch": "#141416",
+   "mass": 60,
+   "shape": [
+    {
+     "box": [
+      4.5,
+      3.5,
+      2.4
+     ],
+     "at": [
+      0,
+      1.75,
+      0
+     ],
+     "color": "#141416"
+    },
+    {
+     "box": [
+      5.7,
+      0.22,
+      2.4
+     ],
+     "at": [
+      0,
+      2.59,
+      0
+     ],
+     "color": "#141416"
+    },
+    {
+     "cyl": [
+      0.792,
+      0.35
+     ],
+     "at": [
+      1.1,
+      3.675,
+      0
+     ],
+     "color": "#141416"
+    },
+    {
+     "box": [
+      2.475,
+      0.01,
+      1.68
+     ],
+     "at": [
+      -0.6749999999999999,
+      1.75,
+      1.206
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#e0e0e0",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "at": [
+      -2.85,
+      0.45,
+      -0.85
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (6-8.4 V)",
+     "at": [
+      -2.85,
+      0.45,
+      -0.6
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 8.6
+    },
+    {
+     "id": "DATA",
+     "label": "DATA (serial bus)",
+     "at": [
+      -2.85,
+      0.45,
+      -0.35
+     ],
+     "kind": "io"
+    },
+    {
+     "id": "GND2",
+     "at": [
+      -2.85,
+      0.45,
+      0.35
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+2",
+     "label": "V+ (6-8.4 V)",
+     "at": [
+      -2.85,
+      0.45,
+      0.6
+     ],
+     "kind": "vin",
+     "vmin": 4,
+     "vmax": 8.6
+    },
+    {
+     "id": "DATA2",
+     "label": "DATA (serial bus)",
+     "at": [
+      -2.85,
+      0.45,
+      0.85
+     ],
+     "kind": "io"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 3.5999999999999996,
+     "shape": [
+      {
+       "cyl": [
+        1.008,
+        0.18
+       ],
+       "at": [
+        1.1,
+        3.94,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        2.0,
+        0.18,
+        0.864
+       ],
+       "at": [
+        2.1,
+        3.94,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        1.7000000000000002,
+        4.04,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       1.1,
+       3.85,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "servo",
+      "torque": 19.5,
+      "speed": 45,
+      "volts": 7.4,
+      "multiturn": true
+     }
+    }
+   ],
+   "device": "sts-servo",
+   "shorts": [
+    [
+     "GND",
+     "GND2"
+    ],
+    [
+     "V+",
+     "V+2"
+    ],
+    [
+     "DATA",
+     "DATA2"
+    ]
+   ],
+   "params": [
+    {
+     "key": "id",
+     "label": "Bus ID",
+     "kind": "number",
+     "min": 0,
+     "max": 253,
+     "step": 1
+    }
+   ],
+   "defaults": {
+    "id": 1
+   }
+  },
+  {
+   "id": "xl430",
+   "name": "Smart servo Dynamixel XL430-W250",
+   "description": "ROBOTIS's smart servo (Protocol 2.0): position (one turn, or many in extended mode) or velocity, and it reports position, speed, load, voltage and temperature. Torque is off until you turn it on. 15 kg*cm (1.5 N*m), about 57 rpm at 12 V (6.5-12 V). DATA: one half-duplex serial line at 57,600 baud by default: wire both the board's TX and RX to it. #include <Dynamixel2Arduino.h>; Dynamixel2Arduino dxl(Serial1, -1); dxl.begin(57600); dxl.setPortProtocolVersion(2.0); dxl.torqueOn(1); dxl.setGoalPosition(1, 90.0, UNIT_DEGREE);",
+   "swatch": "#1d1d20",
+   "mass": 57,
+   "shape": [
+    {
+     "box": [
+      3.4,
+      4.65,
+      2.85
+     ],
+     "at": [
+      0,
+      2.325,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "box": [
+      4.6,
+      0.22,
+      2.85
+     ],
+     "at": [
+      0,
+      3.4410000000000003,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "cyl": [
+      0.9405000000000001,
+      0.35
+     ],
+     "at": [
+      0.0,
+      4.825,
+      0
+     ],
+     "color": "#1d1d20"
+    },
+    {
+     "box": [
+      1.87,
+      0.01,
+      1.9949999999999999
+     ],
+     "at": [
+      -0.51,
+      2.325,
+      1.431
+     ],
+     "rot": [
+      90,
+      0,
+      0
+     ],
+     "color": "#3a6fe0",
+     "collide": false
+    }
+   ],
+   "pins": [
+    {
+     "id": "GND",
+     "at": [
+      -2.3,
+      0.45,
+      -0.85
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+",
+     "label": "V+ (6.5-12 V, 11.1 V best)",
+     "at": [
+      -2.3,
+      0.45,
+      -0.6
+     ],
+     "kind": "vin",
+     "vmin": 5.5,
+     "vmax": 13
+    },
+    {
+     "id": "DATA",
+     "label": "DATA (serial bus)",
+     "at": [
+      -2.3,
+      0.45,
+      -0.35
+     ],
+     "kind": "io"
+    },
+    {
+     "id": "GND2",
+     "at": [
+      -2.3,
+      0.45,
+      0.35
+     ],
+     "kind": "gnd"
+    },
+    {
+     "id": "V+2",
+     "label": "V+ (6.5-12 V, 11.1 V best)",
+     "at": [
+      -2.3,
+      0.45,
+      0.6
+     ],
+     "kind": "vin",
+     "vmin": 5.5,
+     "vmax": 13
+    },
+    {
+     "id": "DATA2",
+     "label": "DATA (serial bus)",
+     "at": [
+      -2.3,
+      0.45,
+      0.85
+     ],
+     "kind": "io"
+    }
+   ],
+   "moving": [
+    {
+     "id": "horn",
+     "mass": 3.42,
+     "shape": [
+      {
+       "cyl": [
+        1.197,
+        0.18
+       ],
+       "at": [
+        0.0,
+        5.09,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        1.8,
+        0.18,
+        1.026
+       ],
+       "at": [
+        0.9,
+        5.09,
+        0
+       ],
+       "color": "#f2f2f2"
+      },
+      {
+       "box": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "at": [
+        0.7125,
+        5.19,
+        0
+       ],
+       "color": "#e33030",
+       "collide": false
+      }
+     ],
+     "joint": {
+      "at": [
+       0.0,
+       5.0,
+       0
+      ],
+      "axis": [
+       0,
+       1,
+       0
+      ],
+      "motor": "servo",
+      "torque": 15.3,
+      "speed": 57,
+      "volts": 12,
+      "multiturn": true
+     }
+    }
+   ],
+   "device": "xl430",
+   "shorts": [
+    [
+     "GND",
+     "GND2"
+    ],
+    [
+     "V+",
+     "V+2"
+    ],
+    [
+     "DATA",
+     "DATA2"
+    ]
+   ],
+   "params": [
+    {
+     "key": "id",
+     "label": "Bus ID",
+     "kind": "number",
+     "min": 0,
+     "max": 253,
+     "step": 1
+    }
+   ],
+   "defaults": {
+    "id": 1
+   }
+  }
+ ],
+ "examples": [
+  {
+   "name": "Continuous servos and a knob",
+   "description": "An FS90R and an MG996R 360 on one knob (its slider in the run panel): the middle stops them, either side spins them that way, faster the further you go. write() sets speed, not an angle.",
+   "file": "examples/cr.bench"
+  },
+  {
+   "name": "270, 360 and winch",
+   "description": "A 270 deg servo, a 360 deg servo and a sail winch servo side by side, all swept by one knob (their run-panel slider): see how far each one turns for the same signal.",
+   "file": "examples/sweep.bench"
+  },
+  {
+   "name": "Smart servos",
+   "description": "An STS3215 (on Serial1) and a Dynamixel XL430 (on Serial2), each on its own battery: the board turns them to angles, spins the STS as a wheel, and prints where they say they are.",
+   "file": "examples/smart.bench"
+  }
+ ]
+}

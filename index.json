@@ -390,6 +390,29 @@
    "needsApp": "0.4.0"
   },
   {
+   "id": "servos",
+   "name": "More servos: 360, continuous, winch and smart",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Servos beyond 180 degrees. Continuous ones that spin round and round (FS90R, MG996R 360: the signal sets speed and direction), positional ones with 270 and 360 degrees of travel, a sail winch servo that turns three and a half turns, and two smart serial-bus servos that turn to any angle and report back (Feetech STS3215 with SCServo.h, Dynamixel XL430 with Dynamixel2Arduino.h).",
+   "category": "Motion",
+   "parts": [
+    "Servo FS90R (continuous, micro)",
+    "Servo MG996R 360 (continuous)",
+    "Servo DS3218 (270 deg)",
+    "Servo 360 deg positional (25 kg)",
+    "Sail winch servo HS-785HB (3.5 turns)",
+    "Smart servo Feetech STS3215",
+    "Smart servo Dynamixel XL430-W250"
+   ],
+   "url": "libraries/servos.benchlib",
+   "size": 51820,
+   "can": [
+    "move"
+   ],
+   "needsApp": "0.4.3"
+  },
+  {
    "id": "shift-register",
    "name": "Shift register (74HC595)",
    "version": "1.0.0",

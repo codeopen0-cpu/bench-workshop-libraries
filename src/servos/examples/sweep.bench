@@ -1,0 +1,286 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "270, 360 and winch",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -14,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Knob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -14,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "s270",
+   "type": "servos/ds3218-270",
+   "name": "270 deg servo",
+   "params": {},
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    -7
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "s360",
+   "type": "servos/servo-360",
+   "name": "360 deg servo",
+   "params": {},
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    2
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "winch",
+   "type": "servos/hs785hb",
+   "name": "Winch servo",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    11
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "batt",
+   "type": "battery-4aa",
+   "name": "Servo batteries",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -8,
+    0,
+    16
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "batt",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "s270",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "s270",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "s270",
+    "pin": "SIG"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "batt",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "s360",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "s360",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "s360",
+    "pin": "SIG"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "batt",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "winch",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "winch",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "board",
+    "pin": "GP4"
+   },
+   "b": {
+    "uid": "winch",
+    "pin": "SIG"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// 270, 360 and a winch: one knob (its slider in the run panel) moves all three. The same signal\n// turns each one a different amount: 270 deg, a full circle, three and a half turns.\n#include <Servo.h>\n\n#define KNOB A0\nServo s270;\nServo s360;\nServo winch;\n\nvoid setup() {\n  Serial.begin(115200);\n  s270.attach(2);\n  s360.attach(3);\n  winch.attach(4);\n}\n\nvoid loop() {\n  int k = analogRead(KNOB);                   // 0 .. 4095\n  int angle = map(k, 0, 4095, 0, 180);        // write(0..180): each servo's whole range\n  s270.write(angle);\n  s360.write(angle);\n  int us = map(k, 0, 4095, 600, 2400);        // the winch's range is 600 .. 2400 us\n  winch.writeMicroseconds(us);\n  Serial.print(\"270 servo: \");\n  Serial.print(map(angle, 0, 180, -135, 135));\n  Serial.print(\" deg   360 servo: \");\n  Serial.print(map(angle, 0, 180, -180, 180));\n  Serial.print(\" deg   winch: \");\n  Serial.print(map(us, 600, 2400, -630, 630));\n  Serial.println(\" deg\");\n  delay(250);\n}\n"
+  }
+ },
+ "boards": []
+}

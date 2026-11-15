@@ -196,6 +196,7 @@ export function checkLibrarySafety(lib, sizeBytes) {
     for (const s of p?.shape ?? []) for (const k of ['color']) if (s?.[k] && !/^#[0-9a-f]{3,8}$/i.test(s[k])) out.push({ level: 'block', where, what: `colour "${String(s[k]).slice(0, 30)}" is not a #hex colour` });
     if (p?.glb) checkGlb(p.glb, where, out);
   }
+  let multiturn = false;
   let sensing = /\bpart\s*\.\s*(motion|touch|light|hear)\s*\(|\bspi\s*:\s*\{|\.pixels\s*\(/.test(stripComments(lib.code ?? ''))
     || Object.values(lib.sketch ?? {}).some((f) => /\bSPI\s*\.|\bsetRef\b|\bisRef\b/.test(f?.code ?? ''));
   for (const p of parts) {
@@ -208,9 +209,12 @@ export function checkLibrarySafety(lib, sizeBytes) {
       if (!(sc.screen.px?.[0] * sc.screen.px?.[1] <= LIMITS.screenPixels)) out.push({ level: 'block', where, what: `screen ${sc.screen.id}: at most 320 x 320 pixels` });
     if (touches.length || lights.length || p?.spi || p?.hear || items.some((x) => x?.screen?.mode === 'rgb')) sensing = true;
     if (p?.hear) out.push({ level: 'warn', where, what: 'hears the sounds parts on the bench make (no real microphone)' });
+    if ((p?.moving ?? []).some((m) => m?.joint?.multiturn === true)) multiturn = true;
   }
   if (sensing && (!lib.needsApp || older(lib.needsApp, SENSING_APP)))
     out.push({ level: 'block', where: 'needsApp', what: `it uses motion, touch, light, hearing, SPI or colour screens: set "needsApp": "${SENSING_APP}" (older apps can't run it)` });
+  if (multiturn && (!lib.needsApp || older(lib.needsApp, '0.4.3')))
+    out.push({ level: 'block', where: 'needsApp', what: 'it has multi-turn servos ("multiturn": true): set "needsApp": "0.4.3" (older apps can\'t run it)' });
   if (newFeatures && (!lib.needsApp || older(lib.needsApp, NEW_FEATURES_APP)))
     out.push({ level: 'block', where: 'needsApp', what: `it uses moving parts, sounds, controls, distance sensors or messages: set "needsApp": "${NEW_FEATURES_APP}" (older apps can't run it)` });
   return { ok: !out.some((x) => x.level === 'block'), problems: out };

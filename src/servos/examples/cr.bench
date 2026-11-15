@@ -1,0 +1,231 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Continuous servos and a knob",
+ "parts": [
+  {
+   "uid": "board",
+   "type": "maker-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Speed knob",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -12,
+    0,
+    9
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "small",
+   "type": "servos/fs90r",
+   "name": "FS90R (continuous)",
+   "params": {},
+   "parent": null,
+   "pos": [
+    2,
+    0,
+    -5
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "big",
+   "type": "servos/mg996r-360",
+   "name": "MG996R 360 (continuous)",
+   "params": {},
+   "parent": null,
+   "pos": [
+    4,
+    0,
+    6
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "batt",
+   "type": "battery-4aa",
+   "name": "Servo batteries",
+   "params": {},
+   "parent": null,
+   "pos": [
+    -2,
+    0,
+    14
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "A0"
+   },
+   "b": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "batt",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "small",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "small",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "small",
+    "pin": "SIG"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "batt",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "big",
+    "pin": "V+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "big",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "big",
+    "pin": "SIG"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "batt",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Continuous servos: turn the knob (its slider in the run panel). The middle stops both servos; to\n// either side they spin that way, faster the further you go. write() sets SPEED, not an angle.\n#include <Servo.h>\n\n#define KNOB A0\nServo small;    // FS90R\nServo big;      // MG996R 360\n\nvoid setup() {\n  Serial.begin(115200);\n  small.attach(2);\n  big.attach(3);\n}\n\nvoid loop() {\n  int speed = map(analogRead(KNOB), 0, 4095, 0, 180);   // 90 = stop\n  small.write(speed);\n  big.write(speed);\n  Serial.print(\"write(\");\n  Serial.print(speed);\n  if (speed == 90) Serial.println(\") = stop\");\n  else if (speed < 90) Serial.println(\") = one way\");\n  else Serial.println(\") = the other way\");\n  delay(200);\n}\n"
+  }
+ },
+ "boards": []
+}

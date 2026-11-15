@@ -1,0 +1,20 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Remote control an LED",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-6, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "ir", "type": "ir-remote/receiver", "name": "IR receiver", "params": {}, "parent": null, "pos": [4, 0, -2], "rot": [0, 0, 0, 1]},
+  {"uid": "remote", "type": "ir-remote/remote", "name": "Remote", "params": {}, "parent": null, "pos": [16, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "led", "type": "led", "name": "LED", "params": {"color": "red"}, "parent": null, "pos": [0, 0, 6], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP11"}, "b": {"uid": "ir", "pin": "S"}, "color": "#e8c547"},
+  {"id": "w2", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "ir", "pin": "+"}, "color": "#e04848"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "ir", "pin": "-"}, "color": "#2b2d33"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GP15"}, "b": {"uid": "led", "pin": "A"}, "color": "#f08c2a"},
+  {"id": "w5", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "led", "pin": "K"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Press keys on the remote (its card in the run panel): 1 = LED on, 0 = LED off.\n#include <IRremote.h>\n\n#define IR_PIN 11\n#define LED 15\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(LED, OUTPUT);\n  IrReceiver.begin(IR_PIN, ENABLE_LED_FEEDBACK);\n  Serial.println(\"Ready for the remote\");\n}\n\nvoid loop() {\n  if (IrReceiver.decode()) {\n    IrReceiver.printIRResultShort(&Serial);\n    if (!(IrReceiver.decodedIRData.flags & IRDATA_FLAGS_IS_REPEAT)) {\n      int cmd = IrReceiver.decodedIRData.command;\n      if (cmd == 0x0C) digitalWrite(LED, HIGH);   // key 1\n      if (cmd == 0x16) digitalWrite(LED, LOW);    // key 0\n    }\n    IrReceiver.resume();\n  }\n}\n"}},
+ "boards": []
+}

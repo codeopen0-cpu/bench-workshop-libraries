@@ -1,0 +1,54 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "keypad",
+  "name": "Keypads",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Membrane keypads (4x4 and 4x3): each key joins its row wire to its column wire while it's held, exactly as the real ones do. Press the keys in the run panel. Includes Keypad.h.",
+  "category": "Input",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "Keypad.h": { "classes": ["Keypad"], "exports": ["makeKeymap", "NO_KEY", "IDLE", "PRESSED", "HOLD", "RELEASED"], "file": "sketch/Keypad.js" }
+  },
+  "parts": [
+    {
+      "id": "keypad4x4",
+      "name": "Keypad 4x4",
+      "description": "16 keys: 1-9, 0, A-D, * and #. 8 wires: R1-R4 (rows) and C1-C4 (columns), left to right on its ribbon. Press its keys in the run panel while running. Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);",
+      "swatch": "#2a2c31",
+      "mass": 8,
+      "shape": [
+        { "box": [6.9, 0.08, 7.6], "at": [0, 0.04, 0], "color": "#2a2c31" },
+        { "screen": { "id": "keys", "size": [6.4, 6.4], "px": [4, 4], "mode": "pixels", "on": "#4f9cff", "off": "#e6e8ee", "bg": "#2a2c31", "dots": true }, "at": [0, 0.09, 0.3] },
+        { "box": [2.2, 0.03, 2.4], "at": [0, 0.015, -4.9], "color": "#cfd3da", "collide": false }
+      ],
+      "pinRows": [{ "ids": ["R1", "R2", "R3", "R4", "C1", "C2", "C3", "C4"], "at": [-0.889, 0.0, -6.2], "kinds": { "R1": "out", "R2": "out", "R3": "out", "R4": "out", "C1": "out", "C2": "out", "C3": "out", "C4": "out" } }],
+      "controls": [
+        { "id": "keys", "kind": "keys", "label": "Keys", "cols": 4, "keys": ["1", "2", "3", "A", "4", "5", "6", "B", "7", "8", "9", "C", "*", "0", "#", "D"] }
+      ],
+      "device": "keypad"
+    },
+    {
+      "id": "keypad4x3",
+      "name": "Keypad 4x3",
+      "description": "12 keys like a phone: 1-9, *, 0, #. 7 wires: R1-R4 and C1-C3. Press its keys in the run panel while running.",
+      "swatch": "#2a2c31",
+      "mass": 6,
+      "shape": [
+        { "box": [5.2, 0.08, 7.6], "at": [0, 0.04, 0], "color": "#2a2c31" },
+        { "screen": { "id": "keys", "size": [4.8, 6.4], "px": [3, 4], "mode": "pixels", "on": "#4f9cff", "off": "#e6e8ee", "bg": "#2a2c31", "dots": true }, "at": [0, 0.09, 0.3] }
+      ],
+      "pinRows": [{ "ids": ["R1", "R2", "R3", "R4", "C1", "C2", "C3"], "at": [-0.762, 0.0, -6.2], "kinds": { "R1": "out", "R2": "out", "R3": "out", "R4": "out", "C1": "out", "C2": "out", "C3": "out" } }],
+      "controls": [
+        { "id": "keys", "kind": "keys", "label": "Keys", "cols": 3, "keys": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"] }
+      ],
+      "device": "keypad"
+    }
+  ],
+  "examples": [
+    { "name": "Keypad to serial", "description": "A 4x4 keypad on 8 pins: every key you press in the run panel is printed in the serial monitor.", "file": "examples/keys.bench" }
+  ]
+}

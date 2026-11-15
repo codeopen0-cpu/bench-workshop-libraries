@@ -1,0 +1,17 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Hello, OLED",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-5, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "oled", "type": "oled-ssd1306/oled128x64", "name": "OLED", "params": {"colour": "white", "addr": "60"}, "parent": null, "pos": [4, 0, 1], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "oled", "pin": "VCC"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "oled", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "SDA"}, "b": {"uid": "oled", "pin": "SDA"}, "color": "#4f9cff"},
+  {"id": "w4", "a": {"uid": "board", "pin": "SCL"}, "b": {"uid": "oled", "pin": "SCL"}, "color": "#e8c547"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Text, a box and a bouncing ball on a 128x64 OLED.\n#include <Wire.h>\n#include <Adafruit_GFX.h>\n#include <Adafruit_SSD1306.h>\n\n#define W 128\n#define H 64\nAdafruit_SSD1306 display(W, H, &Wire, -1);\n\nint x = 20, y = 40, dx = 2, dy = 1;\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {\n    Serial.println(\"No OLED at 0x3C: check its wires\");\n    while (true) delay(1000);\n  }\n}\n\nvoid loop() {\n  display.clearDisplay();\n  display.setTextSize(2);\n  display.setTextColor(SSD1306_WHITE);\n  display.setCursor(4, 2);\n  display.println(\"Hello!\");\n  display.setTextSize(1);\n  display.setCursor(4, 20);\n  int seconds = millis() / 1000;\n  display.print(\"up \");\n  display.print(seconds);\n  display.println(\" s\");\n  display.drawRect(0, 30, W, H - 30, SSD1306_WHITE);\n  display.fillCircle(x, y, 4, SSD1306_WHITE);\n  display.display();\n\n  x += dx;\n  y += dy;\n  if (x < 5 || x > W - 6) dx = -dx;\n  if (y < 35 || y > H - 6) dy = -dy;\n  delay(30);\n}\n"}},
+ "boards": []
+}

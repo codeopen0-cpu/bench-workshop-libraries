@@ -1,0 +1,21 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Joystick steers a servo",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-6, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "stick", "type": "joystick-encoder/ky023", "name": "Joystick", "params": {}, "parent": null, "pos": [4, 0, -5], "rot": [0, 0, 0, 1]},
+  {"uid": "servo", "type": "servo-sg90", "name": "Servo", "params": {"start": 0}, "parent": null, "pos": [5, 0, 5], "rot": [0, 0, 0, 1], "pinned": true}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "stick", "pin": "+5V"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "stick", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "A0"}, "b": {"uid": "stick", "pin": "VRx"}, "color": "#e8c547"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GP3"}, "b": {"uid": "stick", "pin": "SW"}, "color": "#4f9cff"},
+  {"id": "w5", "a": {"uid": "board", "pin": "GP15"}, "b": {"uid": "servo", "pin": "SIG"}, "color": "#f08c2a"},
+  {"id": "w6", "a": {"uid": "board", "pin": "5V"}, "b": {"uid": "servo", "pin": "V+"}, "color": "#e04848"},
+  {"id": "w7", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "servo", "pin": "GND"}, "color": "#6b4226"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// The servo follows the joystick's left/right; pushing the stick in centres it.\n// (The joystick runs on 3.3 V, so its middle is half of the board's 0-4095 reading.)\n#include <Servo.h>\n\n#define STICK_X A0\n#define STICK_SW 3\n\nServo servo;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(STICK_SW, INPUT_PULLUP);\n  servo.attach(15);\n}\n\nvoid loop() {\n  int x = analogRead(STICK_X);\n  int angle = map(x, 0, 4095, 0, 180);\n  if (digitalRead(STICK_SW) == LOW) angle = 90;\n  servo.write(angle);\n  delay(20);\n}\n"}},
+ "boards": []
+}

@@ -1,0 +1,102 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "stepper-motors",
+  "name": "Stepper motors",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Two stepper motors with their drivers: the small 28BYJ-48 on a ULN2003 board (4 pins) and a NEMA 17 on an A4988 driver (STEP and DIR). They turn exactly as many steps as they're given, hold their position, and skip steps when overloaded or rushed. Includes Stepper.h and AccelStepper.h.",
+  "category": "Motion",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "Stepper.h": { "classes": ["Stepper"], "file": "sketch/Stepper.js" },
+    "AccelStepper.h": { "classes": ["AccelStepper"], "file": "sketch/AccelStepper.js" }
+  },
+  "parts": [
+    {
+      "id": "28byj48",
+      "name": "Stepper 28BYJ-48 + ULN2003",
+      "description": "A geared 5 V stepper (2048 steps a turn, about 15 rpm at most, 0.34 kg*cm) on its ULN2003 driver board. IN1-IN4 to four pins, + to 5 V, - to GND. In a sketch: Stepper motor(2048, IN1, IN3, IN2, IN4); (note the order) or AccelStepper motor(AccelStepper::HALF4WIRE, IN1, IN3, IN2, IN4);. Glue things to its shaft.",
+      "swatch": "#c9cdd4",
+      "mass": 45,
+      "shape": [
+        { "cyl": [1.4, 1.9], "at": [0, 0.95, 0], "color": "#c9cdd4" },
+        { "cyl": [1.42, 0.25], "at": [0, 1.78, 0], "color": "#2f5fb8" },
+        { "box": [4.2, 0.12, 0.7], "at": [0, 1.85, 0], "color": "#c9cdd4" },
+        { "cyl": [0.45, 0.5], "at": [0.8, 2.15, 0], "color": "#2f5fb8" },
+        { "box": [3.2, 0.16, 3.5], "at": [-4.0, 0.08, 0], "color": "#1d6b3a" },
+        { "box": [2.0, 0.6, 0.7], "at": [-4.0, 0.46, 0.2], "color": "#18181a" },
+        { "box": [0.9, 1.0, 1.3], "at": [-1.8, 0.5, 0], "color": "#f2f2f2", "collide": false }
+      ],
+      "pins": [
+        { "id": "IN1", "at": [-5.2, 0.16, -1.4], "kind": "in" },
+        { "id": "IN2", "at": [-4.946, 0.16, -1.4], "kind": "in" },
+        { "id": "IN3", "at": [-4.692, 0.16, -1.4], "kind": "in" },
+        { "id": "IN4", "at": [-4.438, 0.16, -1.4], "kind": "in" },
+        { "id": "+", "label": "+ (5-12 V)", "at": [-3.4, 0.16, -1.4], "kind": "vin", "vmin": 4.5, "vmax": 12.5 },
+        { "id": "-", "label": "- (GND)", "at": [-3.146, 0.16, -1.4], "kind": "gnd" }
+      ],
+      "moving": [
+        {
+          "id": "shaft",
+          "mass": 3,
+          "shape": [
+            { "cyl": [0.25, 0.6], "at": [0.8, 2.6, 0], "color": "#d8b04a" },
+            { "box": [2.2, 0.15, 0.5], "at": [1.7, 2.95, 0], "color": "#e04848" }
+          ],
+          "joint": { "type": "turn", "at": [0.8, 2.4, 0], "axis": [0, 1, 0], "motor": "stepper", "torque": 0.34, "speed": 16, "volts": 5 }
+        }
+      ],
+      "device": "uln2003"
+    },
+    {
+      "id": "nema17",
+      "name": "Stepper NEMA 17 + A4988",
+      "description": "A NEMA 17 stepper (200 steps a turn, 4.2 kg*cm at 12 V) on an A4988 driver: every pulse on STEP is one step, DIR picks the way. VMOT to 8-35 V (with GND), VDD to the board's 3.3 or 5 V (with GND2), EN low or open = on. Pick the microstepping (MS jumpers) in its settings. AccelStepper motor(AccelStepper::DRIVER, STEP, DIR);",
+      "swatch": "#2a2c31",
+      "mass": 290,
+      "params": [
+        { "key": "micro", "label": "Microstepping", "kind": "select", "options": [{ "value": "1", "label": "Full step (200 a turn)" }, { "value": "2", "label": "Half (400)" }, { "value": "4", "label": "Quarter (800)" }, { "value": "8", "label": "Eighth (1600)" }, { "value": "16", "label": "Sixteenth (3200)" }] }
+      ],
+      "defaults": { "micro": "1" },
+      "shape": [
+        { "box": [4.2, 4.0, 4.2], "at": [0, 2.0, 0], "color": "#2a2c31" },
+        { "box": [4.25, 0.6, 4.25], "at": [0, 3.7, 0], "color": "#b9bec7" },
+        { "box": [4.25, 0.6, 4.25], "at": [0, 0.3, 0], "color": "#b9bec7" },
+        { "cyl": [1.1, 0.2], "at": [0, 4.1, 0], "color": "#b9bec7" },
+        { "box": [2.0, 0.16, 1.5], "at": [-4.5, 0.08, 0], "color": "#c0262d" },
+        { "box": [0.5, 0.12, 0.5], "at": [-4.5, 0.22, 0], "color": "#1a1a1a" },
+        { "box": [0.25, 0.25, 0.25], "at": [-4.0, 0.28, 0.35], "color": "#d6d6d6", "collide": false }
+      ],
+      "pins": [
+        { "id": "EN", "label": "EN (low = on)", "at": [-5.4, 0.16, -0.6], "kind": "in", "pulled": "down" },
+        { "id": "STEP", "at": [-5.146, 0.16, -0.6], "kind": "in" },
+        { "id": "DIR", "at": [-4.892, 0.16, -0.6], "kind": "in" },
+        { "id": "VMOT", "label": "VMOT (8-35 V)", "at": [-3.8, 0.16, -0.6], "kind": "vin", "vmin": 8, "vmax": 35 },
+        { "id": "GND", "label": "GND (motor)", "at": [-3.8, 0.16, -0.346], "kind": "gnd" },
+        { "id": "VDD", "label": "VDD (3-5.5 V logic)", "at": [-3.8, 0.16, 0.346], "kind": "vin", "vmin": 3, "vmax": 5.5 },
+        { "id": "GND2", "label": "GND (logic)", "at": [-3.8, 0.16, 0.6], "kind": "gnd" }
+      ],
+      "shorts": [["GND", "GND2"]],
+      "moving": [
+        {
+          "id": "shaft",
+          "mass": 8,
+          "shape": [
+            { "cyl": [0.25, 2.0], "at": [0, 5.0, 0], "color": "#d6d6d6" },
+            { "cyl": [0.8, 0.8], "at": [0, 5.5, 0], "color": "#c9a24a" },
+            { "box": [2.6, 0.2, 0.5], "at": [1.2, 6.0, 0], "color": "#e04848" }
+          ],
+          "joint": { "type": "turn", "at": [0, 4.2, 0], "axis": [0, 1, 0], "motor": "stepper", "torque": 4.2, "speed": 600, "volts": 12 }
+        }
+      ],
+      "device": "a4988"
+    }
+  ],
+  "examples": [
+    { "name": "28BYJ-48: a turn each way", "description": "A board turning the little stepper one full turn one way and then back, with Stepper.h. Watch the red pointer on its shaft.", "file": "examples/byj-sweep.bench" },
+    { "name": "NEMA 17 with AccelStepper", "description": "A NEMA 17 on an A4988 and a 12 V bench supply, speeding up and slowing down between two positions with AccelStepper.", "file": "examples/nema-accel.bench" }
+  ]
+}

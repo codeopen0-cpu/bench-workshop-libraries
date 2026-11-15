@@ -1,0 +1,84 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "neopixel",
+  "name": "NeoPixel LEDs (WS2812B)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Addressable RGB LEDs (WS2812B, \"NeoPixels\"): a stick of 8, a strip of 30 and an 8x8 panel. One data wire sets every LED's colour; chain them DOUT to DIN. Includes Adafruit_NeoPixel.h.",
+  "category": "Displays",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "Adafruit_NeoPixel.h": { "classes": ["Adafruit_NeoPixel"], "exports": ["NEO_RGB", "NEO_RBG", "NEO_GRB", "NEO_GBR", "NEO_BRG", "NEO_BGR", "NEO_KHZ800", "NEO_KHZ400"], "file": "sketch/Adafruit_NeoPixel.js" }
+  },
+  "parts": [
+    {
+      "id": "stick8",
+      "name": "NeoPixel stick (8 LEDs)",
+      "description": "8 WS2812B LEDs in a row. 5V and GND (each LED takes up to 60 mA at full white), DIN to a pin. Adafruit_NeoPixel strip(8, PIN, NEO_GRB + NEO_KHZ800);",
+      "swatch": "#1a1a1c",
+      "mass": 3,
+      "params": [{ "key": "count", "label": "LEDs", "kind": "number", "min": 8, "max": 8, "step": 1 }],
+      "defaults": { "count": 8 },
+      "shape": [
+        { "box": [5.1, 0.16, 1.0], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "screen": { "id": "leds", "size": [4.8, 0.6], "px": [8, 1], "mode": "pixels", "on": "#ffffff", "off": "#e8e4dc", "bg": "#1a1a1c" }, "at": [0, 0.17, 0] }
+      ],
+      "pins": [
+        { "id": "DIN", "at": [-2.4, 0.16, 0.381], "kind": "in" },
+        { "id": "5V", "label": "5V (4-5.5 V)", "at": [-2.4, 0.16, 0.127], "kind": "vin", "vmin": 3.5, "vmax": 5.5 },
+        { "id": "GND", "at": [-2.4, 0.16, -0.127], "kind": "gnd" },
+        { "id": "DOUT", "at": [2.4, 0.16, 0.381], "kind": "out" }
+      ],
+      "device": "ws2812"
+    },
+    {
+      "id": "strip30",
+      "name": "NeoPixel strip (30 LEDs)",
+      "description": "Half a metre of WS2812B strip, 30 LEDs. Give it its own 5 V supply for bright colours (30 LEDs at full white take 1.8 A); share its GND with the board. DIN to a pin.",
+      "swatch": "#f2f2f2",
+      "mass": 20,
+      "params": [{ "key": "count", "label": "LEDs", "kind": "number", "min": 30, "max": 30, "step": 1 }],
+      "defaults": { "count": 30 },
+      "shape": [
+        { "box": [50, 0.1, 1.0], "at": [0, 0.05, 0], "color": "#f2f2f2" },
+        { "screen": { "id": "leds", "size": [49.5, 0.55], "px": [30, 1], "mode": "pixels", "on": "#ffffff", "off": "#e8e4dc", "bg": "#f2f2f2" }, "at": [0, 0.11, 0] }
+      ],
+      "pins": [
+        { "id": "DIN", "at": [-25, 0.1, 0.3], "kind": "in" },
+        { "id": "5V", "label": "5V (4-5.5 V)", "at": [-25, 0.1, 0], "kind": "vin", "vmin": 3.5, "vmax": 5.5 },
+        { "id": "GND", "at": [-25, 0.1, -0.3], "kind": "gnd" },
+        { "id": "DOUT", "at": [25, 0.1, 0.3], "kind": "out" }
+      ],
+      "device": "ws2812"
+    },
+    {
+      "id": "matrix8x8",
+      "name": "NeoPixel panel (8x8)",
+      "description": "64 WS2812B LEDs in an 8x8 grid, row by row from the top left (LED 0) to the bottom right (LED 63). 5V, GND, DIN. Needs a good 5 V supply for bright colours (up to 3.8 A).",
+      "swatch": "#1a1a1c",
+      "mass": 25,
+      "params": [
+        { "key": "count", "label": "LEDs", "kind": "number", "min": 64, "max": 64, "step": 1 },
+        { "key": "zigzag", "label": "Rows zig-zag (every other row backwards)", "kind": "bool" }
+      ],
+      "defaults": { "count": 64, "zigzag": false },
+      "shape": [
+        { "box": [6.5, 0.16, 6.5], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "screen": { "id": "leds", "size": [6.2, 6.2], "px": [8, 8], "mode": "pixels", "on": "#ffffff", "off": "#e8e4dc", "bg": "#1a1a1c" }, "at": [0, 0.17, 0] }
+      ],
+      "pins": [
+        { "id": "DIN", "at": [-3.3, 0.16, 0.381], "kind": "in" },
+        { "id": "5V", "label": "5V (4-5.5 V)", "at": [-3.3, 0.16, 0.127], "kind": "vin", "vmin": 3.5, "vmax": 5.5 },
+        { "id": "GND", "at": [-3.3, 0.16, -0.127], "kind": "gnd" },
+        { "id": "DOUT", "at": [3.3, 0.16, 0.381], "kind": "out" }
+      ],
+      "device": "ws2812"
+    }
+  ],
+  "examples": [
+    { "name": "Rainbow stick", "description": "A board sending a moving rainbow to an 8-LED stick with Adafruit_NeoPixel. Press Run.", "file": "examples/rainbow.bench" }
+  ]
+}

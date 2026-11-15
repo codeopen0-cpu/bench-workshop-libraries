@@ -1,0 +1,68 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "joystick-encoder",
+  "name": "Joystick and rotary encoder",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A thumb joystick (KY-023: two knobs and a push button) and a rotary encoder knob (KY-040: clicks round in steps, and pushes). Work them from the run panel.",
+  "category": "Input",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "ky023",
+      "name": "Joystick (KY-023)",
+      "description": "VRx and VRy give 0 V to +5V's volts as the stick goes left/right and up/down (half in the middle): read them with analogRead. SW joins GND while the stick is pushed in (use INPUT_PULLUP). +5V to 3.3 or 5 V, GND.",
+      "swatch": "#1a1a1c",
+      "mass": 12,
+      "shape": [
+        { "box": [3.4, 0.16, 2.6], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "box": [1.6, 1.0, 1.6], "at": [0.3, 0.66, 0], "color": "#2a2c31" },
+        { "cyl": [0.18, 1.0], "at": [0.3, 1.6, 0], "color": "#2a2c31" },
+        { "cyl": [0.9, 0.6], "at": [0.3, 2.3, 0], "color": "#1a1a1c" }
+      ],
+      "pinRows": [{ "ids": ["GND", "+5V", "VRx", "VRy", "SW"], "at": [-1.6, 0.0, -0.508], "dir": "z", "kinds": { "GND": "gnd", "+5V": "vin", "VRx": "out", "VRy": "out", "SW": "out" }, "extra": { "+5V": { "label": "+5V (3.3-5 V)", "vmin": 3, "vmax": 5.5 } } }],
+      "controls": [
+        { "id": "x", "kind": "slider", "label": "Left / right", "min": -100, "max": 100, "step": 1, "value": 0 },
+        { "id": "y", "kind": "slider", "label": "Down / up", "min": -100, "max": 100, "step": 1, "value": 0 },
+        { "id": "press", "kind": "button", "label": "Push in" }
+      ],
+      "device": "joystick"
+    },
+    {
+      "id": "ky040",
+      "name": "Rotary encoder (KY-040)",
+      "description": "A knob that clicks round (20 clicks a turn, no end). Each click, CLK goes low and back high; at each change of CLK, DT different from CLK means clockwise. SW joins GND while pushed (use INPUT_PULLUP). + to 3.3 or 5 V (it pulls CLK and DT up), GND. Turn it from the run panel.",
+      "swatch": "#1a1a1c",
+      "mass": 10,
+      "shape": [
+        { "box": [2.0, 0.16, 2.6], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "box": [1.3, 0.7, 1.3], "at": [0, 0.51, 0.3], "color": "#b9bec7" }
+      ],
+      "pinRows": [{ "ids": ["GND", "+", "SW", "DT", "CLK"], "at": [-0.508, 0.0, -1.1], "kinds": { "GND": "gnd", "+": "vin", "SW": "out", "DT": "out", "CLK": "out" }, "extra": { "+": { "label": "+ (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "CLK": { "pulled": "up" }, "DT": { "pulled": "up" } } }],
+      "moving": [
+        {
+          "id": "knob",
+          "mass": 3,
+          "shape": [
+            { "cyl": [0.6, 1.4], "at": [0, 1.56, 0.3], "color": "#2a2c31" },
+            { "box": [0.12, 0.05, 0.5], "at": [0, 2.28, 0.55], "color": "#f2f2f2" }
+          ],
+          "joint": { "type": "turn", "at": [0, 0.86, 0.3], "axis": [0, -1, 0], "motor": "stepper", "torque": 0.3, "speed": 120, "volts": 5 }
+        }
+      ],
+      "controls": [
+        { "id": "left", "kind": "button", "label": "Click left" },
+        { "id": "right", "kind": "button", "label": "Click right" },
+        { "id": "press", "kind": "button", "label": "Push" }
+      ],
+      "device": "encoder-knob"
+    }
+  ],
+  "examples": [
+    { "name": "Joystick steers a servo", "description": "Move the joystick's left/right slider in the run panel: a servo follows; push it in to centre the servo.", "file": "examples/joystick-servo.bench" },
+    { "name": "Encoder counts", "description": "Click the encoder left and right in the run panel: the count goes down and up in the serial monitor; push to reset it.", "file": "examples/encoder-count.bench" }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "ir-remote",
+  "name": "IR remote and receiver",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The little 21-key infrared remote and an IR receiver module (VS1838B). Press the remote's keys in the run panel; every receiver on the bench picks up the code (NEC protocol). Includes IRremote.h, both its new (IrReceiver) and old (IRrecv) ways.",
+  "category": "Wireless",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "IRremote.h": { "classes": ["IRrecv", "decode_results"], "exports": ["IrReceiver", "ENABLE_LED_FEEDBACK", "DISABLE_LED_FEEDBACK", "USE_DEFAULT_FEEDBACK_LED_PIN", "IRDATA_FLAGS_IS_REPEAT", "NEC", "UNKNOWN"], "file": "sketch/IRremote.js" },
+    "IRremote.hpp": { "classes": ["IRrecv", "decode_results"], "exports": ["IrReceiver", "ENABLE_LED_FEEDBACK", "DISABLE_LED_FEEDBACK", "USE_DEFAULT_FEEDBACK_LED_PIN", "IRDATA_FLAGS_IS_REPEAT", "NEC", "UNKNOWN"], "file": "sketch/IRremote.js" }
+  },
+  "parts": [
+    {
+      "id": "receiver",
+      "name": "IR receiver (VS1838B)",
+      "description": "Picks up infrared remotes. S (signal) to a pin, + to 3.3-5 V, - to GND. Its signal rests high and carries the remote's code (NEC: an address and a command). IrReceiver.begin(PIN); ... if (IrReceiver.decode()) { IrReceiver.decodedIRData.command ... IrReceiver.resume(); }",
+      "swatch": "#1a1a1c",
+      "mass": 2,
+      "shape": [
+        { "box": [1.6, 0.16, 2.0], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "box": [0.6, 0.7, 0.55], "at": [0, 0.51, 0.5], "color": "#141416" },
+        { "sphere": 0.28, "at": [0, 0.75, 0.78], "color": "#26262a" }
+      ],
+      "pinRows": [{ "ids": ["S", "+", "-"], "at": [-0.254, 0.0, -0.8], "kinds": { "S": "out", "+": "vin", "-": "gnd" }, "extra": { "+": { "label": "+ (3.3-5 V)", "vmin": 2.7, "vmax": 5.5 }, "S": { "label": "S (signal)" } } }],
+      "device": "ir-receiver"
+    },
+    {
+      "id": "remote",
+      "name": "IR remote (21 keys)",
+      "description": "The small \"Car MP3\" remote with its own coin cell. Press its keys in the run panel: every IR receiver on the bench gets the code. Address 0x00; commands: CH- 0x45, CH 0x46, CH+ 0x47, |<< 0x44, >>| 0x40, >|| 0x43, - 0x07, + 0x15, EQ 0x09, 0 0x16, 100+ 0x19, 200+ 0x0D, 1 0x0C, 2 0x18, 3 0x5E, 4 0x08, 5 0x1C, 6 0x5A, 7 0x42, 8 0x52, 9 0x4A.",
+      "swatch": "#141416",
+      "mass": 20,
+      "shape": [
+        { "box": [4.0, 0.6, 8.6], "at": [0, 0.3, 0], "color": "#141416" },
+        { "screen": { "id": "keys", "size": [3.4, 7.4], "px": [3, 7], "mode": "pixels", "on": "#ff5040", "off": "#c9ccd2", "bg": "#141416" }, "at": [0, 0.61, -0.3] },
+        { "box": [0.6, 0.3, 0.3], "at": [0, 0.3, 4.4], "color": "#2a1a14", "collide": false }
+      ],
+      "controls": [
+        { "id": "keys", "kind": "keys", "label": "Remote", "cols": 3, "keys": ["CH-", "CH", "CH+", "|<<", ">>|", ">||", "-", "+", "EQ", "0", "100+", "200+", "1", "2", "3", "4", "5", "6", "7", "8", "9"] }
+      ],
+      "device": "ir-remote"
+    }
+  ],
+  "examples": [
+    { "name": "Remote control an LED", "description": "Press 1 on the remote (its card in the run panel) to switch the LED on, 0 to switch it off; every key's code is printed in the serial monitor.", "file": "examples/remote-led.bench" }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "28BYJ-48: a turn each way",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-8, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "motor", "type": "stepper-motors/28byj48", "name": "Stepper", "params": {}, "parent": null, "pos": [4, 0, 0], "rot": [0, 0, 0, 1], "pinned": true}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP2"}, "b": {"uid": "motor", "pin": "IN1"}, "color": "#4f9cff"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GP3"}, "b": {"uid": "motor", "pin": "IN2"}, "color": "#e8c547"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GP4"}, "b": {"uid": "motor", "pin": "IN3"}, "color": "#3fbf7f"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GP5"}, "b": {"uid": "motor", "pin": "IN4"}, "color": "#f08c2a"},
+  {"id": "w5", "a": {"uid": "board", "pin": "5V"}, "b": {"uid": "motor", "pin": "+"}, "color": "#e04848"},
+  {"id": "w6", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "motor", "pin": "-"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// One turn one way, one turn back, with Arduino's Stepper library.\n// The 28BYJ-48 takes 2048 steps for a turn. Its pins go IN1, IN3, IN2, IN4 (that order!).\n#include <Stepper.h>\n\n#define IN1 2\n#define IN2 3\n#define IN3 4\n#define IN4 5\n\nStepper motor(2048, IN1, IN3, IN2, IN4);\n\nvoid setup() {\n  Serial.begin(115200);\n  motor.setSpeed(12);   // rpm (about 15 is its most)\n}\n\nvoid loop() {\n  Serial.println(\"one turn forward\");\n  motor.step(2048);\n  delay(500);\n  Serial.println(\"one turn back\");\n  motor.step(-2048);\n  delay(500);\n}\n"}},
+ "boards": []
+}

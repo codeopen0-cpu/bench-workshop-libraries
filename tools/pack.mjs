@@ -49,6 +49,18 @@ export function readFolder(dir) {
   return lib;
 }
 
+/** what a library's parts do that someone would want to know before installing it */
+export function abilities(lib) {
+  const parts = lib.parts ?? [];
+  const out = [];
+  if (parts.some((p) => p.moving?.length)) out.push('move');
+  if (parts.some((p) => p.sound)) out.push('make sounds');
+  if (parts.some((p) => p.controls?.length)) out.push('have controls in the run panel');
+  if (parts.some((p) => [...(p.shape ?? []), ...(p.moving ?? []).flatMap((m) => m.shape ?? [])].some((s) => s.camera))) out.push('see (camera)');
+  if (parts.some((p) => [...(p.shape ?? []), ...(p.moving ?? []).flatMap((m) => m.shape ?? [])].some((s) => s.ranger))) out.push('measure distance');
+  return out;
+}
+
 export function libraryFolders() {
   const src = join(root, 'src');
   return existsSync(src) ? readdirSync(src).sort().map((n) => join(src, n)).filter((d) => statSync(d).isDirectory() && existsSync(join(d, 'library.json'))) : [];
@@ -81,6 +93,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     entries.push({
       id: lib.id, name: lib.name, version: lib.version, author: lib.author, description: lib.description, category: lib.category,
       parts: lib.parts.map((p) => p.name), url: `libraries/${lib.id}.benchlib`, size: text.length,
+      can: abilities(lib), ...(lib.needsApp ? { needsApp: lib.needsApp } : {}),
     });
     console.log(`packed ${lib.id} ${lib.version} (${lib.parts.length} parts, ${(text.length / 1024).toFixed(1)} KB)`);
   }

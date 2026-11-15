@@ -1,0 +1,17 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Counting clock",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-5, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "disp", "type": "tm1637-display/tm1637", "name": "Display", "params": {}, "parent": null, "pos": [5, 0, 1], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP2"}, "b": {"uid": "disp", "pin": "CLK"}, "color": "#e8c547"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GP3"}, "b": {"uid": "disp", "pin": "DIO"}, "color": "#4f9cff"},
+  {"id": "w3", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "disp", "pin": "VCC"}, "color": "#e04848"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "disp", "pin": "GND"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Minutes and seconds since the start, the colon blinking every second.\n#include <TM1637Display.h>\n\n#define CLK 2\n#define DIO 3\n\nTM1637Display display(CLK, DIO);\n\nvoid setup() {\n  display.setBrightness(5);\n}\n\nvoid loop() {\n  int s = millis() / 1000;\n  int minutes = s / 60;\n  int seconds = s % 60;\n  int shown = minutes * 100 + seconds;      // mm:ss as one number\n  int half = millis() / 500;\n  bool colon = half % 2 == 0;\n  display.showNumberDecEx(shown, colon ? 0b01000000 : 0, true);\n  delay(100);\n}\n"}},
+ "boards": []
+}

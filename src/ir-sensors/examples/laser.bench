@@ -1,0 +1,18 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "How far? (VL53L0X)",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-8, 0, -4], "rot": [0, 0, 0, 1]},
+  {"uid": "tof", "type": "ir-sensors/vl53l0x", "name": "VL53L0X", "params": {}, "parent": null, "pos": [0, 0, 0], "rot": [0, 0, 0, 1], "pinned": true},
+  {"uid": "target", "type": "block", "name": "Target", "params": {"w": 2, "h": 6, "d": 8, "material": "wood", "color": "#c98a4b"}, "parent": null, "pos": [20, 0, 0], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "tof", "pin": "VIN"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "tof", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "SDA"}, "b": {"uid": "tof", "pin": "SDA"}, "color": "#4f9cff"},
+  {"id": "w4", "a": {"uid": "board", "pin": "SCL"}, "b": {"uid": "tof", "pin": "SCL"}, "color": "#e8c547"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// How far is the block? A VL53L0X laser sensor on I2C. Drag the block while it runs.\n#include <Wire.h>\n#include <VL53L0X.h>\n\nVL53L0X sensor;\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  sensor.setTimeout(500);\n  if (!sensor.init()) {\n    Serial.println(\"No VL53L0X found: check its wires\");\n    while (1) delay(1000);\n  }\n  sensor.startContinuous();\n}\n\nvoid loop() {\n  int mm = sensor.readRangeContinuousMillimeters();\n  if (sensor.timeoutOccurred()) Serial.println(\"timeout\");\n  else if (mm >= 8190) Serial.println(\"nothing in range\");\n  else {\n    Serial.print(mm);\n    Serial.println(\" mm\");\n  }\n  delay(500);\n}\n"}},
+ "boards": []
+}

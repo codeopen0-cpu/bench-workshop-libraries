@@ -204,6 +204,84 @@ pictures a second means a rover turning fast moves 15 degrees between two looks 
 The test bench's sketch turns slower as the target nears the middle, and drives slower as it
 gets close. Test your part with something that moves.
 
+### More a part can do (app 0.3.0 and newer)
+
+Any of these needs `"needsApp": "0.3.0"` in `library.json` (the checker asks for it). Every library
+in this list's `src/` uses one or more of them: read them as worked examples.
+
+**Pieces that move** (`src/stepper-motors`, `src/encoder-motor`): a shaft, a horn, a slider, a
+knob. Each is its own body, joined to the part's main body:
+
+```json
+"moving": [{
+  "id": "shaft", "mass": 3,
+  "shape": [{ "cyl": [0.25, 0.6], "at": [0.8, 2.6, 0], "color": "#d8b04a" }],
+  "joint": { "type": "turn", "at": [0.8, 2.4, 0], "axis": [0, 1, 0], "motor": "stepper", "torque": 0.34, "speed": 16, "volts": 5 }
+}]
+```
+
+`type` is `turn` (about `axis`) or `slide` (along it). `motor`: `servo` (goes to an angle within
+`min`/`max` degrees), `motor` (spins with a power), `stepper` (goes to an angle any number of turns
+away, and skips steps when overloaded, as a real one does), `free` (no motor: a hinge, an axle; its
+`torque` is the friction). `torque` is in kg*cm at `volts` (a slide's push is `force`, newtons),
+`speed` in rpm (a slide's in cm/s). Other parts can be glued to a moving piece by its id, and pins
+can sit on one: `"on": "shaft"`. In `device.js`:
+
+```js
+const shaft = part.motor('shaft');
+shaft.to(90, volts);       // servo / stepper / slide: go to 90 deg (or cm), with the volts it gets
+shaft.power(-0.5, volts);  // motor: half power backwards
+shaft.limp();              // no power: it turns freely
+shaft.angle; shaft.speed; shaft.stalled;   // where it is (deg or cm), how fast, and if it's stuck
+```
+
+The app holds it to what `library.json` says: your code can't make it stronger or faster than
+its `torque` and `speed`, and gets less torque from fewer volts. Pass the volts your part really
+gets (`io.supply('+', '-')`), so a flat battery makes a weak motor.
+
+**Sounds** (`src/buzzers`, the relay's click): `"sound": true` on the part, then
+`const snd = part.sound(); snd.tone(440, 0.5, 'square'); snd.stop();`. Tones only (20 Hz-12 kHz,
+`square`, `sine`, `triangle` or `sawtooth`), quiet by design; the toolbar's **Sound** button turns
+them all off. `io.pwm('+')` gives `{ hz, duty }` when a board's `tone()` drives a pin.
+
+**Controls in the run panel** (`src/keypad`, `src/climate-sensors`, `src/joystick-encoder`): for
+what a person does to the part, or what the world around it is like:
+
+```json
+"controls": [
+  { "id": "temp", "kind": "slider", "label": "Temperature (C)", "min": -40, "max": 80, "step": 0.1, "value": 22 },
+  { "id": "press", "kind": "button", "label": "Push" },
+  { "id": "keys", "kind": "keys", "label": "Keys", "cols": 4, "keys": ["1", "2", "3", "A"] }
+]
+```
+
+Kinds: `slider` (`.value`), `button` (`.down`, `.presses()`), `switch` (`.on`), `text` (a text
+box: `.take()` gives the lines sent), `keys` (a grid of buttons: `.down` lists the held ones,
+`.take()` the pressed ones in order). Read them with `part.control('temp')`.
+
+**Distance sensors** (`src/ir-sensors`): a beam in its shape,
+`{ "ranger": { "id": "beam", "look": [1, 0, 0], "max": 200 }, "at": [0.7, 0.26, 0] }`, and
+`part.ranger('beam').distance` is how far (cm) the first thing along it is, or `null`.
+
+**Joining its own pins** (`src/keypad`, `src/relay-module`): `io.connect('COM', 'NO', true)` joins
+two of its pins as a wire would (a pressed key, a relay's contact); `false` parts them.
+
+**Messages along a wire** (`src/neopixel`, `src/bluetooth-hc05`, `src/climate-sensors`,
+`src/ir-remote`): some signals are far faster than the simulation's steps (a serial port's bits,
+an LED strip's 800 kHz train, a DHT's 40 bits in 4 ms). Those travel as messages on the wire:
+`io.send('TX', 'uart', bytes, 9600)` sends one to every part on that pin's wire, and the device's
+`packets(list)` gets the ones that arrive: `[{ pin, proto, data, baud }]`. Kinds: `uart` (serial
+bytes, with their baud: boards' `Serial1`, `Serial2` and `SoftwareSerial` speak it),
+`pixels`, `data`, `ir`, `onewire`, `raw`. In a sketch library, `linkSend(pin, 'pixels', bytes)` and
+`linkReceive(pin, 'data')` do the same from the board's side. Keep the bytes the real ones (a
+DHT22's real 5-byte frame, a strip's GRB order), so the part teaches what the hardware does.
+
+**Power it uses:** `io.draw(0.12)` says it takes 120 mA now; batteries drain and sag by it, and
+a power meter on its supply shows it.
+
+**Pull-ups:** a pin marked `"pulled": "up"` (or `"down"`) gets that resistor from the very first
+step, to the part's own supply: an encoder's or a DHT's line reads high even before its code runs.
+
 ## 4. The Arduino library: sketch/*.js
 
 People will program your part with the library they'd use on real hardware, so give them the same
@@ -214,7 +292,9 @@ one: same class name, same constructor, same functions. In `library.json`:
 ```
 
 Now `#include <LiquidCrystal.h>` in a sketch loads `sketch/LiquidCrystal.js`, and listing the class
-lets the C++-style declaration work: `LiquidCrystal lcd(12, 11, 5, 4, 3, 2);`.
+lets the C++-style declaration work: `LiquidCrystal lcd(12, 11, 5, 4, 3, 2);`. Constants and plain
+functions a sketch uses go in `"exports"`: `"exports": ["NEO_GRB", "makeKeymap"]`. Libraries
+included as `.hpp` (`IRremote.hpp`) are listed by that name.
 
 The file is JavaScript, run inside the program's thread, where the Arduino functions are in scope:
 `pinMode`, `digitalWrite`, `digitalRead`, `shiftOut`, `delay`, `Wire`, `Serial`, `HIGH`/`LOW`/`OUTPUT`.
@@ -305,5 +385,12 @@ network, stored data, other threads or the app window, build code at run time (`
 3D models may not load anything from outside their own file. Write plain, readable code: a person
 reads every pull request before it's merged. And a part that freezes (an endless loop in `step`) is
 stopped after 3 seconds, so keep `step` quick and let time pass between calls.
+
+Parts that move, sound or have controls stay within limits the app enforces while running and the
+checker checks before installing: at most 8 moving pieces a part, 300 kg*cm, 2000 N, 30000 rpm
+(500 cm/s sliding, 100 cm of travel); tones only, volume-capped, muted by the Sound button and
+silent while paused; 32 controls with plain-text labels; 4 distance beams of up to 10 m; messages
+of up to 4096 bytes, 64 a step. Whoever installs a library is told which of its parts move and
+which make sounds.
 
 The full reference for every field is in [README.md](README.md).

@@ -1,0 +1,54 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "buzzers",
+  "name": "Buzzers",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "An active buzzer (beeps by itself when powered) and a passive buzzer (plays the note you give it with tone()). You hear them: the toolbar's Sound button turns part sounds on and off.",
+  "category": "Sound",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "active-buzzer",
+      "name": "Active buzzer",
+      "description": "Beeps (about 2.3 kHz) whenever + is above 2.5 V: digitalWrite(pin, HIGH) to beep, LOW to stop. Long leg + to a pin, short leg - to GND. A tone() on it just sounds rough: it has its own oscillator.",
+      "swatch": "#1c1c1e",
+      "mass": 2,
+      "sound": true,
+      "shape": [
+        { "cyl": [0.6, 0.9], "at": [0, 0.45, 0], "color": "#1c1c1e" },
+        { "cyl": [0.12, 0.02], "at": [0, 0.91, 0], "color": "#0a0a0a", "collide": false },
+        { "box": [0.5, 0.01, 0.12], "at": [0, 0.905, -0.3], "color": "#f2f2f2", "collide": false }
+      ],
+      "pins": [
+        { "id": "+", "label": "+ (long leg)", "at": [-0.25, 0, 0], "kind": "in" },
+        { "id": "-", "label": "- (short leg)", "at": [0.25, 0, 0], "kind": "gnd" }
+      ],
+      "device": "active-buzzer"
+    },
+    {
+      "id": "passive-buzzer",
+      "name": "Passive buzzer",
+      "description": "Plays the frequency it's driven at: tone(pin, 440) is an A, noTone(pin) stops. A plain HIGH only clicks. + to a pin, - to GND.",
+      "swatch": "#14361f",
+      "mass": 2,
+      "sound": true,
+      "shape": [
+        { "cyl": [0.6, 0.8], "at": [0, 0.4, 0], "color": "#1c1c1e" },
+        { "box": [1.3, 0.08, 1.3], "at": [0, 0.04, 0], "color": "#1d6b3a" },
+        { "cyl": [0.15, 0.02], "at": [0, 0.81, 0], "color": "#0a0a0a", "collide": false }
+      ],
+      "pins": [
+        { "id": "+", "label": "+ (signal)", "at": [-0.25, 0, 0], "kind": "in" },
+        { "id": "-", "label": "-", "at": [0.25, 0, 0], "kind": "gnd" }
+      ],
+      "device": "passive-buzzer"
+    }
+  ],
+  "examples": [
+    { "name": "Play a tune", "description": "A board playing a short tune on a passive buzzer with tone(), and beeping an active buzzer between the notes. Press Run (and turn Sound on).", "file": "examples/tune.bench" }
+  ]
+}

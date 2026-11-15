@@ -1,0 +1,89 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "climate-sensors",
+  "name": "Climate sensors",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Temperature and humidity: the DHT11 and DHT22 (one data wire) and the BME280 (I2C, with air pressure). Set the weather with sliders in the run panel. Includes DHT.h and Adafruit_BME280.h.",
+  "category": "Sensors",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "DHT.h": { "classes": ["DHT"], "exports": ["DHT11", "DHT12", "DHT21", "DHT22", "AM2301"], "file": "sketch/DHT.js" },
+    "Adafruit_BME280.h": { "classes": ["Adafruit_BME280"], "file": "sketch/Adafruit_BME280.js" }
+  },
+  "parts": [
+    {
+      "id": "dht11",
+      "name": "DHT11 (temperature, humidity)",
+      "description": "The blue one: 0-50 C (whole degrees), 20-90 % humidity. VCC (3.3-5 V), DATA to a pin (the module has its pull-up), GND. Read it at most once a second. DHT dht(PIN, DHT11);",
+      "swatch": "#2f7fd8",
+      "mass": 3,
+      "shape": [
+        { "box": [1.6, 0.16, 2.6], "at": [0, 0.08, 0], "color": "#1d6b3a" },
+        { "box": [1.2, 0.55, 1.55], "at": [0, 0.435, 0.3], "color": "#2f7fd8" },
+        { "box": [1.0, 0.02, 1.2], "at": [0, 0.72, 0.3], "color": "#5fa3ec", "collide": false }
+      ],
+      "pins": [
+        { "id": "VCC", "label": "VCC (3.3-5.5 V)", "at": [-0.254, 0.16, -1.1], "kind": "vin", "vmin": 3, "vmax": 5.5 },
+        { "id": "DATA", "at": [0, 0.16, -1.1], "kind": "out", "pulled": "up" },
+        { "id": "GND", "at": [0.254, 0.16, -1.1], "kind": "gnd" }
+      ],
+      "controls": [
+        { "id": "temp", "kind": "slider", "label": "Temperature (C)", "min": 0, "max": 50, "step": 1, "value": 22 },
+        { "id": "hum", "kind": "slider", "label": "Humidity (%)", "min": 20, "max": 90, "step": 1, "value": 45 }
+      ],
+      "device": "dht11"
+    },
+    {
+      "id": "dht22",
+      "name": "DHT22 (temperature, humidity)",
+      "description": "The white one: -40-80 C and 0-100 % in tenths. VCC (3.3-5 V), DATA to a pin (the module has its pull-up), GND. Read it at most every 2 seconds. DHT dht(PIN, DHT22);",
+      "swatch": "#f2f2f2",
+      "mass": 4,
+      "shape": [
+        { "box": [1.6, 0.16, 3.0], "at": [0, 0.08, 0], "color": "#1d6b3a" },
+        { "box": [1.5, 0.75, 2.0], "at": [0, 0.535, 0.4], "color": "#f2f2f2" },
+        { "box": [1.3, 0.02, 1.5], "at": [0, 0.92, 0.4], "color": "#d6d6d6", "collide": false }
+      ],
+      "pins": [
+        { "id": "VCC", "label": "VCC (3.3-5.5 V)", "at": [-0.254, 0.16, -1.3], "kind": "vin", "vmin": 3, "vmax": 5.5 },
+        { "id": "DATA", "at": [0, 0.16, -1.3], "kind": "out", "pulled": "up" },
+        { "id": "GND", "at": [0.254, 0.16, -1.3], "kind": "gnd" }
+      ],
+      "controls": [
+        { "id": "temp", "kind": "slider", "label": "Temperature (C)", "min": -40, "max": 80, "step": 0.1, "value": 22.5 },
+        { "id": "hum", "kind": "slider", "label": "Humidity (%)", "min": 0, "max": 100, "step": 0.1, "value": 45 }
+      ],
+      "device": "dht22"
+    },
+    {
+      "id": "bme280",
+      "name": "BME280 (temperature, humidity, pressure)",
+      "description": "A tiny I2C sensor (address 0x76, or 0x77 with its jumper). VIN (3.3-5 V), GND, SCL, SDA. Adafruit_BME280 bme; bme.begin(0x76); then readTemperature(), readHumidity(), readPressure() (Pa), readAltitude(1013.25). Its registers are simplified here: use the included Adafruit_BME280.h.",
+      "swatch": "#7a3ec8",
+      "mass": 2,
+      "params": [
+        { "key": "addr", "label": "I2C address", "kind": "select", "options": [{ "value": "118", "label": "0x76" }, { "value": "119", "label": "0x77" }] }
+      ],
+      "defaults": { "addr": "118" },
+      "shape": [
+        { "box": [1.3, 0.16, 1.5], "at": [0, 0.08, 0], "color": "#7a3ec8" },
+        { "box": [0.25, 0.1, 0.25], "at": [0, 0.21, 0.3], "color": "#c9cdd4" }
+      ],
+      "pinRows": [{ "ids": ["VIN", "GND", "SCL", "SDA"], "at": [-0.381, 0.0, -0.6], "kinds": { "VIN": "vin", "GND": "gnd", "SCL": "i2c", "SDA": "i2c" }, "extra": { "VIN": { "label": "VIN (3.3-5 V)", "vmin": 1.7, "vmax": 5.5 } } }],
+      "controls": [
+        { "id": "temp", "kind": "slider", "label": "Temperature (C)", "min": -40, "max": 85, "step": 0.1, "value": 21.0 },
+        { "id": "hum", "kind": "slider", "label": "Humidity (%)", "min": 0, "max": 100, "step": 0.5, "value": 50 },
+        { "id": "pres", "kind": "slider", "label": "Air pressure (hPa)", "min": 850, "max": 1085, "step": 0.5, "value": 1013.25 }
+      ],
+      "device": "bme280"
+    }
+  ],
+  "examples": [
+    { "name": "Weather to serial (DHT22)", "description": "A DHT22 read every 2 seconds: temperature, humidity and the heat index in the serial monitor. Move its sliders in the run panel.", "file": "examples/dht22.bench" },
+    { "name": "Weather to serial (BME280)", "description": "A BME280 on I2C: temperature, humidity, pressure and altitude every second. Move its sliders in the run panel.", "file": "examples/bme280.bench" }
+  ]
+}

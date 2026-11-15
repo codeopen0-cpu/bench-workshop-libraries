@@ -1,0 +1,59 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "oled-ssd1306",
+  "name": "OLED display (SSD1306)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The little I2C OLED screens (SSD1306): 128x64 and 128x32 pixels, white, blue or yellow-and-blue. Text, lines, shapes and pictures with Adafruit_SSD1306.h and Adafruit_GFX.h. The part speaks the real SSD1306 commands.",
+  "category": "Displays",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "Adafruit_SSD1306.h": { "classes": ["Adafruit_SSD1306", "Adafruit_GFX"], "exports": ["SSD1306_BLACK", "SSD1306_WHITE", "SSD1306_INVERSE", "BLACK", "WHITE", "INVERSE", "SSD1306_SWITCHCAPVCC", "SSD1306_EXTERNALVCC"], "file": "sketch/Adafruit_SSD1306.js" },
+    "Adafruit_GFX.h": { "classes": [], "code": "// (Adafruit_GFX comes with Adafruit_SSD1306.h here)\n" }
+  },
+  "parts": [
+    {
+      "id": "oled128x64",
+      "name": "OLED 0.96\" (128x64, I2C)",
+      "description": "128x64 pixels on I2C (address 0x3C; 0x3D with its jumper). VCC (3.3-5 V), GND, SCL, SDA. Adafruit_SSD1306 display(128, 64, &Wire, -1); display.begin(SSD1306_SWITCHCAPVCC, 0x3C); then draw and call display.display() to show it.",
+      "swatch": "#14161a",
+      "mass": 3,
+      "params": [
+        { "key": "colour", "label": "Colour", "kind": "select", "options": [{ "value": "white", "label": "White" }, { "value": "blue", "label": "Blue" }, { "value": "yellow-blue", "label": "Yellow top, blue below" }] },
+        { "key": "addr", "label": "I2C address", "kind": "select", "options": [{ "value": "60", "label": "0x3C" }, { "value": "61", "label": "0x3D" }] }
+      ],
+      "defaults": { "colour": "white", "addr": "60" },
+      "shape": [
+        { "box": [2.7, 0.16, 2.8], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [2.6, 0.16, 1.9], "at": [0, 0.24, 0.25], "color": "#141416" },
+        { "screen": { "id": "oled", "size": [2.2, 1.1], "px": [128, 64], "mode": "pixels", "on": "#ebf5ff", "off": "#0a0b0d", "bg": "#0a0b0d", "dots": false }, "at": [0, 0.325, 0.2] }
+      ],
+      "pinRows": [{ "ids": ["GND", "VCC", "SCL", "SDA"], "at": [-0.381, 0.0, -1.2], "kinds": { "GND": "gnd", "VCC": "vin", "SCL": "i2c", "SDA": "i2c" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 } } }],
+      "device": "ssd1306"
+    },
+    {
+      "id": "oled128x32",
+      "name": "OLED 0.91\" (128x32, I2C)",
+      "description": "The thin one: 128x32 pixels on I2C (address 0x3C). GND, VCC (3.3-5 V), SCL, SDA. Adafruit_SSD1306 display(128, 32, &Wire, -1); display.begin(SSD1306_SWITCHCAPVCC, 0x3C);",
+      "swatch": "#14161a",
+      "mass": 2,
+      "params": [
+        { "key": "colour", "label": "Colour", "kind": "select", "options": [{ "value": "white", "label": "White" }, { "value": "blue", "label": "Blue" }] }
+      ],
+      "defaults": { "colour": "white" },
+      "shape": [
+        { "box": [3.8, 0.16, 1.2], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [3.0, 0.14, 1.0], "at": [0.3, 0.23, 0], "color": "#141416" },
+        { "screen": { "id": "oled", "size": [2.24, 0.56], "px": [128, 32], "mode": "pixels", "on": "#ebf5ff", "off": "#0a0b0d", "bg": "#0a0b0d", "dots": false }, "at": [0.3, 0.305, 0] }
+      ],
+      "pinRows": [{ "ids": ["GND", "VCC", "SCL", "SDA"], "at": [-1.75, 0.0, -0.381], "dir": "z", "kinds": { "GND": "gnd", "VCC": "vin", "SCL": "i2c", "SDA": "i2c" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 } } }],
+      "device": "ssd1306"
+    }
+  ],
+  "examples": [
+    { "name": "Hello, OLED", "description": "Text in two sizes, a box and a bouncing ball on a 128x64 OLED, with Adafruit_SSD1306.", "file": "examples/hello-oled.bench" }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "encoder-motor",
+  "name": "Gear motor with encoder",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The yellow TT gear motor with a 20-slot encoder disc and an optical sensor on its shaft: its OUT pin changes as the slots pass, so a board can count how far and how fast it turned. Drive it like any TT motor (through a motor driver).",
+  "category": "Motion",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "tt-encoder",
+      "name": "TT motor + encoder (20 slots)",
+      "description": "M+ and M- to a motor driver (3-6 V, about 200 rpm at 6 V, 0.8 kg*cm). The encoder: VCC (3.3-5 V), GND, OUT changes level each time a slot edge passes: 40 changes a turn (20 rising edges). Glue a wheel to its shaft.",
+      "swatch": "#f2c230",
+      "mass": 32,
+      "shape": [
+        { "box": [6.4, 2.2, 1.9], "at": [0, 1.1, 0], "color": "#f2c230" },
+        { "cyl": [1.0, 2.6], "at": [4.1, 1.1, 0], "rot": [0, 0, 90], "color": "#c9cdd4" },
+        { "box": [1.4, 0.16, 2.0], "at": [-1.6, 1.1, -1.6], "rot": [90, 0, 0], "color": "#1d4fb8" },
+        { "box": [0.5, 0.6, 0.5], "at": [-1.6, 1.8, -1.35], "color": "#141416" }
+      ],
+      "pins": [
+        { "id": "M+", "label": "Motor +", "at": [5.4, 1.55, 0], "kind": "motor" },
+        { "id": "M-", "label": "Motor -", "at": [5.4, 0.65, 0], "kind": "motor" },
+        { "id": "VCC", "label": "VCC (3.3-5 V)", "at": [-2.1, 0.35, -2.4], "kind": "vin", "vmin": 3, "vmax": 5.5 },
+        { "id": "GND", "at": [-1.6, 0.35, -2.4], "kind": "gnd" },
+        { "id": "OUT", "label": "OUT (encoder)", "at": [-1.1, 0.35, -2.4], "kind": "out" }
+      ],
+      "moving": [
+        {
+          "id": "shaft",
+          "mass": 4,
+          "shape": [
+            { "cyl": [0.3, 1.0], "at": [-1.6, 1.1, -0.6], "rot": [90, 0, 0], "color": "#f2f2f2" },
+            { "cyl": [0.95, 0.08], "at": [-1.6, 1.1, -1.05], "rot": [90, 0, 0], "color": "#141416" },
+            { "cyl": [0.3, 1.0], "at": [-1.6, 1.1, 1.45], "rot": [90, 0, 0], "color": "#f2f2f2" }
+          ],
+          "joint": { "type": "turn", "at": [-1.6, 1.1, 0], "axis": [0, 0, 1], "motor": "motor", "torque": 0.8, "speed": 200, "volts": 6 }
+        }
+      ],
+      "device": "tt-encoder"
+    }
+  ],
+  "examples": [
+    { "name": "Measure the speed", "description": "A board drives the motor through a DRV8833 at three speeds and counts the encoder's pulses: rpm in the serial monitor.", "file": "examples/rpm.bench" }
+  ]
+}

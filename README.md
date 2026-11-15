@@ -46,6 +46,13 @@ is towards you.
   An input with a resistor on the board (EN, OE, RESET) gets `"pulled": "up"` or `"down"` in
   `extra`, so Check doesn't call it floating when it's left unwired.
 - `shorts`: pins joined on the board: `[["GND", "GND2"]]`.
+- `moving`: pieces that turn or slide, each with its own `shape`, `mass` and a `joint`
+  (`type` turn/slide, `at`, `axis`, `motor` servo/motor/stepper/free, `torque` kg*cm or `force` N,
+  `speed` rpm or cm/s, `volts`, `min`/`max`). Pins can sit on one: `"on": "shaft"`.
+- `controls`: run-panel controls: `slider`, `button`, `switch`, `text`, `keys`.
+- `sound: true`: it can play tones. `ranger` (in `shape`): a distance-measuring beam.
+- Parts using `moving`, `controls`, `sound` or `ranger` (or messages, below) need
+  `"needsApp": "0.3.0"`. See GUIDE.md, "More a part can do".
 - `device`: the name its code registers (below).
 - `params`/`defaults`: settings in the inspector (an I2C address, say).
 - A 3D model: `"glbFile": "board.glb"` (metres, Y up, like KiCad's export) and `"glbAt": [x, y, z]`.
@@ -73,11 +80,28 @@ bench.device('my-chip', (part) => {
 
 Screens: `s.set(x, y, on)` (or a CSS colour), `s.fill(v)`, `s.print(col, row, text)`, `s.light(on)`.
 
+Also (app 0.3.0): `part.motor(id)` (`to`, `power`, `limp`, `angle`, `speed`, `stalled`),
+`part.sound()` (`tone(hz, volume, wave)`, `stop()`), `part.control(id)`, `part.ranger(id).distance`;
+`io.send(pin, proto, bytes, baud)` and a `packets(list)` handler for messages along a wire (`uart`,
+`pixels`, `data`, `ir`...), `io.pwm(pin)`, `io.connect(a, b, on)` to join two of its pins,
+`io.draw(amps)` for the current it takes.
+
 ### Sketch libraries (sketch/*.js)
 
 Plain JavaScript run inside the program's thread, where the Arduino functions (`pinMode`,
 `digitalWrite`, `shiftOut`, `Wire`, `delay`...) are in scope. List the classes it defines under
-`classes`, so a C++-style `LedControl lc(12, 11, 10, 1);` works in Arduino programs.
+`classes`, so a C++-style `LedControl lc(12, 11, 10, 1);` works in Arduino programs, and constants
+or functions under `exports`. `linkSend(pin, proto, bytes)` / `linkReceive(pin, proto)` send and
+receive messages along a wire (an LED strip's pixels, a sensor's answer).
+
+## What's on the list
+
+Displays: LCD 16x2 (I2C and parallel), LED matrix 8x8 (MAX7219), OLED (SSD1306), 4-digit
+(TM1637), NeoPixel LEDs. Sensors: colour camera, DHT11/DHT22/BME280, line (TCRT5000), obstacle
+(FC-51), laser distance (VL53L0X), PIR motion. Motion: steppers (28BYJ-48 + ULN2003, NEMA 17 +
+A4988), TT motor with encoder. Input: keypads, joystick, rotary encoder. Wireless: HC-05
+Bluetooth, IR remote and receiver. Sound: buzzers. Power: relay module. Each comes with a ready-wired
+example bench.
 
 ## Adding yours to the list
 
@@ -101,6 +125,8 @@ never runs them, and blocks:
   escaped text, encoded blobs, `atob`)
 - 3D models that load anything from outside their own file
 - web markup in names and descriptions, non-hex colours, oversized files
+- parts beyond the app's limits (motor torque and speed, travel, controls, distance beams), and it
+  tells installers which parts move or make sounds
 
 And when a library runs, its code is in a sealed-off thread with no network, no storage and no
 access to the app; one that stops responding is shut down. A person still reads every pull request

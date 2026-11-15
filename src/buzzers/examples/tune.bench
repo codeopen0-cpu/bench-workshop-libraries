@@ -1,0 +1,18 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Play a tune",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [0, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "pz", "type": "buzzers/passive-buzzer", "name": "Passive buzzer", "params": {}, "parent": null, "pos": [6, 0, -2], "rot": [0, 0, 0, 1]},
+  {"uid": "az", "type": "buzzers/active-buzzer", "name": "Active buzzer", "params": {}, "parent": null, "pos": [6, 0, 2], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP15"}, "b": {"uid": "pz", "pin": "+"}, "color": "#e8c547"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "pz", "pin": "-"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GP14"}, "b": {"uid": "az", "pin": "+"}, "color": "#e04848"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "az", "pin": "-"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// A tune on the passive buzzer (tone plays a frequency), a beep on the active one between rounds.\n#define BUZZER 15\n#define BEEPER 14\n\nint melody[] = {262, 294, 330, 349, 392, 392, 440, 440, 392};\nint beats[]  = {1, 1, 1, 1, 2, 2, 1, 1, 4};\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(BEEPER, OUTPUT);\n}\n\nvoid loop() {\n  for (int i = 0; i < 9; i++) {\n    Serial.print(\"note \");\n    Serial.println(melody[i]);\n    tone(BUZZER, melody[i], beats[i] * 150);\n    delay(beats[i] * 200);\n  }\n  digitalWrite(BEEPER, HIGH);\n  delay(300);\n  digitalWrite(BEEPER, LOW);\n  delay(1000);\n}\n"}},
+ "boards": []
+}

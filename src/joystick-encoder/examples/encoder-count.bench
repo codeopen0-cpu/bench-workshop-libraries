@@ -1,0 +1,18 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Encoder counts",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-6, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "enc", "type": "joystick-encoder/ky040", "name": "Encoder", "params": {}, "parent": null, "pos": [4, 0, 0], "rot": [0, 0, 0, 1], "pinned": true}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "enc", "pin": "+"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "enc", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GP2"}, "b": {"uid": "enc", "pin": "CLK"}, "color": "#e8c547"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GP3"}, "b": {"uid": "enc", "pin": "DT"}, "color": "#4f9cff"},
+  {"id": "w5", "a": {"uid": "board", "pin": "GP4"}, "b": {"uid": "enc", "pin": "SW"}, "color": "#3fbf7f"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Count the encoder's clicks: right = up, left = down, push = back to 0.\n#define CLK 2\n#define DT 3\n#define SW 4\n\nint counter = 0;\nint lastClk;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(CLK, INPUT);\n  pinMode(DT, INPUT);\n  pinMode(SW, INPUT_PULLUP);\n  lastClk = digitalRead(CLK);\n}\n\nvoid loop() {\n  int clk = digitalRead(CLK);\n  if (clk != lastClk && clk == HIGH) {     // CLK came back up: one click done\n    if (digitalRead(DT) != clk) counter++;  // DT lagging behind: clockwise\n    else counter--;\n    Serial.print(\"count: \");\n    Serial.println(counter);\n  }\n  lastClk = clk;\n  if (digitalRead(SW) == LOW && counter != 0) {\n    counter = 0;\n    Serial.println(\"reset\");\n  }\n}\n"}},
+ "boards": []
+}

@@ -1,0 +1,35 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "tm1637-display",
+  "name": "4-digit display (TM1637)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The red 4-digit 7-segment display with a colon (a clock display) on a TM1637 chip: two wires, CLK and DIO. Includes TM1637Display.h. The part decodes the real TM1637 signals bit by bit.",
+  "category": "Displays",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "sketch": {
+    "TM1637Display.h": { "classes": ["TM1637Display"], "exports": ["SEG_A", "SEG_B", "SEG_C", "SEG_D", "SEG_E", "SEG_F", "SEG_G", "SEG_DP"], "file": "sketch/TM1637Display.js" }
+  },
+  "parts": [
+    {
+      "id": "tm1637",
+      "name": "4-digit display (TM1637)",
+      "description": "CLK and DIO to any two pins, VCC (3.3-5 V), GND. TM1637Display display(CLK, DIO); display.setBrightness(5); display.showNumberDec(1234); The colon is the top bit of the second digit (showNumberDecEx(1234, 0b01000000)).",
+      "swatch": "#1d4fb8",
+      "mass": 10,
+      "shape": [
+        { "box": [4.2, 0.16, 2.4], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [3.9, 0.6, 1.9], "at": [0, 0.46, 0], "color": "#f2f2f2" },
+        { "screen": { "id": "digits", "size": [3.7, 1.6], "px": [32, 13], "mode": "pixels", "on": "#ff2a1a", "off": "#2a0d0c", "bg": "#121214", "dots": false }, "at": [0, 0.765, 0] }
+      ],
+      "pinRows": [{ "ids": ["CLK", "DIO", "VCC", "GND"], "at": [-2.4, 0.0, -0.381], "dir": "z", "kinds": { "CLK": "in", "DIO": "in", "VCC": "vin", "GND": "gnd" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "CLK": { "pulled": "up" }, "DIO": { "pulled": "up" } } }],
+      "device": "tm1637"
+    }
+  ],
+  "examples": [
+    { "name": "Counting clock", "description": "A TM1637 showing minutes and seconds since the start, with the colon blinking.", "file": "examples/clock.bench" }
+  ]
+}

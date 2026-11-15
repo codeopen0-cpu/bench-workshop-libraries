@@ -1,0 +1,20 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Phone switches an LED",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-6, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "bt", "type": "bluetooth-hc05/hc05", "name": "HC-05", "params": {"baud": "9600"}, "parent": null, "pos": [5, 0, -2], "rot": [0, 0, 0, 1]},
+  {"uid": "led", "type": "led", "name": "LED", "params": {"color": "green"}, "parent": null, "pos": [0, 0, 6], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "5V"}, "b": {"uid": "bt", "pin": "VCC"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "bt", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GP0"}, "b": {"uid": "bt", "pin": "RXD"}, "color": "#4f9cff"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GP1"}, "b": {"uid": "bt", "pin": "TXD"}, "color": "#3fbf7f"},
+  {"id": "w5", "a": {"uid": "board", "pin": "GP15"}, "b": {"uid": "led", "pin": "A"}, "color": "#e8c547"},
+  {"id": "w6", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "led", "pin": "K"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Type \"on\" or \"off\" on the phone (the HC-05's card in the run panel).\n// The HC-05 is on Serial1: the board's TX (GP0) to its RXD, the board's RX (GP1) from its TXD.\n#define LED 15\n\nvoid setup() {\n  Serial.begin(115200);\n  Serial1.begin(9600);         // the HC-05's speed\n  pinMode(LED, OUTPUT);\n  Serial1.println(\"Hello phone! Send on or off.\");\n}\n\nvoid loop() {\n  if (Serial1.available()) {\n    String cmd = Serial1.readStringUntil('\\n');\n    cmd.trim();\n    Serial.print(\"phone says: \");\n    Serial.println(cmd);\n    if (cmd == \"on\") {\n      digitalWrite(LED, HIGH);\n      Serial1.println(\"LED is on\");\n    } else if (cmd == \"off\") {\n      digitalWrite(LED, LOW);\n      Serial1.println(\"LED is off\");\n    } else {\n      Serial1.println(\"Send on or off\");\n    }\n  }\n}\n"}},
+ "boards": []
+}

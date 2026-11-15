@@ -1,0 +1,21 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Relay blinks a lamp",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-8, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "relay", "type": "relay-module/relay1", "name": "Relay", "params": {"trigger": "low"}, "parent": null, "pos": [2, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "bat", "type": "battery-9v", "name": "Lamp battery (9 V)", "params": {"charge": 100}, "parent": null, "pos": [10, 0, 6], "rot": [0, 0, 0, 1]},
+  {"uid": "lamp", "type": "led", "name": "Lamp", "params": {"color": "yellow"}, "parent": null, "pos": [10, 0, -4], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP15"}, "b": {"uid": "relay", "pin": "IN"}, "color": "#e8c547"},
+  {"id": "w2", "a": {"uid": "board", "pin": "5V"}, "b": {"uid": "relay", "pin": "VCC"}, "color": "#e04848"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "relay", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w4", "a": {"uid": "bat", "pin": "+"}, "b": {"uid": "relay", "pin": "COM"}, "color": "#e04848"},
+  {"id": "w5", "a": {"uid": "relay", "pin": "NO"}, "b": {"uid": "lamp", "pin": "A"}, "color": "#f08c2a"},
+  {"id": "w6", "a": {"uid": "lamp", "pin": "K"}, "b": {"uid": "bat", "pin": "-"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// A relay switching a lamp on its own battery. This relay module turns on when IN is LOW.\n#define RELAY 15\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(RELAY, OUTPUT);\n  digitalWrite(RELAY, HIGH);   // off to start with\n}\n\nvoid loop() {\n  Serial.println(\"lamp on\");\n  digitalWrite(RELAY, LOW);    // on (click)\n  delay(1000);\n  Serial.println(\"lamp off\");\n  digitalWrite(RELAY, HIGH);   // off (click)\n  delay(1000);\n}\n"}},
+ "boards": []
+}

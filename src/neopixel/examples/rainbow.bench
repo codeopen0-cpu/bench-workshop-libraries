@@ -1,0 +1,16 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Rainbow stick",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-6, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "stick", "type": "neopixel/stick8", "name": "LED stick", "params": {"count": 8}, "parent": null, "pos": [4, 0, 0], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP6"}, "b": {"uid": "stick", "pin": "DIN"}, "color": "#3fbf7f"},
+  {"id": "w2", "a": {"uid": "board", "pin": "5V"}, "b": {"uid": "stick", "pin": "5V"}, "color": "#e04848"},
+  {"id": "w3", "a": {"uid": "board", "pin": "GND2"}, "b": {"uid": "stick", "pin": "GND"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// A moving rainbow on 8 NeoPixels.\n#include <Adafruit_NeoPixel.h>\n\n#define PIN 6\n#define COUNT 8\n\nAdafruit_NeoPixel strip(COUNT, PIN, NEO_GRB + NEO_KHZ800);\nlong hue = 0;\n\nvoid setup() {\n  Serial.begin(115200);\n  strip.begin();\n  strip.setBrightness(80);   // of 255: easy on the eyes (and the USB port)\n  strip.show();              // all off\n}\n\nvoid loop() {\n  for (int i = 0; i < COUNT; i++) {\n    long h = hue + (long)i * 65536 / COUNT;\n    strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(h)));\n  }\n  strip.show();\n  hue += 512;\n  delay(20);\n}\n"}},
+ "boards": []
+}

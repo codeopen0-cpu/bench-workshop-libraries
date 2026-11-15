@@ -2,6 +2,60 @@
  "format": "bench-library-index",
  "libraries": [
   {
+   "id": "bluetooth-hc05",
+   "name": "Bluetooth (HC-05)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The HC-05 Bluetooth serial module: whatever a phone sends comes out of its TXD as serial bytes, and whatever the board sends to its RXD goes to the phone. The phone is in the run panel: type a line and Send. Use SoftwareSerial or Serial1/Serial2.",
+   "category": "Wireless",
+   "parts": [
+    "Bluetooth HC-05"
+   ],
+   "url": "libraries/bluetooth-hc05.benchlib",
+   "size": 6454,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "buzzers",
+   "name": "Buzzers",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "An active buzzer (beeps by itself when powered) and a passive buzzer (plays the note you give it with tone()). You hear them: the toolbar's Sound button turns part sounds on and off.",
+   "category": "Sound",
+   "parts": [
+    "Active buzzer",
+    "Passive buzzer"
+   ],
+   "url": "libraries/buzzers.benchlib",
+   "size": 5177,
+   "can": [
+    "make sounds"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "climate-sensors",
+   "name": "Climate sensors",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Temperature and humidity: the DHT11 and DHT22 (one data wire) and the BME280 (I2C, with air pressure). Set the weather with sliders in the run panel. Includes DHT.h and Adafruit_BME280.h.",
+   "category": "Sensors",
+   "parts": [
+    "DHT11 (temperature, humidity)",
+    "DHT22 (temperature, humidity)",
+    "BME280 (temperature, humidity, pressure)"
+   ],
+   "url": "libraries/climate-sensors.benchlib",
+   "size": 14958,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
    "id": "color-camera",
    "name": "Colour-tracking camera",
    "version": "1.0.0",
@@ -12,7 +66,104 @@
     "Colour-tracking camera"
    ],
    "url": "libraries/color-camera.benchlib",
-   "size": 13907
+   "size": 13907,
+   "can": [
+    "see (camera)"
+   ],
+   "needsApp": "0.2.1"
+  },
+  {
+   "id": "encoder-motor",
+   "name": "Gear motor with encoder",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The yellow TT gear motor with a 20-slot encoder disc and an optical sensor on its shaft: its OUT pin changes as the slots pass, so a board can count how far and how fast it turned. Drive it like any TT motor (through a motor driver).",
+   "category": "Motion",
+   "parts": [
+    "TT motor + encoder (20 slots)"
+   ],
+   "url": "libraries/encoder-motor.benchlib",
+   "size": 5862,
+   "can": [
+    "move"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "ir-remote",
+   "name": "IR remote and receiver",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The little 21-key infrared remote and an IR receiver module (VS1838B). Press the remote's keys in the run panel; every receiver on the bench picks up the code (NEC protocol). Includes IRremote.h, both its new (IrReceiver) and old (IRrecv) ways.",
+   "category": "Wireless",
+   "parts": [
+    "IR receiver (VS1838B)",
+    "IR remote (21 keys)"
+   ],
+   "url": "libraries/ir-remote.benchlib",
+   "size": 14810,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "ir-sensors",
+   "name": "Line, obstacle, laser and motion sensors",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Sensors robots use: the TCRT5000 line sensor (sees dark lines on a light floor), the FC-51 obstacle sensor (IR, a few cm), the VL53L0X laser distance sensor (I2C, up to 2 m) and the HC-SR501 PIR motion sensor. They really look at the bench. Includes VL53L0X.h and Adafruit_VL53L0X.h.",
+   "category": "Sensors",
+   "parts": [
+    "Line sensor (TCRT5000)",
+    "Obstacle sensor (FC-51)",
+    "Laser distance sensor (VL53L0X)",
+    "Motion sensor (HC-SR501 PIR)"
+   ],
+   "url": "libraries/ir-sensors.benchlib",
+   "size": 19273,
+   "can": [
+    "see (camera)",
+    "measure distance"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "joystick-encoder",
+   "name": "Joystick and rotary encoder",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "A thumb joystick (KY-023: two knobs and a push button) and a rotary encoder knob (KY-040: clicks round in steps, and pushes). Work them from the run panel.",
+   "category": "Input",
+   "parts": [
+    "Joystick (KY-023)",
+    "Rotary encoder (KY-040)"
+   ],
+   "url": "libraries/joystick-encoder.benchlib",
+   "size": 8775,
+   "can": [
+    "move",
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "keypad",
+   "name": "Keypads",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Membrane keypads (4x4 and 4x3): each key joins its row wire to its column wire while it's held, exactly as the real ones do. Press the keys in the run panel. Includes Keypad.h.",
+   "category": "Input",
+   "parts": [
+    "Keypad 4x4",
+    "Keypad 4x3"
+   ],
+   "url": "libraries/keypad.benchlib",
+   "size": 8423,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
   },
   {
    "id": "lcd-i2c",
@@ -25,7 +176,8 @@
     "LCD 16x2 (I2C)"
    ],
    "url": "libraries/lcd-i2c.benchlib",
-   "size": 8517
+   "size": 8517,
+   "can": []
   },
   {
    "id": "lcd-parallel",
@@ -38,7 +190,8 @@
     "LCD 16x2 green (parallel)"
    ],
    "url": "libraries/lcd-parallel.benchlib",
-   "size": 14897
+   "size": 14897,
+   "can": []
   },
   {
    "id": "led-matrix-max7219",
@@ -51,7 +204,91 @@
     "LED matrix 8x8 (MAX7219)"
    ],
    "url": "libraries/led-matrix-max7219.benchlib",
-   "size": 7865
+   "size": 7865,
+   "can": []
+  },
+  {
+   "id": "neopixel",
+   "name": "NeoPixel LEDs (WS2812B)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Addressable RGB LEDs (WS2812B, \"NeoPixels\"): a stick of 8, a strip of 30 and an 8x8 panel. One data wire sets every LED's colour; chain them DOUT to DIN. Includes Adafruit_NeoPixel.h.",
+   "category": "Displays",
+   "parts": [
+    "NeoPixel stick (8 LEDs)",
+    "NeoPixel strip (30 LEDs)",
+    "NeoPixel panel (8x8)"
+   ],
+   "url": "libraries/neopixel.benchlib",
+   "size": 11310,
+   "can": [],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "oled-ssd1306",
+   "name": "OLED display (SSD1306)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The little I2C OLED screens (SSD1306): 128x64 and 128x32 pixels, white, blue or yellow-and-blue. Text, lines, shapes and pictures with Adafruit_SSD1306.h and Adafruit_GFX.h. The part speaks the real SSD1306 commands.",
+   "category": "Displays",
+   "parts": [
+    "OLED 0.96\" (128x64, I2C)",
+    "OLED 0.91\" (128x32, I2C)"
+   ],
+   "url": "libraries/oled-ssd1306.benchlib",
+   "size": 24206,
+   "can": [],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "relay-module",
+   "name": "Relay module",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "A 5 V relay on a module: a board's pin switches a separate circuit (a lamp, a motor, a pump) through its COM, NO and NC contacts. It clicks.",
+   "category": "Power",
+   "parts": [
+    "Relay module (1 channel)"
+   ],
+   "url": "libraries/relay-module.benchlib",
+   "size": 4989,
+   "can": [
+    "make sounds"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "stepper-motors",
+   "name": "Stepper motors",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Two stepper motors with their drivers: the small 28BYJ-48 on a ULN2003 board (4 pins) and a NEMA 17 on an A4988 driver (STEP and DIR). They turn exactly as many steps as they're given, hold their position, and skip steps when overloaded or rushed. Includes Stepper.h and AccelStepper.h.",
+   "category": "Motion",
+   "parts": [
+    "Stepper 28BYJ-48 + ULN2003",
+    "Stepper NEMA 17 + A4988"
+   ],
+   "url": "libraries/stepper-motors.benchlib",
+   "size": 20592,
+   "can": [
+    "move"
+   ],
+   "needsApp": "0.3.0"
+  },
+  {
+   "id": "tm1637-display",
+   "name": "4-digit display (TM1637)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The red 4-digit 7-segment display with a colon (a clock display) on a TM1637 chip: two wires, CLK and DIO. Includes TM1637Display.h. The part decodes the real TM1637 signals bit by bit.",
+   "category": "Displays",
+   "parts": [
+    "4-digit display (TM1637)"
+   ],
+   "url": "libraries/tm1637-display.benchlib",
+   "size": 10015,
+   "can": [],
+   "needsApp": "0.3.0"
   }
  ]
 }

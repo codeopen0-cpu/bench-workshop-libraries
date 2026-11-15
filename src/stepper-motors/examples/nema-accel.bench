@@ -1,0 +1,20 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "NEMA 17 with AccelStepper",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-10, 0, -4], "rot": [0, 0, 0, 1]},
+  {"uid": "motor", "type": "stepper-motors/nema17", "name": "NEMA 17", "params": {"micro": "1"}, "parent": null, "pos": [4, 0, 0], "rot": [0, 0, 0, 1], "pinned": true},
+  {"uid": "psu", "type": "bench-supply", "name": "12 V supply", "params": {"volts": 12, "amps": 2}, "parent": null, "pos": [-14, 0, 10], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "GP3"}, "b": {"uid": "motor", "pin": "STEP"}, "color": "#e8c547"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GP4"}, "b": {"uid": "motor", "pin": "DIR"}, "color": "#4f9cff"},
+  {"id": "w3", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "motor", "pin": "VDD"}, "color": "#e04848"},
+  {"id": "w4", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "motor", "pin": "GND2"}, "color": "#2b2d33"},
+  {"id": "w5", "a": {"uid": "psu", "pin": "+"}, "b": {"uid": "motor", "pin": "VMOT"}, "color": "#e04848"},
+  {"id": "w6", "a": {"uid": "psu", "pin": "-"}, "b": {"uid": "motor", "pin": "GND"}, "color": "#2b2d33"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// A NEMA 17 on an A4988: AccelStepper speeds it up and slows it down between two positions.\n// The A4988 needs 8-35 V on VMOT (the bench supply) and the board's 3.3 V on VDD, grounds shared.\n#include <AccelStepper.h>\n\n#define STEP_PIN 3\n#define DIR_PIN 4\n\nAccelStepper motor(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);\n\nvoid setup() {\n  Serial.begin(115200);\n  motor.setMaxSpeed(600);      // steps per second (200 steps = one turn)\n  motor.setAcceleration(400);  // steps per second, per second\n  motor.moveTo(400);           // two turns\n}\n\nvoid loop() {\n  if (motor.distanceToGo() == 0) {\n    Serial.print(\"arrived at \");\n    Serial.println(motor.currentPosition());\n    delay(300);\n    motor.moveTo(-motor.currentPosition());\n  }\n  motor.run();\n}\n"}},
+ "boards": []
+}

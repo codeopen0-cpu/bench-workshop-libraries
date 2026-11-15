@@ -1,0 +1,17 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Weather to serial (BME280)",
+ "parts": [
+  {"uid": "board", "type": "maker-board", "name": "Board", "params": {"usb": true}, "parent": null, "pos": [-5, 0, 0], "rot": [0, 0, 0, 1]},
+  {"uid": "bme", "type": "climate-sensors/bme280", "name": "BME280", "params": {"addr": "118"}, "parent": null, "pos": [4, 0, 2], "rot": [0, 0, 0, 1]}
+ ],
+ "wires": [
+  {"id": "w1", "a": {"uid": "board", "pin": "3V3"}, "b": {"uid": "bme", "pin": "VIN"}, "color": "#e04848"},
+  {"id": "w2", "a": {"uid": "board", "pin": "GND"}, "b": {"uid": "bme", "pin": "GND"}, "color": "#2b2d33"},
+  {"id": "w3", "a": {"uid": "board", "pin": "SDA"}, "b": {"uid": "bme", "pin": "SDA"}, "color": "#4f9cff"},
+  {"id": "w4", "a": {"uid": "board", "pin": "SCL"}, "b": {"uid": "bme", "pin": "SCL"}, "color": "#e8c547"}
+ ],
+ "programs": {"board": {"lang": "arduino", "source": "// Temperature, humidity, air pressure and altitude from a BME280 (I2C, address 0x76).\n#include <Wire.h>\n#include <Adafruit_BME280.h>\n\nAdafruit_BME280 bme;\n\nvoid setup() {\n  Serial.begin(115200);\n  if (!bme.begin(0x76)) {\n    Serial.println(\"No BME280 at 0x76: check the wires (or try 0x77)\");\n    while (1) delay(1000);\n  }\n}\n\nvoid loop() {\n  Serial.print(bme.readTemperature(), 1);\n  Serial.print(\" C  \");\n  Serial.print(bme.readHumidity(), 1);\n  Serial.print(\" %  \");\n  Serial.print(bme.readPressure() / 100.0, 1);\n  Serial.print(\" hPa  about \");\n  Serial.print(bme.readAltitude(1013.25), 0);\n  Serial.println(\" m up\");\n  delay(1000);\n}\n"}},
+ "boards": []
+}

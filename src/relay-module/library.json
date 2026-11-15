@@ -1,0 +1,45 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "relay-module",
+  "name": "Relay module",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A 5 V relay on a module: a board's pin switches a separate circuit (a lamp, a motor, a pump) through its COM, NO and NC contacts. It clicks.",
+  "category": "Power",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "relay1",
+      "name": "Relay module (1 channel)",
+      "description": "Control side: VCC (5 V), GND, IN. Most modules switch on when IN is LOW (pick in its settings). Load side: COM is joined to NO (normally open) while it's on, and to NC (normally closed) while it's off. The coil takes about 70 mA: more than a pin can give, which is why it's a module (with its own transistor).",
+      "swatch": "#2f5fb8",
+      "mass": 15,
+      "sound": true,
+      "params": [
+        { "key": "trigger", "label": "Switches on when IN is", "kind": "select", "options": [{ "value": "low", "label": "LOW (most modules)" }, { "value": "high", "label": "HIGH" }] }
+      ],
+      "defaults": { "trigger": "low" },
+      "shape": [
+        { "box": [5.0, 0.16, 2.6], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [1.9, 1.5, 1.5], "at": [0.4, 0.91, 0], "color": "#2f5fb8" },
+        { "box": [1.0, 0.8, 1.6], "at": [2.0, 0.56, 0], "color": "#3d8ae8" },
+        { "screen": { "id": "led", "size": [0.3, 0.3], "px": [1, 1], "mode": "pixels", "on": "#ff3020", "off": "#3a1210", "bg": "#1d4fb8" }, "at": [-1.6, 0.17, 0.8] }
+      ],
+      "pins": [
+        { "id": "VCC", "label": "VCC (5 V)", "at": [-2.3, 0.16, 0.254], "kind": "vin", "vmin": 4, "vmax": 5.5 },
+        { "id": "GND", "at": [-2.3, 0.16, 0], "kind": "gnd" },
+        { "id": "IN", "at": [-2.3, 0.16, -0.254], "kind": "in", "pulled": "up" },
+        { "id": "NO", "label": "NO (normally open)", "at": [2.4, 0.95, 0.5], "kind": "motor" },
+        { "id": "COM", "label": "COM", "at": [2.4, 0.95, 0], "kind": "motor" },
+        { "id": "NC", "label": "NC (normally closed)", "at": [2.4, 0.95, -0.5], "kind": "motor" }
+      ],
+      "device": "relay"
+    }
+  ],
+  "examples": [
+    { "name": "Relay blinks a lamp", "description": "A board switches a relay once a second; the relay switches an LED that has its own 9 V battery. Two circuits, one shared nothing: that's what a relay is for.", "file": "examples/blink-relay.bench" }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "bluetooth-hc05",
+  "name": "Bluetooth (HC-05)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "The HC-05 Bluetooth serial module: whatever a phone sends comes out of its TXD as serial bytes, and whatever the board sends to its RXD goes to the phone. The phone is in the run panel: type a line and Send. Use SoftwareSerial or Serial1/Serial2.",
+  "category": "Wireless",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "hc05",
+      "name": "Bluetooth HC-05",
+      "description": "VCC (3.6-6 V), GND, TXD to the board's RX, RXD to the board's TX (RXD takes 3.3 V: from a 5 V board, use a divider), STATE is high while a phone is connected. 9600 baud unless you change it in its settings. The run panel has the phone: connect it, type, Send.",
+      "swatch": "#1d4fb8",
+      "mass": 4,
+      "params": [
+        { "key": "baud", "label": "Baud rate", "kind": "select", "options": [{ "value": "9600", "label": "9600 (as it comes)" }, { "value": "38400", "label": "38400" }, { "value": "57600", "label": "57600" }, { "value": "115200", "label": "115200" }] }
+      ],
+      "defaults": { "baud": "9600" },
+      "shape": [
+        { "box": [1.6, 0.16, 4.4], "at": [0, 0.08, 0], "color": "#1d4fb8" },
+        { "box": [1.3, 0.2, 2.6], "at": [0, 0.26, 0.6], "color": "#2a6e2a" },
+        { "box": [1.2, 0.05, 1.0], "at": [0, 0.39, 1.4], "color": "#c9a24a", "collide": false },
+        { "screen": { "id": "led", "size": [0.25, 0.25], "px": [1, 1], "mode": "pixels", "on": "#ff3020", "off": "#3a1210", "bg": "#1d4fb8" }, "at": [0.5, 0.17, -1.4] }
+      ],
+      "pinRows": [
+        {
+          "ids": ["STATE", "RXD", "TXD", "GND", "VCC", "EN"],
+          "at": [-0.635, 0.0, -2.0],
+          "kinds": { "STATE": "out", "RXD": "in", "TXD": "out", "GND": "gnd", "VCC": "vin", "EN": "in" },
+          "extra": { "VCC": { "label": "VCC (3.6-6 V)", "vmin": 3.4, "vmax": 6 }, "EN": { "label": "EN (unused)", "pulled": "down" }, "STATE": { "pulled": "down" } }
+        }
+      ],
+      "controls": [
+        { "id": "connected", "kind": "switch", "label": "Phone connected", "value": true },
+        { "id": "phone", "kind": "text", "label": "Phone sends..." }
+      ],
+      "device": "hc05"
+    }
+  ],
+  "examples": [
+    { "name": "Phone switches an LED", "description": "Type on and off on the phone (the HC-05's card in the run panel): the board switches its LED and answers. The HC-05 is on Serial1 (GP0/GP1).", "file": "examples/phone-led.bench" }
+  ]
+}

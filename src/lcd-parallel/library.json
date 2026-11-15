@@ -1,0 +1,51 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "lcd-parallel",
+  "name": "LCD 16x2 green (parallel, LiquidCrystal)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "description": "A 16x2 character LCD (HD44780) with green text, wired the classic parallel way: RS, E and four data pins, as in Arduino's LiquidCrystal examples. Includes LiquidCrystal.h for sketches. Needs its contrast pin (V0) set, like the real one.",
+  "category": "Displays",
+  "code": "device.js",
+  "sketch": {
+    "LiquidCrystal.h": { "classes": ["LiquidCrystal"], "file": "sketch/LiquidCrystal.js" }
+  },
+  "parts": [
+    {
+      "id": "lcd1602-green",
+      "name": "LCD 16x2 green (parallel)",
+      "description": "16 pins, left to right: VSS (GND), VDD (5 V), V0 (contrast: a 10k knob between 5 V and GND, middle leg here; near 0 V = darkest text), RS, RW (to GND), E, D0-D7 (only D4-D7 in 4-bit mode), A and K (the backlight: A to 5 V, K to GND). In a sketch: #include <LiquidCrystal.h>, LiquidCrystal lcd(rs, e, d4, d5, d6, d7); lcd.begin(16, 2); lcd.print(\"Hello\");",
+      "swatch": "#2fa84f",
+      "mass": 32,
+      "shape": [
+        { "box": [8.0, 0.16, 3.6], "at": [0, 0.08, 0], "color": "#1d6b3a" },
+        { "box": [7.1, 0.7, 2.4], "at": [0, 0.51, 0.1], "color": "#1a1a1c" },
+        { "screen": { "id": "text", "size": [6.4, 1.45], "px": [16, 2], "mode": "text", "on": "#6dff7a", "off": "#04100a", "bg": "#0c2414" }, "at": [0, 0.862, 0.1] }
+      ],
+      "pinRows": [
+        {
+          "ids": ["VSS", "VDD", "V0", "RS", "RW", "E", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "A", "K"],
+          "at": [-3.2, 0.16, -1.55],
+          "kinds": { "VSS": "gnd", "VDD": "vin", "V0": "in", "RS": "in", "RW": "in", "E": "in", "D0": "in", "D1": "in", "D2": "in", "D3": "in", "D4": "in", "D5": "in", "D6": "in", "D7": "in", "A": "in", "K": "gnd" },
+          "extra": {
+            "VDD": { "label": "VDD (5 V)", "vmin": 4.5, "vmax": 5.5 },
+            "V0": { "label": "V0 (contrast)" },
+            "RW": { "label": "RW (to GND: write)" },
+            "D0": { "pulled": "up" }, "D1": { "pulled": "up" }, "D2": { "pulled": "up" }, "D3": { "pulled": "up" },
+            "A": { "label": "A (backlight +)" },
+            "K": { "label": "K (backlight -)" }
+          }
+        }
+      ],
+      "device": "hd44780"
+    }
+  ],
+  "examples": [
+    {
+      "name": "Hello, LCD (LiquidCrystal)",
+      "description": "The LCD wired to a board as in Arduino's LiquidCrystal Hello World, with a knob for contrast. Press Run; turn the knob if the text is faint.",
+      "file": "examples/hello-lcd.bench"
+    }
+  ]
+}

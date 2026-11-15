@@ -115,6 +115,11 @@ export function checkLibrarySafety(lib, sizeBytes) {
     for (const c of f?.classes ?? []) if (!/^[A-Za-z_]\w*$/.test(c)) out.push({ level: 'block', where: `sketch ${name}`, what: `"${c}" is not a class name` });
     checkCode(f?.code, `sketch ${name}`, out, false);
   }
+  for (const ex of Array.isArray(lib.examples) ? lib.examples : []) {
+    for (const k of ['name', 'description']) if (typeof ex?.[k] === 'string' && MARKUP.test(ex[k])) out.push({ level: 'block', where: `example ${ex?.name}`, what: `its ${k} has web markup or script in it` });
+    if (ex?.project?.format !== 'bench-workshop') out.push({ level: 'block', where: `example ${ex?.name}`, what: 'is not a bench project' });
+    for (const p of ex?.project?.parts ?? []) if (typeof p?.name === 'string' && MARKUP.test(p.name)) out.push({ level: 'block', where: `example ${ex?.name}`, what: 'a part name has web markup in it' });
+  }
   const parts = Array.isArray(lib.parts) ? lib.parts : [];
   if (parts.length > LIMITS.parts) out.push({ level: 'block', where: 'parts', what: `${parts.length} parts (most is ${LIMITS.parts})` });
   for (const p of parts) {

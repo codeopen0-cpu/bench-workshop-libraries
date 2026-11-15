@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "led-matrix-max7219",
   "name": "LED matrix 8x8 (MAX7219)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Bench Workshop",
   "description": "The common red 8x8 LED matrix module with a MAX7219 driver: 64 LEDs from 3 pins (DIN, CS, CLK). Includes LedControl.h for sketches.",
   "category": "Displays",

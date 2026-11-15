@@ -30,6 +30,13 @@ export function readFolder(dir) {
     }
     if (typeof f.code !== 'string') fail(`sketch library ${name} has no code`);
   }
+  for (const ex of lib.examples ?? []) {
+    if (ex.file) {
+      ex.project = JSON.parse(readFileSync(inside(ex.file), 'utf8'));
+      delete ex.file;
+    }
+    if (ex.project?.format !== 'bench-workshop') fail(`example ${ex.name}: not a .bench project`);
+  }
   for (const p of lib.parts ?? []) {
     if (p.glbFile) {
       p.glb = readFileSync(inside(p.glbFile)).toString('base64');

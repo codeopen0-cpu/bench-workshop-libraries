@@ -5,6 +5,10 @@ sensor, your own board. In the app, **Libraries** lists everything here; one cli
 
 ## Making a library
 
+**New to this? Start with [GUIDE.md](GUIDE.md)**: it builds a working part (a green 16x2 LCD with
+Arduino's LiquidCrystal library) step by step, and shows how to test it. What follows is the
+reference.
+
 A library is a folder in `src/` with:
 
 | File | What |
@@ -34,7 +38,9 @@ is towards you.
   Boxes, cylinders and spheres make its physical shape unless `"collide": false`.
 - `pinRows`: pins on a header: `{ "ids": [...], "at": [x, y, z], "dir": "x" | "z", "kinds": {...} }`
   (kinds: `gnd`, `vin`, `vout`, `io`, `in`, `out`, `motor`, `i2c`). For a `vin` pin, `vmin`/`vmax`
-  in `extra` make it burn out above its rating, as in real life.
+  in `extra` make it burn out above its rating, as in real life, and let Check warn before it does.
+  An input with a resistor on the board (EN, OE, RESET) gets `"pulled": "up"` or `"down"` in
+  `extra`, so Check doesn't call it floating when it's left unwired.
 - `shorts`: pins joined on the board: `[["GND", "GND2"]]`.
 - `device`: the name its code registers (below).
 - `params`/`defaults`: settings in the inspector (an I2C address, say).

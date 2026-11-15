@@ -15,9 +15,22 @@
    "size": 8517
   },
   {
+   "id": "lcd-parallel",
+   "name": "LCD 16x2 green (parallel, LiquidCrystal)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "A 16x2 character LCD (HD44780) with green text, wired the classic parallel way: RS, E and four data pins, as in Arduino's LiquidCrystal examples. Includes LiquidCrystal.h for sketches. Needs its contrast pin (V0) set, like the real one.",
+   "category": "Displays",
+   "parts": [
+    "LCD 16x2 green (parallel)"
+   ],
+   "url": "libraries/lcd-parallel.benchlib",
+   "size": 14897
+  },
+  {
    "id": "led-matrix-max7219",
    "name": "LED matrix 8x8 (MAX7219)",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "The common red 8x8 LED matrix module with a MAX7219 driver: 64 LEDs from 3 pins (DIN, CS, CLK). Includes LedControl.h for sketches.",
    "category": "Displays",

@@ -1,0 +1,249 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Hello, LCD (LiquidCrystal)",
+ "libraries": [
+  {
+   "id": "lcd-parallel",
+   "name": "LCD 16x2 green (parallel, LiquidCrystal)",
+   "version": "1.0.0"
+  }
+ ],
+ "parts": [
+  {
+   "uid": "board",
+   "type": "uno-wifi-board",
+   "name": "Board",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "lcd",
+   "type": "lcd-parallel/lcd1602-green",
+   "name": "LCD",
+   "params": {},
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    -8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "knob",
+   "type": "knob",
+   "name": "Contrast knob",
+   "params": {
+    "start": 10
+   },
+   "parent": null,
+   "pos": [
+    7,
+    0,
+    -3
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "VSS"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "5V"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "VDD"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "GND2"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "RW"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "GND3"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "K"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "5V"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "A"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "D12"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "RS"
+   },
+   "color": "#4f9cff"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "D11"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "E"
+   },
+   "color": "#ff9d3a"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "D5"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "D4"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "board",
+    "pin": "D4"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "D5"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "board",
+    "pin": "D3"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "D6"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "board",
+    "pin": "D2"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "D7"
+   },
+   "color": "#3fbf7f"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "knob",
+    "pin": "L"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "knob",
+    "pin": "H"
+   },
+   "b": {
+    "uid": "board",
+    "pin": "5V"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "knob",
+    "pin": "W"
+   },
+   "b": {
+    "uid": "lcd",
+    "pin": "V0"
+   },
+   "color": "#e8c547"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Hello, LCD: Arduino's LiquidCrystal \"Hello World\", on the bench.\n// The LCD shows a greeting on line 1 and the seconds since start on line 2.\n// Wiring (as in the Arduino example): RS -> 12, E -> 11, D4 -> 5, D5 -> 4, D6 -> 3, D7 -> 2,\n// VSS and RW and K -> GND, VDD and A -> 5V, V0 -> the knob's middle leg (its ends on 5V and GND).\n// Faint or no text? Turn the knob (right panel while running) towards GND: that's the contrast.\n#include <LiquidCrystal.h>\n\nLiquidCrystal lcd(12, 11, 5, 4, 3, 2);   // rs, enable, d4, d5, d6, d7\n\nvoid setup() {\n  lcd.begin(16, 2);          // 16 columns, 2 rows\n  lcd.print(\"Hello, world!\");\n}\n\nvoid loop() {\n  int seconds = millis() / 1000;\n  lcd.setCursor(0, 1);       // column 0, row 1 (the second line)\n  lcd.print(seconds);\n  lcd.print(\" s\");\n  delay(250);\n}\n"
+  }
+ },
+ "boards": []
+}

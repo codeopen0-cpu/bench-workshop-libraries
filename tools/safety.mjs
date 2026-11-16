@@ -195,6 +195,22 @@ export function checkLibrarySafety(lib, sizeBytes) {
     if (!(p?.mass > 0 && p.mass < 1e6)) out.push({ level: 'warn', where, what: `weighs ${p?.mass} g` });
     for (const s of p?.shape ?? []) for (const k of ['color']) if (s?.[k] && !/^#[0-9a-f]{3,8}$/i.test(s[k])) out.push({ level: 'block', where, what: `colour "${String(s[k]).slice(0, 30)}" is not a #hex colour` });
     if (p?.glb) checkGlb(p.glb, where, out);
+    // imported 3D models (.stl): plain numbers only (corner points, triangles, convex pieces)
+    const B64 = /^[A-Za-z0-9+/]*={0,2}$/;
+    for (const s of [...(p?.shape ?? []), ...(p?.moving ?? []).flatMap((m) => m?.shape ?? [])]) {
+      if (s?.model !== undefined) {
+        const v = s.model?.v, i = s.model?.i;
+        if (typeof v !== 'string' || typeof i !== 'string' || !B64.test(v) || !B64.test(i)) out.push({ level: 'block', where, what: 'its 3D model is not points and triangles' });
+        else if ((v.length + i.length) * 0.75 > LIMITS.glbBytes) out.push({ level: 'block', where, what: `its 3D model is ${((v.length + i.length) * 0.75 / 1048576).toFixed(1)} MB (most is ${LIMITS.glbBytes / 1048576} MB)` });
+      }
+      if (s?.hull !== undefined) {
+        const pts = s.hull?.p;
+        if (!Array.isArray(pts) || pts.length < 12 || pts.length > 3 * 1024 || pts.length % 3 || !pts.every((x) => typeof x === 'number' && Number.isFinite(x) && Math.abs(x) < 1e4) || !(s.hull.vol >= 0))
+          out.push({ level: 'block', where, what: 'a convex piece of its shape is not 4 to 1024 points' });
+      }
+    }
+    const hulls = [...(p?.shape ?? []), ...(p?.moving ?? []).flatMap((m) => m?.shape ?? [])].filter((s) => s?.hull).length;
+    if (hulls > 64) out.push({ level: 'block', where, what: `${hulls} convex pieces in its shape (most is 64)` });
   }
   let multiturn = false;
   let sensing = /\bpart\s*\.\s*(motion|touch|light|hear)\s*\(|\bspi\s*:\s*\{|\.pixels\s*\(/.test(stripComments(lib.code ?? ''))

@@ -109,6 +109,28 @@
    "needsApp": "0.3.0"
   },
   {
+   "id": "extras",
+   "name": "Gripper, fingerprint sensor, MP3 player, 7-segment digit",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "A servo claw gripper that really grabs things, a fingerprint sensor (R307 / AS608, Adafruit_Fingerprint.h), the DFPlayer Mini MP3 player (DFRobotDFPlayerMini.h) and a single 7-segment LED digit.",
+   "category": "Modules",
+   "parts": [
+    "Servo gripper (claw)",
+    "Fingerprint sensor (R307 / AS608)",
+    "MP3 player (DFPlayer Mini)",
+    "7-segment digit (0.56\")"
+   ],
+   "url": "libraries/extras.benchlib",
+   "size": 25118,
+   "can": [
+    "move",
+    "make sounds",
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.4.0"
+  },
+  {
    "id": "gps-neo6m",
    "name": "GPS module (NEO-6M)",
    "version": "1.0.0",

@@ -1,0 +1,786 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "extras",
+  "name": "Gripper, fingerprint sensor, MP3 player, 7-segment digit",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "A servo claw gripper that really grabs things, a fingerprint sensor (R307 / AS608, Adafruit_Fingerprint.h), the DFPlayer Mini MP3 player (DFRobotDFPlayerMini.h) and a single 7-segment LED digit.",
+  "category": "Modules",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "DFRobotDFPlayerMini.h": {
+      "classes": [
+        "DFRobotDFPlayerMini"
+      ],
+      "exports": [
+        "DFPlayerPlayFinished",
+        "DFPlayerError",
+        "DFPlayerCardInserted",
+        "DFPlayerCardRemoved",
+        "DFPlayerCardOnline",
+        "TimeOut",
+        "WrongStack",
+        "DFPLAYER_EQ_NORMAL",
+        "DFPLAYER_EQ_POP",
+        "DFPLAYER_EQ_ROCK",
+        "DFPLAYER_EQ_JAZZ",
+        "DFPLAYER_EQ_CLASSIC",
+        "DFPLAYER_EQ_BASS",
+        "DFPLAYER_DEVICE_SD"
+      ],
+      "file": "sketch/DFRobotDFPlayerMini.js"
+    },
+    "Adafruit_Fingerprint.h": {
+      "classes": [
+        "Adafruit_Fingerprint"
+      ],
+      "exports": [
+        "FINGERPRINT_OK",
+        "FINGERPRINT_PACKETRECIEVEERR",
+        "FINGERPRINT_NOFINGER",
+        "FINGERPRINT_IMAGEFAIL",
+        "FINGERPRINT_IMAGEMESS",
+        "FINGERPRINT_FEATUREFAIL",
+        "FINGERPRINT_NOMATCH",
+        "FINGERPRINT_NOTFOUND",
+        "FINGERPRINT_ENROLLMISMATCH",
+        "FINGERPRINT_BADLOCATION",
+        "FINGERPRINT_DBREADFAIL",
+        "FINGERPRINT_FLASHERR",
+        "FINGERPRINT_INVALIDIMAGE",
+        "FINGERPRINT_TIMEOUT",
+        "FINGERPRINT_BADPACKET",
+        "FINGERPRINT_LED_BREATHING",
+        "FINGERPRINT_LED_FLASHING",
+        "FINGERPRINT_LED_ON",
+        "FINGERPRINT_LED_OFF",
+        "FINGERPRINT_LED_RED",
+        "FINGERPRINT_LED_BLUE",
+        "FINGERPRINT_LED_PURPLE"
+      ],
+      "file": "sketch/Adafruit_Fingerprint.js"
+    }
+  },
+  "parts": [
+    {
+      "id": "gripper",
+      "name": "Servo gripper (claw)",
+      "description": "Two jaws worked by a servo inside it (about 2.5 kg*cm): wire it like a servo (GND, V+ 4.8-6 V, SIG) and Servo.write(0) opens it wide, Servo.write(90) closes it. It really holds things: put a block between its jaws and close them, then lift the gripper while it runs. Glue it to a servo arm for a robot arm.",
+      "swatch": "#2a2c31",
+      "mass": 30,
+      "shape": [
+        {
+          "box": [
+            3.4,
+            2.0,
+            2.4
+          ],
+          "at": [
+            0,
+            1.0,
+            0
+          ],
+          "color": "#2a2c31"
+        },
+        {
+          "box": [
+            1.2,
+            1.0,
+            2.2
+          ],
+          "at": [
+            0,
+            0.5,
+            -2.2
+          ],
+          "color": "#2a62c8"
+        }
+      ],
+      "pins": [
+        {
+          "id": "GND",
+          "label": "GND (brown)",
+          "at": [
+            -0.3,
+            1.0,
+            -3.3
+          ],
+          "kind": "gnd"
+        },
+        {
+          "id": "V+",
+          "label": "V+ (red, 4.8-6 V)",
+          "at": [
+            0,
+            1.0,
+            -3.3
+          ],
+          "kind": "vin",
+          "vmin": 4,
+          "vmax": 7.2
+        },
+        {
+          "id": "SIG",
+          "label": "SIG (orange)",
+          "at": [
+            0.3,
+            1.0,
+            -3.3
+          ],
+          "kind": "in"
+        }
+      ],
+      "moving": [
+        {
+          "id": "jawL",
+          "mass": 4,
+          "shape": [
+            {
+              "box": [
+                0.35,
+                1.6,
+                4.2
+              ],
+              "at": [
+                -0.9,
+                1.0,
+                3.2
+              ],
+              "color": "#c7c9cc"
+            },
+            {
+              "box": [
+                0.6,
+                1.6,
+                0.4
+              ],
+              "at": [
+                -0.65,
+                1.0,
+                5.1
+              ],
+              "color": "#3a3c42"
+            }
+          ],
+          "joint": {
+            "type": "turn",
+            "at": [
+              -0.9,
+              1.0,
+              1.2
+            ],
+            "axis": [
+              0,
+              1,
+              0
+            ],
+            "motor": "servo",
+            "torque": 2.5,
+            "speed": 100,
+            "volts": 6,
+            "min": -40,
+            "max": 5
+          }
+        },
+        {
+          "id": "jawR",
+          "mass": 4,
+          "shape": [
+            {
+              "box": [
+                0.35,
+                1.6,
+                4.2
+              ],
+              "at": [
+                0.9,
+                1.0,
+                3.2
+              ],
+              "color": "#c7c9cc"
+            },
+            {
+              "box": [
+                0.6,
+                1.6,
+                0.4
+              ],
+              "at": [
+                0.65,
+                1.0,
+                5.1
+              ],
+              "color": "#3a3c42"
+            }
+          ],
+          "joint": {
+            "type": "turn",
+            "at": [
+              0.9,
+              1.0,
+              1.2
+            ],
+            "axis": [
+              0,
+              1,
+              0
+            ],
+            "motor": "servo",
+            "torque": 2.5,
+            "speed": 100,
+            "volts": 6,
+            "min": -5,
+            "max": 40
+          }
+        }
+      ],
+      "device": "gripper"
+    },
+    {
+      "id": "fingerprint",
+      "name": "Fingerprint sensor (R307 / AS608)",
+      "description": "Reads fingers and keeps up to 162 of them. Serial at 57600 baud (its TX to the board's RX, RX to TX), 3.3-6 V. With #include <Adafruit_Fingerprint.h>: Adafruit_Fingerprint finger(&mySerial); finger.begin(57600); finger.verifyPassword(); then getImage(), image2Tz(), createModel(), storeModel(id) to enrol, and fingerFastSearch() (finger.fingerID, finger.confidence) to find. Put a finger on it from the run panel (three people's fingers to try); it stays on for 2 seconds.",
+      "swatch": "#1a1a1c",
+      "mass": 20,
+      "shape": [
+        {
+          "box": [
+            2.8,
+            1.8,
+            4.2
+          ],
+          "at": [
+            0,
+            0.9,
+            0
+          ],
+          "color": "#2a2c31"
+        },
+        {
+          "box": [
+            1.6,
+            0.06,
+            1.8
+          ],
+          "at": [
+            0,
+            1.83,
+            0.4
+          ],
+          "color": "#6d8fb3"
+        }
+      ],
+      "pins": [
+        {
+          "id": "VCC",
+          "label": "VCC (red, 3.3-6 V)",
+          "at": [
+            -0.6,
+            0.3,
+            -2.2
+          ],
+          "kind": "vin",
+          "vmin": 3.0,
+          "vmax": 6.5
+        },
+        {
+          "id": "TX",
+          "label": "TX (to the board's RX)",
+          "at": [
+            -0.2,
+            0.3,
+            -2.2
+          ],
+          "kind": "out"
+        },
+        {
+          "id": "RX",
+          "label": "RX (from the board's TX)",
+          "at": [
+            0.2,
+            0.3,
+            -2.2
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "GND",
+          "label": "GND (black)",
+          "at": [
+            0.6,
+            0.3,
+            -2.2
+          ],
+          "kind": "gnd"
+        }
+      ],
+      "controls": [
+        {
+          "id": "finger",
+          "kind": "keys",
+          "label": "Put a finger on it",
+          "cols": 3,
+          "keys": [
+            "Alice's",
+            "Bob's",
+            "Carol's"
+          ]
+        }
+      ],
+      "device": "fingerprint"
+    },
+    {
+      "id": "dfplayer",
+      "name": "MP3 player (DFPlayer Mini)",
+      "description": "Plays the tracks on its micro SD card through a small speaker (SPK_1 / SPK_2: up to 3 W). Serial at 9600 baud: its RX (through a 1k resistor on 5 V boards) to the board's TX, TX to RX. With #include <DFRobotDFPlayerMini.h>: myDFPlayer.begin(mySerial); myDFPlayer.volume(20); myDFPlayer.play(1); BUSY is LOW while it plays. (On the bench each track is a little tune: track 1, 2, 3... each its own.)",
+      "swatch": "#1a1a1c",
+      "mass": 3,
+      "sound": true,
+      "shape": [
+        {
+          "box": [
+            2.1,
+            0.16,
+            2.1
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1a1a1c"
+        },
+        {
+          "box": [
+            1.5,
+            0.25,
+            1.5
+          ],
+          "at": [
+            0,
+            0.29,
+            0.1
+          ],
+          "color": "#b9bec7",
+          "collide": false
+        },
+        {
+          "screen": {
+            "id": "led",
+            "size": [
+              0.25,
+              0.25
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#30d158",
+            "off": "#0c2414",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            -0.75,
+            0.17,
+            -0.8
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "RX",
+            "TX",
+            "DAC_R",
+            "DAC_L",
+            "SPK_1",
+            "GND",
+            "SPK_2"
+          ],
+          "at": [
+            -0.9,
+            0.16,
+            -0.889
+          ],
+          "dir": "z",
+          "kinds": {
+            "VCC": "vin",
+            "RX": "in",
+            "TX": "out",
+            "DAC_R": "out",
+            "DAC_L": "out",
+            "SPK_1": "out",
+            "GND": "gnd",
+            "SPK_2": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.2-5 V)",
+              "vmin": 3.2,
+              "vmax": 5.5
+            }
+          }
+        },
+        {
+          "ids": [
+            "BUSY",
+            "USB-",
+            "USB+",
+            "ADKEY2",
+            "ADKEY1",
+            "IO2",
+            "GND2",
+            "IO1"
+          ],
+          "at": [
+            0.9,
+            0.16,
+            -0.889
+          ],
+          "dir": "z",
+          "kinds": {
+            "BUSY": "out",
+            "GND2": "gnd"
+          },
+          "extra": {
+            "BUSY": {
+              "label": "BUSY (LOW while playing)"
+            }
+          }
+        }
+      ],
+      "shorts": [
+        [
+          "GND",
+          "GND2"
+        ]
+      ],
+      "device": "dfplayer"
+    },
+    {
+      "id": "seg7",
+      "name": "7-segment digit (0.56\")",
+      "description": "One digit of eight LEDs (segments a-g and the dot dp). Common cathode: COM to GND, and each segment through its own resistor (220-330 ohm) to a pin: HIGH lights it. (Common anode: COM to 5 V, LOW lights a segment.) Pick which kind in its settings.",
+      "swatch": "#1a1a1c",
+      "mass": 2,
+      "params": [
+        {
+          "key": "kind",
+          "label": "Its common pin",
+          "kind": "select",
+          "options": [
+            {
+              "value": "cathode",
+              "label": "common cathode (COM to GND)"
+            },
+            {
+              "value": "anode",
+              "label": "common anode (COM to +)"
+            }
+          ]
+        }
+      ],
+      "defaults": {
+        "kind": "cathode"
+      },
+      "shape": [
+        {
+          "box": [
+            1.25,
+            0.8,
+            1.9
+          ],
+          "at": [
+            0,
+            0.4,
+            0
+          ],
+          "color": "#1a1a1c"
+        },
+        {
+          "screen": {
+            "id": "a",
+            "size": [
+              0.5,
+              0.1
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            0.03,
+            0.81,
+            -0.62
+          ]
+        },
+        {
+          "screen": {
+            "id": "b",
+            "size": [
+              0.1,
+              0.5
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            0.33,
+            0.81,
+            -0.32
+          ]
+        },
+        {
+          "screen": {
+            "id": "c",
+            "size": [
+              0.1,
+              0.5
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            0.3,
+            0.81,
+            0.32
+          ]
+        },
+        {
+          "screen": {
+            "id": "d",
+            "size": [
+              0.5,
+              0.1
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            -0.03,
+            0.81,
+            0.62
+          ]
+        },
+        {
+          "screen": {
+            "id": "e",
+            "size": [
+              0.1,
+              0.5
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            -0.33,
+            0.81,
+            0.32
+          ]
+        },
+        {
+          "screen": {
+            "id": "f",
+            "size": [
+              0.1,
+              0.5
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            -0.3,
+            0.81,
+            -0.32
+          ]
+        },
+        {
+          "screen": {
+            "id": "g",
+            "size": [
+              0.5,
+              0.1
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            0,
+            0.81,
+            0
+          ]
+        },
+        {
+          "screen": {
+            "id": "dp",
+            "size": [
+              0.12,
+              0.12
+            ],
+            "px": [
+              1,
+              1
+            ],
+            "mode": "pixels",
+            "on": "#ff3020",
+            "off": "#2a1210",
+            "bg": "#1a1a1c"
+          },
+          "at": [
+            0.48,
+            0.81,
+            0.66
+          ]
+        }
+      ],
+      "pins": [
+        {
+          "id": "e",
+          "at": [
+            -0.508,
+            0.0,
+            0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "d",
+          "at": [
+            -0.254,
+            0.0,
+            0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "COM",
+          "label": "COM (common)",
+          "at": [
+            0,
+            0.0,
+            0.85
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "c",
+          "at": [
+            0.254,
+            0.0,
+            0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "dp",
+          "at": [
+            0.508,
+            0.0,
+            0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "g",
+          "at": [
+            -0.508,
+            0.0,
+            -0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "f",
+          "at": [
+            -0.254,
+            0.0,
+            -0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "COM2",
+          "label": "COM (common)",
+          "at": [
+            0,
+            0.0,
+            -0.85
+          ],
+          "kind": "io"
+        },
+        {
+          "id": "a",
+          "at": [
+            0.254,
+            0.0,
+            -0.85
+          ],
+          "kind": "in"
+        },
+        {
+          "id": "b",
+          "at": [
+            0.508,
+            0.0,
+            -0.85
+          ],
+          "kind": "in"
+        }
+      ],
+      "shorts": [
+        [
+          "COM",
+          "COM2"
+        ]
+      ],
+      "device": "seg7"
+    }
+  ],
+  "examples": []
+}

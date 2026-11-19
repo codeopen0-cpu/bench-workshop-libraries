@@ -284,6 +284,27 @@
    "needsApp": "0.4.0"
   },
   {
+   "id": "motor-drivers",
+   "name": "Motor drivers and movers",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "More ways to drive and move things: the TB6612FNG (two small motors, efficient) and BTS7960 (one big motor, 43 A) drivers, a vibration motor that really shakes what it's on, a push-pull solenoid, and a linear actuator.",
+   "category": "Motion",
+   "parts": [
+    "Motor driver (TB6612FNG, 2 channels)",
+    "Big motor driver (BTS7960, 43 A)",
+    "Vibration motor (eccentric weight)",
+    "Push-pull solenoid (12 V)",
+    "Linear actuator (12 V, 10 cm)"
+   ],
+   "url": "libraries/motor-drivers.benchlib",
+   "size": 10535,
+   "can": [
+    "move"
+   ],
+   "needsApp": "0.8.0"
+  },
+  {
    "id": "neopixel",
    "name": "NeoPixel LEDs (WS2812B)",
    "version": "1.0.0",

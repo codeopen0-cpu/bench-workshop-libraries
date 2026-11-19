@@ -306,3 +306,76 @@ class Adafruit_ILI9341 extends Adafruit_SPITFT {
   begin() { this._start(); }
   readcommand8() { return 0; }
 }
+
+// GC9A01A (a round 1.28" 240 x 240 panel): the same commands as an ST7789
+const GC9A01A_BLACK = 0x0000, GC9A01A_WHITE = 0xffff, GC9A01A_RED = 0xf800, GC9A01A_GREEN = 0x07e0, GC9A01A_BLUE = 0x001f;
+const GC9A01A_CYAN = 0x07ff, GC9A01A_MAGENTA = 0xf81f, GC9A01A_YELLOW = 0xffe0, GC9A01A_ORANGE = 0xfd20;
+class Adafruit_GC9A01A extends Adafruit_SPITFT {
+  constructor(cs, dc, a, b, c) { super(240, 240, cs, dc, a, b, c); }
+  begin() { this._start(); }
+}
+
+// Adafruit_EPD (e-paper, SSD1680 2.13" 250 x 122): draw into its memory with the usual GFX calls, then
+// display() sends it all and the panel refreshes (about 2 s; it waits for BUSY to go LOW).
+//   Adafruit_SSD1680 display(250, 122, EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+//   display.begin(); display.clearBuffer(); display.setTextColor(EPD_BLACK); display.print("Hi"); display.display();
+const EPD_WHITE = 0, EPD_BLACK = 1, EPD_RED = 2, EPD_GRAY = 3, EPD_DARK = 4, EPD_LIGHT = 5, EPD_INVERSE = 6;
+class Adafruit_EPD extends Adafruit_GFX {
+  constructor(w, h, dc, rst, cs, sramcs, busy) {
+    super(w, h);
+    this.dc = dc; this.rst = rst; this.cs = cs; this.busy = busy ?? -1;
+    this.buf = new Uint8Array(32 * 122);
+    this.textcolor = EPD_BLACK; this.textbgcolor = EPD_BLACK;
+  }
+  _send(cmd, data) {
+    digitalWrite(this.cs, LOW);
+    digitalWrite(this.dc, LOW);
+    SPI.writeBytes([cmd]);
+    digitalWrite(this.dc, HIGH);
+    if (data && data.length) SPI.writeBytes(data);
+    digitalWrite(this.cs, HIGH);
+  }
+  begin() {
+    pinMode(this.cs, OUTPUT); pinMode(this.dc, OUTPUT); digitalWrite(this.cs, HIGH);
+    if (this.busy >= 0) pinMode(this.busy, INPUT);
+    if (this.rst >= 0) { pinMode(this.rst, OUTPUT); digitalWrite(this.rst, LOW); delay(10); digitalWrite(this.rst, HIGH); delay(10); }
+    SPI.begin();
+    this._send(0x12); delay(10);
+    this.clearBuffer();
+  }
+  drawPixel(x, y, c) {
+    x = Math.trunc(x); y = Math.trunc(y);
+    if (x < 0 || y < 0 || x >= this._width || y >= this._height) return;
+    // (turned: the memory is always the panel's own way round, 250 across)
+    let px = x, py = y;
+    if (this.rotation === 1) { px = this.WIDTH - 1 - y; py = x; }
+    else if (this.rotation === 2) { px = this.WIDTH - 1 - x; py = this.HEIGHT - 1 - y; }
+    else if (this.rotation === 3) { px = y; py = this.HEIGHT - 1 - x; }
+    const i = py * 32 + (px >> 3), bit = 0x80 >> (px & 7);
+    if (c === EPD_INVERSE) this.buf[i] ^= bit;
+    else if (c === EPD_WHITE || c === EPD_LIGHT) this.buf[i] &= ~bit;
+    else this.buf[i] |= bit;
+  }
+  fillRect(x, y, w, h, c) { for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) this.drawPixel(x + i, y + j, c); }
+  drawFastHLine(x, y, w, c) { this.fillRect(x, y, w, 1, c); }
+  drawFastVLine(x, y, h, c) { this.fillRect(x, y, 1, h, c); }
+  fillScreen(c) { this.fillRect(0, 0, this._width, this._height, c); }
+  clearBuffer() { this.buf.fill(0); }
+  clearDisplay() { this.clearBuffer(); this.display(); }
+  display() {
+    this._send(0x24, Array.from(this.buf));
+    this._send(0x20);
+    // the panel takes about 2 s to show it: wait for BUSY to go LOW (or 2 s with no BUSY wired)
+    if (this.busy >= 0) {
+      let n = 0;
+      while (digitalRead(this.busy) === LOW && n++ < 20) delay(5); // (BUSY rises as it starts)
+      n = 0;
+      while (digitalRead(this.busy) === HIGH && n++ < 600) delay(10);
+    }
+    else delay(2000);
+  }
+  powerDown() {}
+}
+class Adafruit_SSD1680 extends Adafruit_EPD {
+  constructor(w, h, dc, rst, cs, sramcs, busy) { super(250, 122, dc, rst, cs, sramcs, busy); }
+}

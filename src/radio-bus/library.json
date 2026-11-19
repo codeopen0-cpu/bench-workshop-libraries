@@ -1,0 +1,77 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "radio-bus",
+  "name": "LoRa radio, CAN bus and RS485",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Talking further and tougher: a LoRa radio (SX1278, long range, slow; LoRa.h), a CAN bus module (MCP2515 + TJA1050, as in cars; mcp_can.h) and an RS485 transceiver (MAX485, long wires in noisy places, with Serial). Radios on the same frequency and settings hear each other; CAN and RS485 modules talk over their wires.",
+  "category": "Communication",
+  "needsApp": "0.4.0",
+  "code": "device.js",
+  "sketch": {
+    "LoRa.h": { "classes": ["LoRaClass"], "exports": ["LoRa"], "file": "sketch/LoRa.js" },
+    "mcp_can.h": { "classes": ["MCP_CAN"], "exports": ["CAN_OK", "CAN_FAILINIT", "CAN_FAILTX", "CAN_MSGAVAIL", "CAN_NOMSG", "CAN_CTRLERROR", "CAN_GETTXBFTIMEOUT", "CAN_SENDMSGTIMEOUT", "CAN_FAIL", "MCP_ANY", "MCP_STD", "MCP_EXT", "MCP_STDEXT", "MCP_NORMAL", "MCP_SLEEP", "MCP_LOOPBACK", "MCP_LISTENONLY", "MCP_8MHZ", "MCP_16MHZ", "MCP_20MHZ", "CAN_5KBPS", "CAN_10KBPS", "CAN_20KBPS", "CAN_50KBPS", "CAN_100KBPS", "CAN_125KBPS", "CAN_250KBPS", "CAN_500KBPS", "CAN_1000KBPS"], "file": "sketch/mcp_can.js" }
+  },
+  "parts": [
+    {
+      "id": "lora",
+      "name": "LoRa radio (SX1278, 433 MHz)",
+      "description": "Long-range, slow radio (kilometres outdoors; a few hundred bytes a second). SPI: SCK, MISO, MOSI, NSS (its CS), plus RST and DIO0. 3.3 V only. With #include <LoRa.h>: LoRa.setPins(ss, rst, dio0); LoRa.begin(433E6); LoRa.beginPacket(); LoRa.print(\"hi\"); LoRa.endPacket(); and on the other one: int n = LoRa.parsePacket(); if (n) while (LoRa.available()) Serial.print((char)LoRa.read()). Sending takes the real air time (SF7, 125 kHz: about 50 ms for 20 bytes; SF12: over a second). Two radios hear each other only with the same frequency, spreading factor, bandwidth and sync word.",
+      "swatch": "#2e7d4f", "mass": 3,
+      "shape": [
+        { "box": [1.7, 0.16, 1.7], "at": [0, 0.08, 0], "color": "#2e7d4f" },
+        { "box": [1.5, 0.25, 1.5], "at": [0, 0.28, 0], "color": "#b9bec7", "collide": false },
+        { "cyl": [0.15, 1.2], "at": [0.6, 0.75, -0.7], "color": "#d9b54a", "collide": false }
+      ],
+      "pinRows": [
+        { "ids": ["GND", "MISO", "MOSI", "SCK", "NSS", "RST", "DIO0", "VCC"], "at": [-0.889, 0.16, 0.95], "dir": "x",
+          "kinds": { "GND": "gnd", "VCC": "vin", "MISO": "out", "MOSI": "in", "SCK": "in", "NSS": "in", "RST": "in", "DIO0": "out" },
+          "extra": { "VCC": { "label": "VCC (3.3 V only)", "vmin": 2.4, "vmax": 3.7 }, "NSS": { "label": "NSS (CS)", "pulled": "up" }, "RST": { "pulled": "up" } } }
+      ],
+      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "NSS" },
+      "device": "lora"
+    },
+    {
+      "id": "mcp2515",
+      "name": "CAN bus module (MCP2515 + TJA1050)",
+      "description": "Joins a board to a CAN bus (the two-wire network in cars and machines): wire every module's CANH together and every CANL together. SPI to the board: SCK, SI (MOSI), SO (MISO), CS; INT goes LOW while a message waits. 5 V. With #include <mcp_can.h>: MCP_CAN CAN0(10); CAN0.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ) == CAN_OK; CAN0.setMode(MCP_NORMAL); CAN0.sendMsgBuf(0x100, 0, 8, data); and if (CAN0.checkReceive() == CAN_MSGAVAIL) CAN0.readMsgBuf(&id, &len, buf). Every module on a bus must use the same speed.",
+      "swatch": "#2a62c8", "mass": 6,
+      "params": [ { "key": "crystal", "label": "Its crystal", "kind": "select", "options": [ { "value": "8", "label": "8 MHz (most blue modules)" }, { "value": "16", "label": "16 MHz" } ] } ],
+      "defaults": { "crystal": "8" },
+      "shape": [
+        { "box": [4.4, 0.16, 2.8], "at": [0, 0.08, 0], "color": "#2a62c8" },
+        { "box": [0.9, 0.12, 1.2], "at": [-0.3, 0.22, 0], "color": "#151618", "collide": false },
+        { "box": [1.0, 0.9, 0.9], "at": [1.7, 0.61, 0], "color": "#2a62f0" }
+      ],
+      "pinRows": [
+        { "ids": ["INT", "SCK", "SI", "SO", "CS", "GND", "VCC"], "at": [-2.05, 0.16, -0.762], "dir": "z",
+          "kinds": { "INT": "out", "SCK": "in", "SI": "in", "SO": "out", "CS": "in", "GND": "gnd", "VCC": "vin" },
+          "extra": { "VCC": { "label": "VCC (5 V)", "vmin": 4.5, "vmax": 5.5 }, "CS": { "pulled": "up" }, "INT": { "label": "INT (LOW: a message waits)" } } }
+      ],
+      "pins": [
+        { "id": "CANH", "label": "CANH", "at": [2.0, 1.1, -0.25], "kind": "io" },
+        { "id": "CANL", "label": "CANL", "at": [2.0, 1.1, 0.25], "kind": "io" }
+      ],
+      "spi": { "sck": "SCK", "mosi": "SI", "miso": "SO", "cs": "CS" },
+      "device": "mcp2515"
+    },
+    {
+      "id": "max485",
+      "name": "RS485 transceiver (MAX485)",
+      "description": "Serial over long twisted wires (up to 1200 m), many devices on one pair. Board side: DI (the board's TX), RO (its RX), DE (HIGH: send) and RE (LOW: receive), usually tied together on one pin. Line side: A to A, B to B on every module (swapped, the bytes come out garbled). Use Serial1 / Serial2 / SoftwareSerial at the same baud on every node; set DE/RE HIGH just while sending.",
+      "swatch": "#2a62c8", "mass": 2,
+      "shape": [
+        { "box": [2.2, 0.16, 1.5], "at": [0, 0.08, 0], "color": "#2a62c8" },
+        { "box": [0.6, 0.12, 0.5], "at": [0, 0.22, 0], "color": "#151618", "collide": false }
+      ],
+      "pinRows": [
+        { "ids": ["RO", "RE", "DE", "DI"], "at": [-1.0, 0.16, -0.381], "dir": "z", "kinds": { "RO": "out", "RE": "in", "DE": "in", "DI": "in" }, "extra": { "RE": { "label": "RE (LOW: receive)" }, "DE": { "label": "DE (HIGH: send)" } } },
+        { "ids": ["VCC", "B", "A", "GND"], "at": [1.0, 0.16, -0.381], "dir": "z", "kinds": { "VCC": "vin", "GND": "gnd", "A": "io", "B": "io" }, "extra": { "VCC": { "label": "VCC (5 V)", "vmin": 4.5, "vmax": 5.5 } } }
+      ],
+      "device": "max485"
+    }
+  ],
+  "examples": []
+}

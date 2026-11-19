@@ -1,0 +1,101 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "world-sensors",
+  "name": "Soil, water, gas, flame, magnet and pulse sensors",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "description": "Sensors for the world around a project: soil moisture (capacitive), water level, MQ-2 gas and smoke (with its warm-up), an IR flame sensor, a hall-effect magnet sensor and a pulse (heartbeat) sensor. What they sense is set in the run panel while it runs: how wet the soil is, how much gas, a finger on the pulse sensor.",
+  "category": "Sensors",
+  "needsApp": "0.3.0",
+  "code": "device.js",
+  "parts": [
+    {
+      "id": "soil-moisture",
+      "name": "Soil moisture sensor (capacitive)",
+      "description": "A capacitive probe for plant pots: AOUT falls the wetter the soil is (about 2.4 V dry to 1.2 V soaked on 3.3-5 V). Read it with analogRead. Set how wet the soil is in the run panel.",
+      "swatch": "#1a1a1c", "mass": 4,
+      "shape": [
+        { "box": [2.3, 0.16, 9.8], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "box": [1.6, 0.25, 1.2], "at": [0, 0.28, -4.0], "color": "#2a2c31", "collide": false }
+      ],
+      "pinRows": [ { "ids": ["GND", "VCC", "AOUT"], "at": [-0.254, 0.16, -4.75], "dir": "x", "kinds": { "GND": "gnd", "VCC": "vin", "AOUT": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5.5 V)", "vmin": 3, "vmax": 5.5 }, "AOUT": { "analog": true } } } ],
+      "controls": [ { "id": "wet", "kind": "slider", "label": "Soil wetness (%)", "min": 0, "max": 100, "step": 1, "value": 35 } ],
+      "device": "soil"
+    },
+    {
+      "id": "water-level",
+      "name": "Water level sensor",
+      "description": "A strip of copper traces: dipped in water its S pin rises with the depth (0-4 cm), as an analog value. Set the water's depth in the run panel. (Powered all the time, the traces corrode in real life: power it from a pin and only read now and then.)",
+      "swatch": "#c0392b", "mass": 2,
+      "shape": [ { "box": [2.0, 0.16, 6.2], "at": [0, 0.08, 0], "color": "#c0392b" } ],
+      "pinRows": [ { "ids": ["S", "+", "-"], "at": [-0.254, 0.16, -2.9], "dir": "x", "kinds": { "S": "out", "+": "vin", "-": "gnd" }, "extra": { "+": { "label": "+ (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "S": { "analog": true } } } ],
+      "controls": [ { "id": "depth", "kind": "slider", "label": "Water depth (cm)", "min": 0, "max": 5, "step": 0.1, "value": 0 } ],
+      "device": "water"
+    },
+    {
+      "id": "mq2",
+      "name": "Gas and smoke sensor (MQ-2)",
+      "description": "Senses smoke, LPG and methane: AO rises with the gas (analogRead), DO goes LOW past the level set by its little knob (Threshold). Its heater takes about 150 mA at 5 V and needs about 20 seconds to warm up before its readings mean anything. Set the gas in the air in the run panel.",
+      "swatch": "#2a62c8", "mass": 8,
+      "params": [ { "key": "threshold", "label": "DO trips at (ppm)", "kind": "number", "min": 200, "max": 10000, "step": 50 } ],
+      "defaults": { "threshold": 1000 },
+      "shape": [
+        { "box": [3.2, 0.16, 2.2], "at": [0, 0.08, 0], "color": "#2a62c8" },
+        { "cyl": [0.95, 1.4], "at": [0.3, 0.86, 0], "color": "#b9bec7" },
+        { "box": [0.5, 0.5, 0.5], "at": [-1.1, 0.41, 0.6], "color": "#2a62f0", "collide": false }
+      ],
+      "pinRows": [ { "ids": ["VCC", "GND", "DO", "AO"], "at": [-1.4, 0.16, -0.381], "dir": "z", "kinds": { "VCC": "vin", "GND": "gnd", "DO": "out", "AO": "out" }, "extra": { "VCC": { "label": "VCC (5 V)", "vmin": 4.5, "vmax": 5.5 }, "AO": { "analog": true } } } ],
+      "controls": [ { "id": "ppm", "kind": "slider", "label": "Gas / smoke in the air (ppm)", "min": 0, "max": 10000, "step": 50, "value": 0 } ],
+      "device": "mq2"
+    },
+    {
+      "id": "flame",
+      "name": "Flame sensor (IR)",
+      "description": "Sees the infrared of a flame in front of it (up to about 80 cm): AO falls the stronger the flame (analogRead), DO goes LOW past the level its knob sets. Light a flame in the run panel (how strong / how close).",
+      "swatch": "#2a62c8", "mass": 3,
+      "shape": [
+        { "box": [3.0, 0.16, 1.5], "at": [0, 0.08, 0], "color": "#2a62c8" },
+        { "cyl": [0.25, 0.6], "at": [1.7, 0.4, 0], "rot": [0, 0, 90], "color": "#1a1a1c" }
+      ],
+      "pinRows": [ { "ids": ["AO", "GND", "VCC", "DO"], "at": [-1.4, 0.16, -0.381], "dir": "z", "kinds": { "VCC": "vin", "GND": "gnd", "DO": "out", "AO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "AO": { "analog": true } } } ],
+      "controls": [ { "id": "flame", "kind": "slider", "label": "A flame in front of it (0 none, 100 close and bright)", "min": 0, "max": 100, "step": 1, "value": 0 } ],
+      "device": "flame"
+    },
+    {
+      "id": "hall",
+      "name": "Magnet sensor (hall effect)",
+      "description": "Feels a magnetic field: AO is half its supply with no magnet and moves up or down with a magnet's north or south pole near it (about 14 mV per mT, a 49E chip), DO goes LOW when a south pole is close (as the KY-003 / A3144). Bring a magnet near in the run panel.",
+      "swatch": "#1a1a1c", "mass": 2,
+      "shape": [
+        { "box": [1.9, 0.16, 1.5], "at": [0, 0.08, 0], "color": "#1a1a1c" },
+        { "box": [0.4, 0.15, 0.3], "at": [0.6, 0.24, 0], "color": "#2a2c31", "collide": false }
+      ],
+      "pinRows": [ { "ids": ["DO", "AO", "VCC", "GND"], "at": [-0.85, 0.16, -0.381], "dir": "z", "kinds": { "VCC": "vin", "GND": "gnd", "DO": "out", "AO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3, "vmax": 5.5 }, "AO": { "analog": true } } } ],
+      "controls": [ { "id": "field", "kind": "slider", "label": "Magnet (mT: + south pole near, - north)", "min": -100, "max": 100, "step": 1, "value": 0 } ],
+      "device": "hall"
+    },
+    {
+      "id": "pulse",
+      "name": "Pulse sensor (heartbeat)",
+      "description": "Shines green light into a fingertip and sees each heartbeat as a bump in the light coming back: S is an analog wave around half the supply, a peak per beat (analogRead it fast and count the peaks). Put a finger on it and set the heart rate in the run panel.",
+      "swatch": "#2e7d4f", "mass": 1,
+      "shape": [
+        { "cyl": [0.8, 0.16], "at": [0, 0.08, 0], "color": "#2e7d4f" },
+        { "box": [0.3, 0.1, 0.3], "at": [0, 0.21, 0], "color": "#30d158", "collide": false }
+      ],
+      "pins": [
+        { "id": "S", "label": "S (purple, analog)", "at": [-0.5, 0.16, -0.95], "kind": "out", "analog": true },
+        { "id": "+", "label": "+ (3.3-5 V)", "at": [0, 0.16, -0.95], "kind": "vin", "vmin": 3, "vmax": 5.5 },
+        { "id": "-", "at": [0.5, 0.16, -0.95], "kind": "gnd" }
+      ],
+      "controls": [
+        { "id": "finger", "kind": "switch", "label": "Finger on it", "value": true },
+        { "id": "bpm", "kind": "slider", "label": "Heart rate (beats a minute)", "min": 40, "max": 180, "step": 1, "value": 72 }
+      ],
+      "device": "pulse"
+    }
+  ],
+  "examples": []
+}

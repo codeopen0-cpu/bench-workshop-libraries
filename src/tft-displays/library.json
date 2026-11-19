@@ -2,19 +2,142 @@
   "format": "bench-library",
   "formatVersion": 1,
   "id": "tft-displays",
-  "name": "Colour TFT screens",
-  "version": "1.0.0",
+  "name": "Colour TFTs, round and e-paper displays",
+  "version": "1.1.0",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
-  "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h.",
+  "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h. Also a 240 x 240 ST7789, a round GC9A01 (1.28\", for watch faces and gauges) and a 2.13\" e-paper panel (Adafruit_EPD: it keeps its picture with the power off).",
   "category": "Displays",
   "needsApp": "0.4.0",
   "code": "device.js",
   "sketch": {
-    "Adafruit_ST7735.h": { "classes": ["Adafruit_ST7735"], "exports": ["ST77XX_BLACK", "ST77XX_WHITE", "ST77XX_RED", "ST77XX_GREEN", "ST77XX_BLUE", "ST77XX_CYAN", "ST77XX_MAGENTA", "ST77XX_YELLOW", "ST77XX_ORANGE", "ST7735_BLACK", "ST7735_WHITE", "ST7735_RED", "ST7735_GREEN", "ST7735_BLUE", "ST7735_CYAN", "ST7735_MAGENTA", "ST7735_YELLOW", "ST7735_ORANGE", "INITR_GREENTAB", "INITR_REDTAB", "INITR_BLACKTAB", "INITR_144GREENTAB", "INITR_MINI160x80"], "file": "sketch/Adafruit_TFT.js" },
-    "Adafruit_ST7789.h": { "classes": ["Adafruit_ST7789"], "exports": ["ST77XX_BLACK", "ST77XX_WHITE", "ST77XX_RED", "ST77XX_GREEN", "ST77XX_BLUE", "ST77XX_CYAN", "ST77XX_MAGENTA", "ST77XX_YELLOW", "ST77XX_ORANGE"], "file": "sketch/Adafruit_TFT.js" },
-    "Adafruit_ILI9341.h": { "classes": ["Adafruit_ILI9341"], "exports": ["ILI9341_BLACK", "ILI9341_NAVY", "ILI9341_DARKGREEN", "ILI9341_DARKCYAN", "ILI9341_MAROON", "ILI9341_PURPLE", "ILI9341_OLIVE", "ILI9341_LIGHTGREY", "ILI9341_DARKGREY", "ILI9341_BLUE", "ILI9341_GREEN", "ILI9341_CYAN", "ILI9341_RED", "ILI9341_MAGENTA", "ILI9341_YELLOW", "ILI9341_WHITE", "ILI9341_ORANGE", "ILI9341_GREENYELLOW", "ILI9341_PINK"], "file": "sketch/Adafruit_TFT.js" },
-    "Adafruit_GFX.h": { "exports": [], "file": "sketch/Adafruit_GFX.js" }
+    "Adafruit_ST7735.h": {
+      "classes": [
+        "Adafruit_ST7735"
+      ],
+      "exports": [
+        "ST77XX_BLACK",
+        "ST77XX_WHITE",
+        "ST77XX_RED",
+        "ST77XX_GREEN",
+        "ST77XX_BLUE",
+        "ST77XX_CYAN",
+        "ST77XX_MAGENTA",
+        "ST77XX_YELLOW",
+        "ST77XX_ORANGE",
+        "ST7735_BLACK",
+        "ST7735_WHITE",
+        "ST7735_RED",
+        "ST7735_GREEN",
+        "ST7735_BLUE",
+        "ST7735_CYAN",
+        "ST7735_MAGENTA",
+        "ST7735_YELLOW",
+        "ST7735_ORANGE",
+        "INITR_GREENTAB",
+        "INITR_REDTAB",
+        "INITR_BLACKTAB",
+        "INITR_144GREENTAB",
+        "INITR_MINI160x80"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    },
+    "Adafruit_ST7789.h": {
+      "classes": [
+        "Adafruit_ST7789"
+      ],
+      "exports": [
+        "ST77XX_BLACK",
+        "ST77XX_WHITE",
+        "ST77XX_RED",
+        "ST77XX_GREEN",
+        "ST77XX_BLUE",
+        "ST77XX_CYAN",
+        "ST77XX_MAGENTA",
+        "ST77XX_YELLOW",
+        "ST77XX_ORANGE"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    },
+    "Adafruit_ILI9341.h": {
+      "classes": [
+        "Adafruit_ILI9341"
+      ],
+      "exports": [
+        "ILI9341_BLACK",
+        "ILI9341_NAVY",
+        "ILI9341_DARKGREEN",
+        "ILI9341_DARKCYAN",
+        "ILI9341_MAROON",
+        "ILI9341_PURPLE",
+        "ILI9341_OLIVE",
+        "ILI9341_LIGHTGREY",
+        "ILI9341_DARKGREY",
+        "ILI9341_BLUE",
+        "ILI9341_GREEN",
+        "ILI9341_CYAN",
+        "ILI9341_RED",
+        "ILI9341_MAGENTA",
+        "ILI9341_YELLOW",
+        "ILI9341_WHITE",
+        "ILI9341_ORANGE",
+        "ILI9341_GREENYELLOW",
+        "ILI9341_PINK"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    },
+    "Adafruit_GFX.h": {
+      "exports": [],
+      "file": "sketch/Adafruit_GFX.js"
+    },
+    "Adafruit_GC9A01A.h": {
+      "classes": [
+        "Adafruit_GC9A01A"
+      ],
+      "exports": [
+        "GC9A01A_BLACK",
+        "GC9A01A_WHITE",
+        "GC9A01A_RED",
+        "GC9A01A_GREEN",
+        "GC9A01A_BLUE",
+        "GC9A01A_CYAN",
+        "GC9A01A_MAGENTA",
+        "GC9A01A_YELLOW",
+        "GC9A01A_ORANGE"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    },
+    "Adafruit_EPD.h": {
+      "classes": [
+        "Adafruit_SSD1680",
+        "Adafruit_EPD"
+      ],
+      "exports": [
+        "EPD_WHITE",
+        "EPD_BLACK",
+        "EPD_RED",
+        "EPD_GRAY",
+        "EPD_DARK",
+        "EPD_LIGHT",
+        "EPD_INVERSE"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    },
+    "Adafruit_SSD1680.h": {
+      "classes": [
+        "Adafruit_SSD1680"
+      ],
+      "exports": [
+        "EPD_WHITE",
+        "EPD_BLACK",
+        "EPD_RED",
+        "EPD_GRAY",
+        "EPD_DARK",
+        "EPD_LIGHT",
+        "EPD_INVERSE"
+      ],
+      "file": "sketch/Adafruit_TFT.js"
+    }
   },
   "parts": [
     {
@@ -24,12 +147,107 @@
       "swatch": "#141416",
       "mass": 15,
       "shape": [
-        { "box": [4.4, 0.16, 5.8], "at": [0, 0.08, -0.25], "color": "#c83030" },
-        { "box": [3.6, 0.3, 4.6], "at": [0, 0.31, 0], "color": "#141416" },
-        { "screen": { "id": "tft", "size": [2.85, 3.55], "px": [128, 160], "mode": "rgb", "bg": "#000000" }, "at": [0, 0.462, 0] }
+        {
+          "box": [
+            4.4,
+            0.16,
+            5.8
+          ],
+          "at": [
+            0,
+            0.08,
+            -0.25
+          ],
+          "color": "#c83030"
+        },
+        {
+          "box": [
+            3.6,
+            0.3,
+            4.6
+          ],
+          "at": [
+            0,
+            0.31,
+            0
+          ],
+          "color": "#141416"
+        },
+        {
+          "screen": {
+            "id": "tft",
+            "size": [
+              2.85,
+              3.55
+            ],
+            "px": [
+              128,
+              160
+            ],
+            "mode": "rgb",
+            "bg": "#000000"
+          },
+          "at": [
+            0,
+            0.462,
+            0
+          ]
+        }
       ],
-      "pinRows": [{ "ids": ["LED", "SCK", "SDA", "A0", "RESET", "CS", "GND", "VCC"], "at": [-0.889, 0.0, -2.8], "kinds": { "LED": "in", "SCK": "in", "SDA": "in", "A0": "in", "RESET": "in", "CS": "in", "GND": "gnd", "VCC": "vin" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 }, "SDA": { "label": "SDA (its MOSI)" }, "A0": { "label": "A0 (DC: data / command)" }, "RESET": { "pulled": "up" }, "LED": { "label": "LED (backlight)", "pulled": "up" } } }],
-      "spi": { "sck": "SCK", "mosi": "SDA", "cs": "CS" },
+      "pinRows": [
+        {
+          "ids": [
+            "LED",
+            "SCK",
+            "SDA",
+            "A0",
+            "RESET",
+            "CS",
+            "GND",
+            "VCC"
+          ],
+          "at": [
+            -0.889,
+            0.0,
+            -2.8
+          ],
+          "kinds": {
+            "LED": "in",
+            "SCK": "in",
+            "SDA": "in",
+            "A0": "in",
+            "RESET": "in",
+            "CS": "in",
+            "GND": "gnd",
+            "VCC": "vin"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.8,
+              "vmax": 5.5
+            },
+            "SDA": {
+              "label": "SDA (its MOSI)"
+            },
+            "A0": {
+              "label": "A0 (DC: data / command)"
+            },
+            "RESET": {
+              "pulled": "up"
+            },
+            "LED": {
+              "label": "LED (backlight)",
+              "pulled": "up"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCK",
+        "mosi": "SDA",
+        "cs": "CS"
+      },
       "device": "st7735"
     },
     {
@@ -39,16 +257,464 @@
       "swatch": "#141416",
       "mass": 40,
       "shape": [
-        { "box": [5.0, 0.16, 8.6], "at": [0, 0.08, -0.4], "color": "#c83030" },
-        { "box": [4.6, 0.35, 6.6], "at": [0, 0.335, 0], "color": "#141416" },
-        { "screen": { "id": "tft", "size": [4.32, 5.76], "px": [240, 320], "mode": "rgb", "bg": "#000000" }, "at": [0, 0.512, 0] }
+        {
+          "box": [
+            5.0,
+            0.16,
+            8.6
+          ],
+          "at": [
+            0,
+            0.08,
+            -0.4
+          ],
+          "color": "#c83030"
+        },
+        {
+          "box": [
+            4.6,
+            0.35,
+            6.6
+          ],
+          "at": [
+            0,
+            0.335,
+            0
+          ],
+          "color": "#141416"
+        },
+        {
+          "screen": {
+            "id": "tft",
+            "size": [
+              4.32,
+              5.76
+            ],
+            "px": [
+              240,
+              320
+            ],
+            "mode": "rgb",
+            "bg": "#000000"
+          },
+          "at": [
+            0,
+            0.512,
+            0
+          ]
+        }
       ],
-      "pinRows": [{ "ids": ["VCC", "GND", "CS", "RESET", "DC", "MOSI", "SCK", "LED", "MISO"], "at": [-1.016, 0.0, -4.4], "kinds": { "VCC": "vin", "GND": "gnd", "CS": "in", "RESET": "in", "DC": "in", "MOSI": "in", "SCK": "in", "LED": "in", "MISO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.8, "vmax": 5.5 }, "DC": { "label": "DC (data / command)" }, "RESET": { "pulled": "up" }, "LED": { "label": "LED (backlight)", "pulled": "up" } } }],
-      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "CS" },
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "CS",
+            "RESET",
+            "DC",
+            "MOSI",
+            "SCK",
+            "LED",
+            "MISO"
+          ],
+          "at": [
+            -1.016,
+            0.0,
+            -4.4
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "CS": "in",
+            "RESET": "in",
+            "DC": "in",
+            "MOSI": "in",
+            "SCK": "in",
+            "LED": "in",
+            "MISO": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.8,
+              "vmax": 5.5
+            },
+            "DC": {
+              "label": "DC (data / command)"
+            },
+            "RESET": {
+              "pulled": "up"
+            },
+            "LED": {
+              "label": "LED (backlight)",
+              "pulled": "up"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCK",
+        "mosi": "MOSI",
+        "miso": "MISO",
+        "cs": "CS"
+      },
       "device": "ili9341"
+    },
+    {
+      "id": "st7789-240",
+      "name": "Colour TFT 1.3\" (ST7789, 240x240)",
+      "description": "A sharp square IPS screen, 240 x 240. SPI: SCL (SCK), SDA (MOSI), DC, CS, RES; BLK is the backlight (HIGH or unwired: on). With #include <Adafruit_ST7789.h>: Adafruit_ST7789 tft(CS, DC, RST); tft.init(240, 240); then the usual drawing (fillScreen, drawCircle, setCursor, print...).",
+      "swatch": "#1a1a1c",
+      "mass": 6,
+      "shape": [
+        {
+          "box": [
+            3.2,
+            0.16,
+            4.4
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1d4fb8"
+        },
+        {
+          "box": [
+            2.9,
+            0.3,
+            2.9
+          ],
+          "at": [
+            0,
+            0.31,
+            0.4
+          ],
+          "color": "#141416"
+        },
+        {
+          "screen": {
+            "id": "tft",
+            "size": [
+              2.4,
+              2.4
+            ],
+            "px": [
+              240,
+              240
+            ],
+            "mode": "rgb",
+            "bg": "#000000"
+          },
+          "at": [
+            0,
+            0.462,
+            0.4
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "GND",
+            "VCC",
+            "SCL",
+            "SDA",
+            "RES",
+            "DC",
+            "CS",
+            "BLK"
+          ],
+          "at": [
+            -0.889,
+            0,
+            -1.9
+          ],
+          "dir": "x",
+          "kinds": {
+            "GND": "gnd",
+            "VCC": "vin",
+            "SCL": "in",
+            "SDA": "in",
+            "RES": "in",
+            "DC": "in",
+            "CS": "in",
+            "BLK": "in"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3 V)",
+              "vmin": 2.8,
+              "vmax": 3.6
+            },
+            "SCL": {
+              "label": "SCL (its SCK)"
+            },
+            "SDA": {
+              "label": "SDA (its MOSI)"
+            },
+            "RES": {
+              "pulled": "up"
+            },
+            "BLK": {
+              "label": "BLK (backlight)",
+              "pulled": "up"
+            },
+            "CS": {
+              "pulled": "up"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCL",
+        "mosi": "SDA",
+        "cs": "CS"
+      },
+      "device": "st7789-240"
+    },
+    {
+      "id": "gc9a01",
+      "name": "Round TFT 1.28\" (GC9A01, 240x240)",
+      "description": "A round colour screen, 240 x 240 (the corners are bezel): for watch faces, gauges and eyes. SPI: SCL (SCK), SDA (MOSI), DC, CS, RST; BL is the backlight. 3.3 V. With #include <Adafruit_GC9A01A.h>: Adafruit_GC9A01A tft(CS, DC, RST); tft.begin(); then the usual drawing.",
+      "swatch": "#1a1a1c",
+      "mass": 5,
+      "shape": [
+        {
+          "cyl": [
+            1.95,
+            0.16
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1a1a1c"
+        },
+        {
+          "cyl": [
+            1.75,
+            0.3
+          ],
+          "at": [
+            0,
+            0.31,
+            0
+          ],
+          "color": "#141416"
+        },
+        {
+          "screen": {
+            "id": "tft",
+            "size": [
+              3.2,
+              3.2
+            ],
+            "px": [
+              240,
+              240
+            ],
+            "mode": "rgb",
+            "bg": "#000000"
+          },
+          "at": [
+            0,
+            0.462,
+            0
+          ]
+        },
+        {
+          "box": [
+            2.2,
+            0.16,
+            0.8
+          ],
+          "at": [
+            0,
+            0.08,
+            -2.2
+          ],
+          "color": "#1a1a1c"
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "SCL",
+            "SDA",
+            "DC",
+            "CS",
+            "RST",
+            "BL"
+          ],
+          "at": [
+            -0.889,
+            0,
+            -2.35
+          ],
+          "dir": "x",
+          "kinds": {
+            "GND": "gnd",
+            "VCC": "vin",
+            "SCL": "in",
+            "SDA": "in",
+            "RST": "in",
+            "DC": "in",
+            "CS": "in",
+            "BL": "in"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3 V)",
+              "vmin": 2.8,
+              "vmax": 3.6
+            },
+            "SCL": {
+              "label": "SCL (its SCK)"
+            },
+            "SDA": {
+              "label": "SDA (its MOSI)"
+            },
+            "RST": {
+              "pulled": "up"
+            },
+            "BL": {
+              "label": "BL (backlight)",
+              "pulled": "up"
+            },
+            "CS": {
+              "pulled": "up"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCL",
+        "mosi": "SDA",
+        "cs": "CS"
+      },
+      "device": "gc9a01"
+    },
+    {
+      "id": "epd213",
+      "name": "E-paper display 2.13\" (SSD1680, 250x122)",
+      "description": "Black-and-white e-paper (as in an e-reader): it reflects the room's light, uses power only while it changes, and keeps its picture with the power off. A refresh takes about 2 seconds (it flashes; BUSY is HIGH meanwhile), so it's for things that change now and then. SPI: SCK, MOSI (DIN), CS, DC, RST, BUSY. With #include <Adafruit_EPD.h>: Adafruit_SSD1680 display(250, 122, DC, RST, CS, -1, BUSY); display.begin(); display.clearBuffer(); display.setTextColor(EPD_BLACK); display.print(\"Hi\"); display.display();",
+      "swatch": "#e8e8e2",
+      "mass": 8,
+      "shape": [
+        {
+          "box": [
+            6.6,
+            0.16,
+            3.4
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1d4fb8"
+        },
+        {
+          "box": [
+            6.0,
+            0.12,
+            3.0
+          ],
+          "at": [
+            0,
+            0.22,
+            0
+          ],
+          "color": "#cfcfc8"
+        },
+        {
+          "screen": {
+            "id": "epd",
+            "size": [
+              4.86,
+              2.37
+            ],
+            "px": [
+              250,
+              122
+            ],
+            "mode": "rgb",
+            "bg": "#e8e8e2"
+          },
+          "at": [
+            0,
+            0.285,
+            0
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "BUSY",
+            "RST",
+            "DC",
+            "CS",
+            "SCK",
+            "MOSI",
+            "GND",
+            "VCC"
+          ],
+          "at": [
+            -3.1,
+            0,
+            -0.889
+          ],
+          "dir": "z",
+          "kinds": {
+            "GND": "gnd",
+            "VCC": "vin",
+            "SCK": "in",
+            "MOSI": "in",
+            "RST": "in",
+            "DC": "in",
+            "CS": "in",
+            "BUSY": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3 V)",
+              "vmin": 2.2,
+              "vmax": 3.7
+            },
+            "MOSI": {
+              "label": "MOSI (DIN)"
+            },
+            "RST": {
+              "pulled": "up"
+            },
+            "CS": {
+              "pulled": "up"
+            },
+            "BUSY": {
+              "label": "BUSY (HIGH while it refreshes)"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCK",
+        "mosi": "MOSI",
+        "cs": "CS"
+      },
+      "device": "ssd1680"
     }
   ],
   "examples": [
-    { "name": "Colour dashboard", "description": "A 2.8\" ILI9341 shows a dashboard: a title bar, the knob's value as a gauge and a moving graph. Press Run and turn the knob (its slider in the run panel).", "file": "examples/dashboard.bench" }
+    {
+      "name": "Colour dashboard",
+      "description": "A 2.8\" ILI9341 shows a dashboard: a title bar, the knob's value as a gauge and a moving graph. Press Run and turn the knob (its slider in the run panel).",
+      "file": "examples/dashboard.bench"
+    }
   ]
 }

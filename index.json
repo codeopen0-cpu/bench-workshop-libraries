@@ -356,6 +356,25 @@
    "needsApp": "0.3.0"
   },
   {
+   "id": "radio-bus",
+   "name": "LoRa radio, CAN bus and RS485",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Talking further and tougher: a LoRa radio (SX1278, long range, slow; LoRa.h), a CAN bus module (MCP2515 + TJA1050, as in cars; mcp_can.h) and an RS485 transceiver (MAX485, long wires in noisy places, with Serial). Radios on the same frequency and settings hear each other; CAN and RS485 modules talk over their wires.",
+   "category": "Communication",
+   "parts": [
+    "LoRa radio (SX1278, 433 MHz)",
+    "CAN bus module (MCP2515 + TJA1050)",
+    "RS485 transceiver (MAX485)"
+   ],
+   "url": "libraries/radio-bus.benchlib",
+   "size": 19777,
+   "can": [
+    "talk SPI"
+   ],
+   "needsApp": "0.4.0"
+  },
+  {
    "id": "relay-module",
    "name": "Relay module",
    "version": "1.0.0",
@@ -468,17 +487,20 @@
   },
   {
    "id": "tft-displays",
-   "name": "Colour TFT screens",
-   "version": "1.0.0",
+   "name": "Colour TFTs, round and e-paper displays",
+   "version": "1.1.0",
    "author": "Bench Workshop",
-   "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h.",
+   "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h. Also a 240 x 240 ST7789, a round GC9A01 (1.28\", for watch faces and gauges) and a 2.13\" e-paper panel (Adafruit_EPD: it keeps its picture with the power off).",
    "category": "Displays",
    "parts": [
     "Colour TFT 1.8\" (ST7735, 128x160)",
-    "Colour TFT 2.8\" (ILI9341, 240x320)"
+    "Colour TFT 2.8\" (ILI9341, 240x320)",
+    "Colour TFT 1.3\" (ST7789, 240x240)",
+    "Round TFT 1.28\" (GC9A01, 240x240)",
+    "E-paper display 2.13\" (SSD1680, 250x122)"
    ],
    "url": "libraries/tft-displays.benchlib",
-   "size": 66386,
+   "size": 151243,
    "can": [
     "talk SPI"
    ],
@@ -522,6 +544,28 @@
     "feel touch"
    ],
    "needsApp": "0.4.0"
+  },
+  {
+   "id": "world-sensors",
+   "name": "Soil, water, gas, flame, magnet and pulse sensors",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "Sensors for the world around a project: soil moisture (capacitive), water level, MQ-2 gas and smoke (with its warm-up), an IR flame sensor, a hall-effect magnet sensor and a pulse (heartbeat) sensor. What they sense is set in the run panel while it runs: how wet the soil is, how much gas, a finger on the pulse sensor.",
+   "category": "Sensors",
+   "parts": [
+    "Soil moisture sensor (capacitive)",
+    "Water level sensor",
+    "Gas and smoke sensor (MQ-2)",
+    "Flame sensor (IR)",
+    "Magnet sensor (hall effect)",
+    "Pulse sensor (heartbeat)"
+   ],
+   "url": "libraries/world-sensors.benchlib",
+   "size": 11125,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.3.0"
   }
  ]
 }

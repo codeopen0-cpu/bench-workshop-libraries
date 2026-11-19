@@ -378,6 +378,23 @@
    "needsApp": "0.3.0"
   },
   {
+   "id": "ps2-controller",
+   "name": "PS2 wireless controller",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "The PS2-style wireless game pad that comes with most robot car kits: its receiver goes on the board (PS2X_lib.h), the pad's buttons and sticks drive the robot. Play it with a real game pad plugged into your PC, the keyboard (arrows, 1-4, Q/E, Enter), or the run panel.",
+   "category": "Controls",
+   "parts": [
+    "PS2 controller receiver"
+   ],
+   "url": "libraries/ps2-controller.benchlib",
+   "size": 7948,
+   "can": [
+    "have controls in the run panel"
+   ],
+   "needsApp": "0.9.0"
+  },
+  {
    "id": "radio-bus",
    "name": "LoRa radio, CAN bus and RS485",
    "version": "1.0.0",

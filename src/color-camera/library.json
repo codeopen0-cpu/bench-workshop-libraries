@@ -3,10 +3,10 @@
   "formatVersion": 1,
   "id": "color-camera",
   "name": "Colour-tracking camera",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
-  "needsApp": "0.2.1",
+  "needsApp": "0.13.0",
   "description": "A small camera that finds the biggest patch of one colour (red, green, blue, yellow...) in what it sees and tells a board where it is over I2C, like the Pixy or HuskyLens cameras robots use. A screen on its back shows what it sees. Includes BlobCam.h for sketches.",
   "category": "Sensors",
   "code": "device.js",
@@ -180,6 +180,11 @@
       "name": "Rover chases a red ball",
       "description": "A rover with the camera on its nose turns towards a red ball, drives to it and stops in front of it. Move the ball (drag it while running) and it follows.",
       "file": "examples/chase-ball.bench"
+    },
+    {
+      "name": "Drone follows a red ball",
+      "description": "A quadcopter with an ESP32-S3 flight controller: an MPU-6050 keeps it level, a sonar underneath holds its height, and the camera on its nose finds the ball. It takes off, turns to the ball and flies to 50 cm from it. Pick the ball up and move it while it runs (or carry it with WASD) and it follows.",
+      "file": "examples/drone-follow.bench"
     }
   ]
 }

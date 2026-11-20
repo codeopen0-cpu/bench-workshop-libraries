@@ -77,7 +77,7 @@
   {
    "id": "color-camera",
    "name": "Colour-tracking camera",
-   "version": "1.0.0",
+   "version": "1.1.0",
    "author": "Bench Workshop",
    "description": "A small camera that finds the biggest patch of one colour (red, green, blue, yellow...) in what it sees and tells a board where it is over I2C, like the Pixy or HuskyLens cameras robots use. A screen on its back shows what it sees. Includes BlobCam.h for sketches.",
    "category": "Sensors",
@@ -85,11 +85,11 @@
     "Colour-tracking camera"
    ],
    "url": "libraries/color-camera.benchlib",
-   "size": 13907,
+   "size": 35249,
    "can": [
     "see (camera)"
    ],
-   "needsApp": "0.2.1"
+   "needsApp": "0.13.0"
   },
   {
    "id": "encoder-motor",

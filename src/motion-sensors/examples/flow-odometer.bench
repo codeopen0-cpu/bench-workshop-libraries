@@ -1,0 +1,521 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "Optical flow odometer",
+ "parts": [
+  {
+   "uid": "chassis",
+   "type": "plate",
+   "name": "Chassis",
+   "params": {
+    "w": 12,
+    "h": 0.3,
+    "d": 9,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    4.4,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "motorR",
+   "type": "motor-tt",
+   "name": "Right motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    -0.15,
+    3.55
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "motorL",
+   "type": "motor-tt",
+   "name": "Left motor",
+   "params": {},
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    3.2,
+    -0.15,
+    -3.55
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelR",
+   "type": "wheel",
+   "name": "Right wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorR",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "uid": "wheelL",
+   "type": "wheel",
+   "name": "Left wheel",
+   "params": {
+    "r": 3.3,
+    "width": 2.6,
+    "grip": 1.2
+   },
+   "parent": {
+    "uid": "motorL",
+    "body": "hub"
+   },
+   "pos": [
+    0,
+    0.45,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "battery",
+   "type": "battery-18650",
+   "name": "Batteries",
+   "params": {
+    "count": "2",
+    "charge": 100
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -2.2,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "brain",
+   "type": "maker-board",
+   "name": "Brain",
+   "params": {
+    "usb": false
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    -0.7071,
+    0,
+    0.7071
+   ]
+  },
+  {
+   "uid": "driver",
+   "type": "drv8833",
+   "name": "Motor driver",
+   "params": {},
+   "parent": {
+    "uid": "battery",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "caster",
+   "type": "caster",
+   "name": "Caster",
+   "params": {
+    "r": 1.57
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    -4.6,
+    -0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "uid": "mast",
+   "type": "block",
+   "name": "Mast",
+   "params": {
+    "w": 1.2,
+    "h": 5.1,
+    "d": 1.2,
+    "material": "plastic",
+    "color": "#d8dce4"
+   },
+   "parent": {
+    "uid": "chassis",
+    "body": "body"
+   },
+   "pos": [
+    5.4,
+    0.15,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "boom",
+   "type": "plate",
+   "name": "Boom",
+   "params": {
+    "w": 7,
+    "h": 0.3,
+    "d": 3,
+    "material": "plastic",
+    "color": "#8fa3b8"
+   },
+   "parent": {
+    "uid": "mast",
+    "body": "body"
+   },
+   "pos": [
+    2.6,
+    5.25,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "flow",
+   "type": "motion-sensors/pmw3901",
+   "name": "Optical flow (PMW3901)",
+   "params": {},
+   "parent": {
+    "uid": "boom",
+    "body": "body"
+   },
+   "pos": [
+    2.2,
+    -0.15,
+    0
+   ],
+   "rot": [
+    1,
+    0,
+    0,
+    0
+   ]
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "VM"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "battery",
+    "pin": "+"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "VIN"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "battery",
+    "pin": "-"
+   },
+   "b": {
+    "uid": "brain",
+    "pin": "GND2"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "brain",
+    "pin": "GP2"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN1"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "brain",
+    "pin": "GP3"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "AIN2"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "brain",
+    "pin": "GP5"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN1"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "brain",
+    "pin": "GP6"
+   },
+   "b": {
+    "uid": "driver",
+    "pin": "BIN2"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w9",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT1"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w10",
+   "a": {
+    "uid": "driver",
+    "pin": "AOUT2"
+   },
+   "b": {
+    "uid": "motorR",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w11",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT1"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M+"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w12",
+   "a": {
+    "uid": "driver",
+    "pin": "BOUT2"
+   },
+   "b": {
+    "uid": "motorL",
+    "pin": "M-"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w13",
+   "a": {
+    "uid": "brain",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w14",
+   "a": {
+    "uid": "brain",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w15",
+   "a": {
+    "uid": "brain",
+    "pin": "GP18"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "SCK"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w16",
+   "a": {
+    "uid": "brain",
+    "pin": "GP19"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "MOSI"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w17",
+   "a": {
+    "uid": "brain",
+    "pin": "GP16"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "MISO"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w18",
+   "a": {
+    "uid": "brain",
+    "pin": "GP17"
+   },
+   "b": {
+    "uid": "flow",
+    "pin": "CS"
+   },
+   "color": "#9b59b6"
+  }
+ ],
+ "programs": {
+  "brain": {
+   "lang": "arduino",
+   "source": "// Optical flow odometer. A rover with a PMW3901 optical flow sensor looking down from a boom, about\n// 12 cm over the floor. It drives ahead, stops, and drives back; the sensor's counts add up to how\n// far it went (counts / 500 = the angle the floor slid by; times the height = centimetres).\n// Open the serial monitor (Program) and press Plot. Pick the rover up and carry it (WASD) too.\n#include <SPI.h>\n#include <Bitcraze_PMW3901.h>\n\n#define AIN1 2    // right motor (through the DRV8833)\n#define AIN2 3\n#define BIN1 5    // left motor\n#define BIN2 6\n#define FLOW_CS 17\n\nconst float HEIGHT_CM = 12.0;       // the sensor's height over the floor (fixed on this rover)\nconst float COUNTS_PER_RAD = 500;   // the PMW3901: about 500 counts a radian\n\nBitcraze_PMW3901 flow(FLOW_CS);\nfloat xCm = 0, yCm = 0;\nunsigned long lastPrint = 0;\n\nvoid motor(int in1, int in2, int speed) {\n  if (speed >= 0) { analogWrite(in1, speed); analogWrite(in2, 0); }\n  else            { analogWrite(in1, 0);     analogWrite(in2, -speed); }\n}\n\nvoid drive(int left, int right) {   // -255 .. 255\n  motor(BIN1, BIN2, left);\n  motor(AIN2, AIN1, right);         // the right motor faces the other way\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(AIN1, OUTPUT); pinMode(AIN2, OUTPUT);\n  pinMode(BIN1, OUTPUT); pinMode(BIN2, OUTPUT);\n  if (!flow.begin()) Serial.println(\"no PMW3901 on SPI: check its wires (CS on GP17)\");\n  else Serial.println(\"PMW3901 found\");\n}\n\nvoid loop() {\n  int16_t dx, dy;\n  flow.readMotionCount(&dx, &dy);\n  // the floor slid this far (angle) at this height: that's how far the rover went\n  xCm += dx / COUNTS_PER_RAD * HEIGHT_CM;\n  yCm += dy / COUNTS_PER_RAD * HEIGHT_CM;\n\n  unsigned long t = millis();\n  // (slowing down before each stop: a sudden stop tips it onto its nose and the sensor loses the floor)\n  if (t < 1000)      drive(0, 0);        // wait a moment\n  else if (t < 3600) drive(160, 160);    // ahead\n  else if (t < 4000) drive(70, 70);\n  else if (t < 5000) drive(0, 0);\n  else if (t < 7600) drive(-160, -160);  // and back\n  else if (t < 8000) drive(-70, -70);\n  else               drive(0, 0);\n\n  if (t - lastPrint >= 200) {\n    lastPrint = t;\n    Serial.print(\"ahead_cm:\");\n    Serial.print(xCm, 1);\n    Serial.print(\" sideways_cm:\");\n    Serial.print(yCm, 1);\n    Serial.print(\" quality:\");\n    Serial.println(flow.readQuality());\n  }\n  delay(10);\n}\n"
+  }
+ },
+ "boards": [],
+ "libraries": [
+  {
+   "id": "motion-sensors",
+   "name": "Motion sensors",
+   "version": "1.1.0"
+  }
+ ]
+}

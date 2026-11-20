@@ -3,19 +3,87 @@
   "formatVersion": 1,
   "id": "motion-sensors",
   "name": "Motion sensors",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
-  "description": "Sensors that feel how they move and which way they face: a tilt switch, a compass (QMC5883L, as on the GY-271) and an ADXL345 accelerometer. They feel the real motion of whatever they're glued to: pick it up with the hand and tilt it. Also sketch libraries for the app's own MPU-6050 (Adafruit_MPU6050.h and MPU6050.h), and a self-balancing robot to build on.",
+  "description": "Sensors that feel how they move and which way they face: a tilt switch, a compass (QMC5883L, as on the GY-271) an ADXL345 accelerometer and a PMW3901 optical flow sensor (it sees the floor slide past: how far it moved, for drones and rovers). They feel the real motion of whatever they're glued to: pick it up with the hand and tilt it. Also sketch libraries for the app's own MPU-6050 (Adafruit_MPU6050.h and MPU6050.h), and a self-balancing robot to build on.",
   "category": "Sensors",
   "needsApp": "0.4.0",
   "code": "device.js",
   "sketch": {
-    "Adafruit_MPU6050.h": { "classes": ["Adafruit_MPU6050", "sensors_event_t"], "exports": ["MPU6050_RANGE_2_G", "MPU6050_RANGE_4_G", "MPU6050_RANGE_8_G", "MPU6050_RANGE_16_G", "MPU6050_RANGE_250_DEG", "MPU6050_RANGE_500_DEG", "MPU6050_RANGE_1000_DEG", "MPU6050_RANGE_2000_DEG", "MPU6050_BAND_260_HZ", "MPU6050_BAND_184_HZ", "MPU6050_BAND_94_HZ", "MPU6050_BAND_44_HZ", "MPU6050_BAND_21_HZ", "MPU6050_BAND_10_HZ", "MPU6050_BAND_5_HZ", "SENSORS_GRAVITY_STANDARD"], "file": "sketch/Adafruit_MPU6050.js" },
-    "Adafruit_Sensor.h": { "classes": ["sensors_event_t"], "file": "sketch/Adafruit_Sensor.js" },
-    "MPU6050.h": { "classes": ["MPU6050"], "exports": ["MPU6050_ACCEL_FS_2", "MPU6050_ACCEL_FS_4", "MPU6050_ACCEL_FS_8", "MPU6050_ACCEL_FS_16", "MPU6050_GYRO_FS_250", "MPU6050_GYRO_FS_500", "MPU6050_GYRO_FS_1000", "MPU6050_GYRO_FS_2000"], "file": "sketch/MPU6050.js" },
-    "Adafruit_ADXL345_U.h": { "classes": ["Adafruit_ADXL345_Unified", "sensors_event_t"], "exports": ["ADXL345_RANGE_2_G", "ADXL345_RANGE_4_G", "ADXL345_RANGE_8_G", "ADXL345_RANGE_16_G", "SENSORS_GRAVITY_STANDARD"], "file": "sketch/Adafruit_ADXL345_U.js" },
-    "QMC5883LCompass.h": { "classes": ["QMC5883LCompass"], "file": "sketch/QMC5883LCompass.js" }
+    "Adafruit_MPU6050.h": {
+      "classes": [
+        "Adafruit_MPU6050",
+        "sensors_event_t"
+      ],
+      "exports": [
+        "MPU6050_RANGE_2_G",
+        "MPU6050_RANGE_4_G",
+        "MPU6050_RANGE_8_G",
+        "MPU6050_RANGE_16_G",
+        "MPU6050_RANGE_250_DEG",
+        "MPU6050_RANGE_500_DEG",
+        "MPU6050_RANGE_1000_DEG",
+        "MPU6050_RANGE_2000_DEG",
+        "MPU6050_BAND_260_HZ",
+        "MPU6050_BAND_184_HZ",
+        "MPU6050_BAND_94_HZ",
+        "MPU6050_BAND_44_HZ",
+        "MPU6050_BAND_21_HZ",
+        "MPU6050_BAND_10_HZ",
+        "MPU6050_BAND_5_HZ",
+        "SENSORS_GRAVITY_STANDARD"
+      ],
+      "file": "sketch/Adafruit_MPU6050.js"
+    },
+    "Adafruit_Sensor.h": {
+      "classes": [
+        "sensors_event_t"
+      ],
+      "file": "sketch/Adafruit_Sensor.js"
+    },
+    "MPU6050.h": {
+      "classes": [
+        "MPU6050"
+      ],
+      "exports": [
+        "MPU6050_ACCEL_FS_2",
+        "MPU6050_ACCEL_FS_4",
+        "MPU6050_ACCEL_FS_8",
+        "MPU6050_ACCEL_FS_16",
+        "MPU6050_GYRO_FS_250",
+        "MPU6050_GYRO_FS_500",
+        "MPU6050_GYRO_FS_1000",
+        "MPU6050_GYRO_FS_2000"
+      ],
+      "file": "sketch/MPU6050.js"
+    },
+    "Adafruit_ADXL345_U.h": {
+      "classes": [
+        "Adafruit_ADXL345_Unified",
+        "sensors_event_t"
+      ],
+      "exports": [
+        "ADXL345_RANGE_2_G",
+        "ADXL345_RANGE_4_G",
+        "ADXL345_RANGE_8_G",
+        "ADXL345_RANGE_16_G",
+        "SENSORS_GRAVITY_STANDARD"
+      ],
+      "file": "sketch/Adafruit_ADXL345_U.js"
+    },
+    "QMC5883LCompass.h": {
+      "classes": [
+        "QMC5883LCompass"
+      ],
+      "file": "sketch/QMC5883LCompass.js"
+    },
+    "Bitcraze_PMW3901.h": {
+      "classes": [
+        "Bitcraze_PMW3901"
+      ],
+      "file": "sketch/Bitcraze_PMW3901.js"
+    }
   },
   "parts": [
     {
@@ -25,11 +93,77 @@
       "swatch": "#1f5fbf",
       "mass": 2,
       "shape": [
-        { "box": [1.5, 0.16, 3.0], "at": [0, 0.08, 0], "color": "#1f5fbf" },
-        { "cyl": [0.3, 1.1], "at": [0, 0.4, 0.6], "rot": [90, 0, 0], "color": "#2a2a2c" },
-        { "box": [0.2, 0.1, 0.2], "at": [0.45, 0.21, -0.4], "color": "#e33030", "collide": false }
+        {
+          "box": [
+            1.5,
+            0.16,
+            3.0
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1f5fbf"
+        },
+        {
+          "cyl": [
+            0.3,
+            1.1
+          ],
+          "at": [
+            0,
+            0.4,
+            0.6
+          ],
+          "rot": [
+            90,
+            0,
+            0
+          ],
+          "color": "#2a2a2c"
+        },
+        {
+          "box": [
+            0.2,
+            0.1,
+            0.2
+          ],
+          "at": [
+            0.45,
+            0.21,
+            -0.4
+          ],
+          "color": "#e33030",
+          "collide": false
+        }
       ],
-      "pinRows": [{ "ids": ["VCC", "GND", "DO"], "at": [-0.254, 0.0, -1.3], "kinds": { "VCC": "vin", "GND": "gnd", "DO": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3, "vmax": 5.5 } } }],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "DO"
+          ],
+          "at": [
+            -0.254,
+            0.0,
+            -1.3
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "DO": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 3,
+              "vmax": 5.5
+            }
+          }
+        }
+      ],
       "device": "tilt"
     },
     {
@@ -39,12 +173,96 @@
       "swatch": "#2a2d8f",
       "mass": 2,
       "shape": [
-        { "box": [1.4, 0.16, 1.8], "at": [0, 0.08, 0], "color": "#2a2d8f" },
-        { "box": [0.3, 0.1, 0.3], "at": [0, 0.21, 0.3], "color": "#141416" },
-        { "box": [0.8, 0.01, 0.12], "at": [0, 0.165, 0.7], "color": "#f2f2f2", "collide": false },
-        { "box": [0.12, 0.01, 0.3], "at": [0.35, 0.165, 0.62], "rot": [0, 45, 0], "color": "#f2f2f2", "collide": false }
+        {
+          "box": [
+            1.4,
+            0.16,
+            1.8
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#2a2d8f"
+        },
+        {
+          "box": [
+            0.3,
+            0.1,
+            0.3
+          ],
+          "at": [
+            0,
+            0.21,
+            0.3
+          ],
+          "color": "#141416"
+        },
+        {
+          "box": [
+            0.8,
+            0.01,
+            0.12
+          ],
+          "at": [
+            0,
+            0.165,
+            0.7
+          ],
+          "color": "#f2f2f2",
+          "collide": false
+        },
+        {
+          "box": [
+            0.12,
+            0.01,
+            0.3
+          ],
+          "at": [
+            0.35,
+            0.165,
+            0.62
+          ],
+          "rot": [
+            0,
+            45,
+            0
+          ],
+          "color": "#f2f2f2",
+          "collide": false
+        }
       ],
-      "pinRows": [{ "ids": ["VCC", "GND", "SCL", "SDA", "DRDY"], "at": [-0.508, 0.0, -0.75], "kinds": { "VCC": "vin", "GND": "gnd", "SCL": "i2c", "SDA": "i2c", "DRDY": "out" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.2, "vmax": 5.5 } } }],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "SCL",
+            "SDA",
+            "DRDY"
+          ],
+          "at": [
+            -0.508,
+            0.0,
+            -0.75
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "SCL": "i2c",
+            "SDA": "i2c",
+            "DRDY": "out"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.2,
+              "vmax": 5.5
+            }
+          }
+        }
+      ],
       "device": "qmc5883l"
     },
     {
@@ -54,15 +272,233 @@
       "swatch": "#6a2fb0",
       "mass": 2,
       "shape": [
-        { "box": [1.8, 0.16, 2.6], "at": [0, 0.08, 0], "color": "#6a2fb0" },
-        { "box": [0.5, 0.1, 0.5], "at": [0, 0.21, 0.4], "color": "#141416" }
+        {
+          "box": [
+            1.8,
+            0.16,
+            2.6
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#6a2fb0"
+        },
+        {
+          "box": [
+            0.5,
+            0.1,
+            0.5
+          ],
+          "at": [
+            0,
+            0.21,
+            0.4
+          ],
+          "color": "#141416"
+        }
       ],
-      "pinRows": [{ "ids": ["GND", "VCC", "CS", "INT1", "INT2", "SDO", "SDA", "SCL"], "at": [-0.889, 0.0, -1.1], "kinds": { "GND": "gnd", "VCC": "vin", "CS": "in", "INT1": "out", "INT2": "out", "SDO": "in", "SDA": "i2c", "SCL": "i2c" }, "extra": { "VCC": { "label": "VCC (3.3-5 V)", "vmin": 2.0, "vmax": 5.5 }, "CS": { "pulled": "up" }, "SDO": { "pulled": "down" } } }],
+      "pinRows": [
+        {
+          "ids": [
+            "GND",
+            "VCC",
+            "CS",
+            "INT1",
+            "INT2",
+            "SDO",
+            "SDA",
+            "SCL"
+          ],
+          "at": [
+            -0.889,
+            0.0,
+            -1.1
+          ],
+          "kinds": {
+            "GND": "gnd",
+            "VCC": "vin",
+            "CS": "in",
+            "INT1": "out",
+            "INT2": "out",
+            "SDO": "in",
+            "SDA": "i2c",
+            "SCL": "i2c"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.0,
+              "vmax": 5.5
+            },
+            "CS": {
+              "pulled": "up"
+            },
+            "SDO": {
+              "pulled": "down"
+            }
+          }
+        }
+      ],
       "device": "adxl345"
+    },
+    {
+      "id": "pmw3901",
+      "name": "Optical flow sensor (PMW3901)",
+      "description": "A tiny camera that tracks how the surface in front of its lens slides past: how far it moved, as counts (about 500 a radian of view; at a height h, counts / 500 x h = the distance). It needs the surface at least 8 cm away and sees up to 4 m. The lens is on top: glue it upside down under a drone or a boom to watch the floor. Tilting slides the picture too (a flight controller takes that off with its gyro). SPI: SCK, MOSI, MISO to the board's SPI pins, CS to any pin; VCC 3.3-5 V, GND. #include <Bitcraze_PMW3901.h>; Bitcraze_PMW3901 flow(CS); flow.begin(); int16_t dx, dy; flow.readMotionCount(&dx, &dy); x is the arrow on the board, y points away from the pins.",
+      "swatch": "#1b1b1f",
+      "mass": 2,
+      "shape": [
+        {
+          "box": [
+            2.4,
+            0.16,
+            2.4
+          ],
+          "at": [
+            0,
+            0.08,
+            0
+          ],
+          "color": "#1b1b1f"
+        },
+        {
+          "box": [
+            0.9,
+            0.34,
+            0.9
+          ],
+          "at": [
+            0,
+            0.33,
+            0.2
+          ],
+          "color": "#141416"
+        },
+        {
+          "cyl": [
+            0.25,
+            0.06
+          ],
+          "at": [
+            0,
+            0.53,
+            0.2
+          ],
+          "color": "#6a7b8c",
+          "collide": false
+        },
+        {
+          "box": [
+            0.8,
+            0.01,
+            0.12
+          ],
+          "at": [
+            0,
+            0.165,
+            0.95
+          ],
+          "color": "#f2f2f2",
+          "collide": false
+        },
+        {
+          "box": [
+            0.12,
+            0.01,
+            0.3
+          ],
+          "at": [
+            0.35,
+            0.165,
+            0.87
+          ],
+          "rot": [
+            0,
+            45,
+            0
+          ],
+          "color": "#f2f2f2",
+          "collide": false
+        },
+        {
+          "ranger": {
+            "id": "eye",
+            "look": [
+              0,
+              1,
+              0
+            ],
+            "max": 400
+          },
+          "at": [
+            0,
+            0.56,
+            0.2
+          ]
+        }
+      ],
+      "pinRows": [
+        {
+          "ids": [
+            "VCC",
+            "GND",
+            "SCK",
+            "MOSI",
+            "MISO",
+            "CS"
+          ],
+          "at": [
+            -0.635,
+            0.0,
+            -1.0
+          ],
+          "kinds": {
+            "VCC": "vin",
+            "GND": "gnd",
+            "SCK": "in",
+            "MOSI": "in",
+            "MISO": "out",
+            "CS": "in"
+          },
+          "extra": {
+            "VCC": {
+              "label": "VCC (3.3-5 V)",
+              "vmin": 2.7,
+              "vmax": 5.5
+            },
+            "CS": {
+              "label": "CS (LOW = talking)",
+              "pulled": "up"
+            }
+          }
+        }
+      ],
+      "spi": {
+        "sck": "SCK",
+        "mosi": "MOSI",
+        "miso": "MISO",
+        "cs": "CS"
+      },
+      "device": "pmw3901"
     }
   ],
   "examples": [
-    { "name": "Self-balancing robot", "description": "Two wheels and a tall body that would fall over: the board reads the MPU-6050 and drives the motors to keep it upright (a PID loop). Press Run, then push it with the hand (Shift) and watch it catch itself; the serial monitor's Plot shows the angle.", "file": "examples/balancer.bench" },
-    { "name": "Compass and tilt alarm", "description": "A compass prints which way it faces and a tilt switch sounds the alarm LED. Pick the little board up with the hand: turn it (Q / E) and the heading changes; tip it over and the LED lights.", "file": "examples/compass-tilt.bench" }
+    {
+      "name": "Self-balancing robot",
+      "description": "Two wheels and a tall body that would fall over: the board reads the MPU-6050 and drives the motors to keep it upright (a PID loop). Press Run, then push it with the hand (Shift) and watch it catch itself; the serial monitor's Plot shows the angle.",
+      "file": "examples/balancer.bench"
+    },
+    {
+      "name": "Compass and tilt alarm",
+      "description": "A compass prints which way it faces and a tilt switch sounds the alarm LED. Pick the little board up with the hand: turn it (Q / E) and the heading changes; tip it over and the LED lights.",
+      "file": "examples/compass-tilt.bench"
+    },
+    {
+      "name": "Optical flow odometer",
+      "description": "A rover with a PMW3901 looking down from a boom, 12 cm over the floor: it drives ahead and back, and adds up how far it went from what the sensor sees. Open its serial monitor and press Plot; pick it up and carry it about (WASD) too.",
+      "file": "examples/flow-odometer.bench"
+    }
   ]
 }

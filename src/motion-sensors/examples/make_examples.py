@@ -68,4 +68,23 @@ for w in ws:
     if w['a']['uid'] == 'board' and w['b']['uid'] in ('compass', 'tilt'): w['length'] = 40  # (slack: carry it about)
 save('compass-tilt.bench', {"format": "bench-workshop", "version": 1, "name": "Compass and tilt alarm", "parts": parts, "wires": ws,
      "programs": {"board": {"lang": "arduino", "source": src('compass-tilt.ino')}}, "boards": []})
+
+# ---- optical flow odometer: the two-wheel rover with a PMW3901 looking down from a boom at the front
+import sys
+sys.path.insert(0, os.path.join(here, '..', '..', '..', 'tools'))
+from benchgen import rover_base, wires as bwires, O, P
+parts, rws = rover_base()
+FLIP = (1, 0, 0, 0)   # upside down: the lens faces the floor
+parts += [
+    part('mast', 'block', 'Mast', (5.4, 0.15, 0), parent=('chassis', 'body'), params={"w": 1.2, "h": 5.1, "d": 1.2, "material": "plastic", "color": "#d8dce4"}),
+    part('boom', 'plate', 'Boom', (2.6, 5.25, 0), parent=('mast', 'body'), params={"w": 7, "h": 0.3, "d": 3, "material": "plastic", "color": "#8fa3b8"}),
+    part('flow', 'motion-sensors/pmw3901', 'Optical flow (PMW3901)', (2.2, -0.15, 0), FLIP, ('boom', 'body')),
+]
+rws += [
+    ('brain.3V3', 'flow.VCC', R), ('brain.GND', 'flow.GND', K),
+    ('brain.GP18', 'flow.SCK', O), ('brain.GP19', 'flow.MOSI', B), ('brain.GP16', 'flow.MISO', G), ('brain.GP17', 'flow.CS', P),
+]
+save('flow-odometer.bench', {"format": "bench-workshop", "version": 1, "name": "Optical flow odometer", "parts": parts, "wires": bwires(rws),
+     "programs": {"brain": {"lang": "arduino", "source": src('flow-odometer.ino')}}, "boards": [],
+     "libraries": [{"id": "motion-sensors", "name": "Motion sensors", "version": "1.1.0"}]})
 print('written')

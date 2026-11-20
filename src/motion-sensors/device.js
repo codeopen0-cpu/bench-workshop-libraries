@@ -131,3 +131,82 @@ bench.device('adxl345', (part) => {
     },
   };
 });
+
+// PMW3901: an optical flow sensor. A tiny camera (35 x 35 pixels, 42 degrees) looks at the surface
+// in front of its lens and counts how far the picture slides between readings: the sensor's own
+// motion over the floor, in counts (about 500 a radian of view angle). The farther the floor, the
+// fewer counts for the same move (counts = 500 x distance moved / height); tilting also slides the
+// picture (a flight controller takes that off with its gyro). It needs the floor at least 8 cm away.
+// SPI registers (Bitcraze_PMW3901 reads them as the real one): 0x00 product id 0x49, 0x5F its
+// inverse 0xB6, 0x02 motion (reading it latches the counts into 0x03-0x06: delta X, delta Y, 16-bit
+// low byte first), 0x07 surface quality, 0x3A = 0x5A resets it. The picture's x is the arrow on the
+// board, y points away from the pins (the part's -z); the lens is on top (+y): mount it facing the floor.
+bench.device('pmw3901', (part) => {
+  const eye = part.ranger('eye');
+  const regs = new Array(128).fill(0);
+  const reset = () => { regs.fill(0); regs[0x00] = 0x49; regs[0x01] = 0x00; regs[0x5f] = 0xb6; };
+  reset();
+  let powered = false, accX = 0, accY = 0, last = null, quality = 0, reads = 0, height = null;
+  // a direction in the part's frame, turned into the world (by its orientation q)
+  const rot = ([x, y, z, w], [vx, vy, vz]) => {
+    const tx = 2 * (y * vz - z * vy), ty = 2 * (z * vx - x * vz), tz = 2 * (x * vy - y * vx);
+    return [vx + w * tx + (y * tz - z * ty), vy + w * ty + (z * tx - x * tz), vz + w * tz + (x * ty - y * tx)];
+  };
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const s16 = (v) => Math.max(-32768, Math.min(32767, Math.round(v))) & 0xffff;
+  return {
+    spi: {
+      // pairs of bytes: [register (bit 7 set = write), value]; answers [0, value] for reads
+      transfer(bytes) {
+        const out = new Array(bytes.length).fill(0);
+        if (!powered) return out.fill(0xff);
+        for (let i = 0; i + 1 < bytes.length; i += 2) {
+          const a = bytes[i] & 0x7f;
+          if (bytes[i] & 0x80) {
+            regs[a] = bytes[i + 1] & 255;
+            if (a === 0x3a && bytes[i + 1] === 0x5a) { reset(); accX = 0; accY = 0; }
+            continue;
+          }
+          if (a === 0x02) {
+            // reading "motion" takes the counts since the last time
+            const x = s16(accX), y = s16(accY);
+            regs[0x03] = x & 255; regs[0x04] = x >> 8; regs[0x05] = y & 255; regs[0x06] = y >> 8;
+            regs[0x02] = (Math.round(accX) || Math.round(accY) ? 0x80 : 0) | 0x01;
+            regs[0x07] = quality;
+            accX -= Math.round(accX); accY -= Math.round(accY);
+            reads++;
+          }
+          out[i + 1] = regs[a];
+        }
+        return out;
+      },
+    },
+    step(io) {
+      powered = io.supply('VCC', 'GND') >= 2.7;
+      if (!powered) { io.draw(0); last = null; return; }
+      io.draw(0.009);
+      const m = part.motion();
+      if (!m.ready) return;
+      const d = eye.distance;
+      const ex = rot(m.quat, [1, 0, 0]), ey = rot(m.quat, [0, 1, 0]), ez = rot(m.quat, [0, 0, 1]);
+      const o = [m.pos[0] + ey[0] * 0.56, m.pos[1] + ey[1] * 0.56, m.pos[2] + ey[2] * 0.56]; // (the lens)
+      height = d;
+      const sees = d !== null && d >= 8;
+      quality = sees ? Math.max(20, Math.min(160, Math.round(160 - d / 4))) : 0;
+      if (sees && last) {
+        // where the spot it saw last step is in its view now: that's how far the picture slid
+        const rel = [last[0] - o[0], last[1] - o[1], last[2] - o[2]];
+        const f = dot(rel, ey);
+        if (f > 1) {
+          accX -= 500 * Math.atan2(dot(rel, ex), f); // (the spot slides back as the sensor moves along +x)
+          accY += 500 * Math.atan2(dot(rel, ez), f); // (its y is the part's -z)
+        }
+      }
+      last = sees ? [o[0] + ey[0] * d, o[1] + ey[1] * d, o[2] + ey[2] * d] : null;
+    },
+    status() {
+      if (!powered) return ['no power'];
+      return [height === null ? 'sees no surface (nothing within 4 m)' : height < 8 ? `too close to the surface (${height.toFixed(1)} cm: it needs 8 cm)` : `surface ${height.toFixed(1)} cm away, quality ${quality}`, `${reads} readings`];
+    },
+  };
+});

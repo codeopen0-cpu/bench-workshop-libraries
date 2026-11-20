@@ -34,6 +34,7 @@ const float CAM_UP = 2.5;     // the camera is this much above the sonar
 const float BALL_R = 4;       // the ball's radius (its middle is this high)
 const float VFOV = 55;        // the camera's view, top to bottom (degrees); it is 80 x 60 pixels
 const float DRAG = 0.25;      // the air slows this drone by 25 % of its speed each second
+const unsigned long LOOP_US = 2000;  // the flight loop: 500 times a second
 
 Servo escFR, escFL, escBR, escBL;
 BlobCam cam;
@@ -167,6 +168,7 @@ void setup() {
   motors(1000, 1000, 1000, 1000);         // a low signal arms the ESCs
 
   Wire.begin();
+  Wire.setClock(400000);                  // fast I2C: a full MPU-6050 read takes 0.4 ms
   mpuWrite(0x6B, 0x00);                   // wake the MPU-6050
   mpuWrite(0x1B, 0x08);                   // gyro +-500 deg/s
   mpuWrite(0x1C, 0x08);                   // accel +-4 g
@@ -195,21 +197,27 @@ void setup() {
 }
 
 void loop() {
+  // a steady 500 loops a second, like a real flight controller's
+  while (micros() - lastUs < LOOP_US) {}
   float dt = (micros() - lastUs) / 1000000.0;
   lastUs = micros();
-  dt = constrain(dt, 0.001, 0.05);
+  dt = constrain(dt, 0.0005, 0.05);
   readImu();
 
-  // how it leans: the gyro (fast, but adds up small errors) nudged very gently by gravity. Only
-  // gently: a flying drone falls with gravity, so its accelerometer can't feel which way is down
-  // (it reads level even while it leans to fly along); trusted more, it would let the drone tip.
-  roll = 0.999 * (roll + gx * dt) + 0.001 * atan2(ay, az) * RAD_TO_DEG;
-  pitch = 0.999 * (pitch + gy * dt) + 0.001 * atan2(-ax, az) * RAD_TO_DEG;
+  // how it leans: the gyro (fast, but adds up small errors) nudged very gently by gravity (over
+  // about 10 s). Only gently: a flying drone falls with gravity, so its accelerometer can't feel
+  // which way is down (it reads level even while it leans to fly along); trusted more, it would
+  // let the drone tip.
+  float k = 0.1 * dt;
+  roll = (1 - k) * (roll + gx * dt) + k * atan2(ay, az) * RAD_TO_DEG;
+  pitch = (1 - k) * (pitch + gy * dt) + k * atan2(-ax, az) * RAD_TO_DEG;
   // how fast it moves: what the accelerometer does feel sideways in flight is the air pushing
-  // back, which grows with speed (the same trick real flight controllers use, "rotor drag")
+  // back, which grows with speed (the same trick real flight controllers use, "rotor drag");
+  // smoothed over about a tenth of a second
   if (alt > 10) {
-    vFwd = 0.9 * vFwd + 0.1 * (-ax * 981 / DRAG);
-    vRight = 0.9 * vRight + 0.1 * (ay * 981 / DRAG);
+    float a = constrain(10 * dt, 0, 1);
+    vFwd += a * (-ax * 981 / DRAG - vFwd);
+    vRight += a * (ay * 981 / DRAG - vRight);
   }
 
   if (millis() - lastSonar >= 50) {       // the sonar 20 times a second

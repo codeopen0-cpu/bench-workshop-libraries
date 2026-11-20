@@ -67,4 +67,4 @@ for m, x, z, spin in MOTORS:
 
 d = here(__file__)
 save(d, 'drone-follow.bench', bench('Drone follows a red ball', parts, wires(ws), {'fc': source(d, 'drone-follow.ino')},
-                                    libraries=[{"id": "color-camera", "name": "Colour-tracking camera", "version": "1.1.0"}]))
+                                    libraries=[{"id": "color-camera", "name": "Colour-tracking camera", "version": "1.1.1"}]))

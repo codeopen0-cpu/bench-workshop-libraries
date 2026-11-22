@@ -112,7 +112,7 @@
   {
    "id": "encoder-motor",
    "name": "Gear motor with encoder",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "The yellow TT gear motor with a 20-slot encoder disc and an optical sensor on its shaft: its OUT pin changes as the slots pass, so a board can count how far and how fast it turned. Drive it like any TT motor (through a motor driver).",
    "category": "Motion",
@@ -120,7 +120,7 @@
     "TT motor + encoder (20 slots)"
    ],
    "url": "libraries/encoder-motor.benchlib",
-   "size": 5862,
+   "size": 5863,
    "can": [
     "move"
    ],
@@ -129,7 +129,7 @@
   {
    "id": "extras",
    "name": "Gripper, fingerprint sensor, MP3 player, 7-segment digit",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "A servo claw gripper that really grabs things, a fingerprint sensor (R307 / AS608, Adafruit_Fingerprint.h), the DFPlayer Mini MP3 player (DFRobotDFPlayerMini.h) and a single 7-segment LED digit.",
    "category": "Modules",
@@ -140,7 +140,7 @@
     "7-segment digit (0.56\")"
    ],
    "url": "libraries/extras.benchlib",
-   "size": 25118,
+   "size": 25119,
    "can": [
     "move",
     "make sounds",
@@ -244,7 +244,7 @@
   {
    "id": "lcd-i2c",
    "name": "LCD 16x2 and 20x4 (I2C)",
-   "version": "1.1.0",
+   "version": "1.1.1",
    "author": "Bench Workshop",
    "description": "The classic blue 16x2 character LCD and its bigger 20x4 brother (HD44780) with an I2C backpack (PCF8574): text over just 2 wires. Includes LiquidCrystal_I2C.h for sketches; real firmware using LiquidCrystal_I2C works too.",
    "category": "Displays",
@@ -253,7 +253,7 @@
     "LCD 20x4 (I2C)"
    ],
    "url": "libraries/lcd-i2c.benchlib",
-   "size": 9838,
+   "size": 9850,
    "can": []
   },
   {
@@ -307,7 +307,7 @@
   {
    "id": "motion-sensors",
    "name": "Motion sensors",
-   "version": "1.1.0",
+   "version": "1.1.1",
    "author": "Bench Workshop",
    "description": "Sensors that feel how they move and which way they face: a tilt switch, a compass (QMC5883L, as on the GY-271) an ADXL345 accelerometer and a PMW3901 optical flow sensor (it sees the floor slide past: how far it moved, for drones and rovers). They feel the real motion of whatever they're glued to: pick it up with the hand and tilt it. Also sketch libraries for the app's own MPU-6050 (Adafruit_MPU6050.h and MPU6050.h), and a self-balancing robot to build on.",
    "category": "Sensors",
@@ -318,7 +318,7 @@
     "Optical flow sensor (PMW3901)"
    ],
    "url": "libraries/motion-sensors.benchlib",
-   "size": 44133,
+   "size": 44136,
    "can": [
     "measure distance",
     "feel motion",
@@ -329,7 +329,7 @@
   {
    "id": "motor-drivers",
    "name": "Motor drivers and movers",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "More ways to drive and move things: the TB6612FNG (two small motors, efficient) and BTS7960 (one big motor, 43 A) drivers, a vibration motor that really shakes what it's on, a push-pull solenoid, and a linear actuator.",
    "category": "Motion",
@@ -341,7 +341,7 @@
     "Linear actuator (12 V, 10 cm)"
    ],
    "url": "libraries/motor-drivers.benchlib",
-   "size": 10535,
+   "size": 10542,
    "can": [
     "move"
    ],
@@ -401,7 +401,7 @@
   {
    "id": "ps2-controller",
    "name": "PS2 wireless controller",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "The PS2-style wireless game pad that comes with most robot car kits: its receiver goes on the board (PS2X_lib.h), the pad's buttons and sticks drive the robot. Play it with a real game pad plugged into your PC, the keyboard (arrows, 1-4, Q/E, Enter), or the run panel.",
    "category": "Controls",
@@ -409,7 +409,7 @@
     "PS2 controller receiver"
    ],
    "url": "libraries/ps2-controller.benchlib",
-   "size": 7948,
+   "size": 7941,
    "can": [
     "have controls in the run panel"
    ],
@@ -418,7 +418,7 @@
   {
    "id": "radio-bus",
    "name": "LoRa radio, CAN bus and RS485",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "Talking further and tougher: a LoRa radio (SX1278, long range, slow; LoRa.h), a CAN bus module (MCP2515 + TJA1050, as in cars; mcp_can.h) and an RS485 transceiver (MAX485, long wires in noisy places, with Serial). Radios on the same frequency and settings hear each other; CAN and RS485 modules talk over their wires.",
    "category": "Communication",
@@ -428,7 +428,7 @@
     "RS485 transceiver (MAX485)"
    ],
    "url": "libraries/radio-bus.benchlib",
-   "size": 19777,
+   "size": 19840,
    "can": [
     "talk SPI"
    ],
@@ -492,7 +492,7 @@
   {
    "id": "servos",
    "name": "More servos: 360, continuous, winch and smart",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "Servos beyond 180 degrees. Continuous ones that spin round and round (FS90R, MG996R 360: the signal sets speed and direction), positional ones with 270 and 360 degrees of travel, a sail winch servo that turns three and a half turns, and two smart serial-bus servos that turn to any angle and report back (Feetech STS3215 with SCServo.h, Dynamixel XL430 with Dynamixel2Arduino.h).",
    "category": "Motion",
@@ -506,7 +506,7 @@
     "Smart servo Dynamixel XL430-W250"
    ],
    "url": "libraries/servos.benchlib",
-   "size": 51820,
+   "size": 51840,
    "can": [
     "move"
    ],
@@ -548,7 +548,7 @@
   {
    "id": "tft-displays",
    "name": "Colour TFTs, round and e-paper displays",
-   "version": "1.1.0",
+   "version": "1.1.1",
    "author": "Bench Workshop",
    "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h. Also a 240 x 240 ST7789, a round GC9A01 (1.28\", for watch faces and gauges) and a 2.13\" e-paper panel (Adafruit_EPD: it keeps its picture with the power off).",
    "category": "Displays",
@@ -560,7 +560,7 @@
     "E-paper display 2.13\" (SSD1680, 250x122)"
    ],
    "url": "libraries/tft-displays.benchlib",
-   "size": 151243,
+   "size": 151242,
    "can": [
     "talk SPI"
    ],
@@ -569,7 +569,7 @@
   {
    "id": "tm1637-display",
    "name": "4-digit display (TM1637)",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "The red 4-digit 7-segment display with a colon (a clock display) on a TM1637 chip: two wires, CLK and DIO. Includes TM1637Display.h. The part decodes the real TM1637 signals bit by bit.",
    "category": "Displays",
@@ -577,7 +577,7 @@
     "4-digit display (TM1637)"
    ],
    "url": "libraries/tm1637-display.benchlib",
-   "size": 10015,
+   "size": 10016,
    "can": [],
    "needsApp": "0.3.0"
   },

@@ -2,6 +2,24 @@
  "format": "bench-library-index",
  "libraries": [
   {
+   "id": "arducam-ov2640",
+   "name": "ArduCAM Mini 2MP (OV2640)",
+   "version": "1.0.0",
+   "author": "Bench Workshop",
+   "description": "A simulated Arducam Mini 2MP SPI camera (OV2640): it photographs the bench and gives real JPEG or RGB565 bytes from a 384 KB buffer, over the real module's SPI and I2C registers. Includes ArduCAM.h, so sketches for the real camera run. The view is rendered at 160 x 120 and scaled up to the chosen size. Not made by or affiliated with Arducam.",
+   "category": "Sensors",
+   "parts": [
+    "ArduCAM Mini 2MP (OV2640)"
+   ],
+   "url": "libraries/arducam-ov2640.benchlib",
+   "size": 41130,
+   "can": [
+    "see (camera)",
+    "talk SPI"
+   ],
+   "needsApp": "0.15.1"
+  },
+  {
    "id": "bluetooth-hc05",
    "name": "Bluetooth (HC-05)",
    "version": "1.0.0",
@@ -457,7 +475,7 @@
   {
    "id": "sd-card",
    "name": "SD card module",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Bench Workshop",
    "description": "A micro-SD card module (SPI) for keeping data: log readings to a file, read them back. The card holds its files while the run lasts (stop the run and it's a fresh card; its files are listed in the run panel). Includes SD.h.",
    "category": "Storage",
@@ -465,7 +483,7 @@
     "SD card module"
    ],
    "url": "libraries/sd-card.benchlib",
-   "size": 13410,
+   "size": 13458,
    "can": [
     "talk SPI"
    ],

@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "lcd-i2c",
   "name": "LCD 16x2 and 20x4 (I2C)",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Bench Workshop",
   "description": "The classic blue 16x2 character LCD and its bigger 20x4 brother (HD44780) with an I2C backpack (PCF8574): text over just 2 wires. Includes LiquidCrystal_I2C.h for sketches; real firmware using LiquidCrystal_I2C works too.",
   "category": "Displays",
@@ -94,14 +94,14 @@
         },
         {
           "box": [
-            1.9,
+            4.15,
             0.3,
-            4.1
+            1.9
           ],
           "at": [
-            -3.5,
+            -1.925,
             -0.15,
-            0
+            -0.5
           ],
           "color": "#202a24",
           "collide": false
@@ -215,14 +215,14 @@
         },
         {
           "box": [
-            1.9,
+            4.15,
             0.3,
-            4.1
+            1.9
           ],
           "at": [
-            -4.3,
+            -2.825,
             -0.15,
-            0
+            -0.5
           ],
           "color": "#202a24",
           "collide": false

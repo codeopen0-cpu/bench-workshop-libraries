@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "motion-sensors",
   "name": "Motion sensors",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
   "description": "Sensors that feel how they move and which way they face: a tilt switch, a compass (QMC5883L, as on the GY-271) an ADXL345 accelerometer and a PMW3901 optical flow sensor (it sees the floor slide past: how far it moved, for drones and rovers). They feel the real motion of whatever they're glued to: pick it up with the hand and tilt it. Also sketch libraries for the app's own MPU-6050 (Adafruit_MPU6050.h and MPU6050.h), and a self-balancing robot to build on.",
@@ -175,9 +175,9 @@
       "shape": [
         {
           "box": [
-            1.4,
+            1.45,
             0.16,
-            1.8
+            1.35
           ],
           "at": [
             0,
@@ -195,7 +195,7 @@
           "at": [
             0,
             0.21,
-            0.3
+            0.05
           ],
           "color": "#141416"
         },
@@ -208,7 +208,7 @@
           "at": [
             0,
             0.165,
-            0.7
+            0.5
           ],
           "color": "#f2f2f2",
           "collide": false
@@ -222,7 +222,7 @@
           "at": [
             0.35,
             0.165,
-            0.62
+            0.42
           ],
           "rot": [
             0,
@@ -245,7 +245,7 @@
           "at": [
             -0.508,
             0.0,
-            -0.75
+            -0.53
           ],
           "kinds": {
             "VCC": "vin",

@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "tft-displays",
   "name": "Colour TFTs, round and e-paper displays",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
   "description": "Full-colour SPI screens: the 1.8\" ST7735 (128 x 160) and the 2.8\" ILI9341 (240 x 320). Draw shapes, text and pictures with the Adafruit GFX functions. Includes Adafruit_ST7735.h, Adafruit_ILI9341.h, Adafruit_ST7789.h and Adafruit_GFX.h. Also a 240 x 240 ST7789, a round GC9A01 (1.28\", for watch faces and gauges) and a 2.13\" e-paper panel (Adafruit_EPD: it keeps its picture with the power off).",
@@ -149,20 +149,20 @@
       "shape": [
         {
           "box": [
-            4.4,
+            3.4,
             0.16,
-            5.8
+            5.6
           ],
           "at": [
             0,
             0.08,
-            -0.25
+            -0.2
           ],
           "color": "#c83030"
         },
         {
           "box": [
-            3.6,
+            3.4,
             0.3,
             4.6
           ],

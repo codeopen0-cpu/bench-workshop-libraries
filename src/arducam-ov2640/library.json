@@ -1,0 +1,79 @@
+{
+  "format": "bench-library",
+  "formatVersion": 1,
+  "id": "arducam-ov2640",
+  "name": "ArduCAM Mini 2MP (OV2640)",
+  "version": "1.0.0",
+  "author": "Bench Workshop",
+  "owner": "codeopen0-cpu",
+  "needsApp": "0.15.1",
+  "description": "A simulated Arducam Mini 2MP SPI camera (OV2640): it photographs the bench and gives real JPEG or RGB565 bytes from a 384 KB buffer, over the real module's SPI and I2C registers. Includes ArduCAM.h, so sketches for the real camera run. The view is rendered at 160 x 120 and scaled up to the chosen size. Not made by or affiliated with Arducam.",
+  "category": "Sensors",
+  "code": "device.js",
+  "sketch": {
+    "ArduCAM.h": {
+      "file": "sketch/ArduCAM.js",
+      "defines": { "OV2640_MINI_2MP": 1 },
+      "classes": ["ArduCAM"],
+      "exports": [
+        "BMP", "JPEG", "RAW", "OV7670", "MT9D111_A", "OV7675", "OV5642", "MT9D111_B", "OV2640",
+        "OV2640_160x120", "OV2640_176x144", "OV2640_320x240", "OV2640_352x288", "OV2640_640x480",
+        "OV2640_800x600", "OV2640_1024x768", "OV2640_1280x1024", "OV2640_1600x1200",
+        "OV2640_CHIPID_HIGH", "OV2640_CHIPID_LOW",
+        "ARDUCHIP_TEST1", "ARDUCHIP_FRAMES", "ARDUCHIP_MODE", "ARDUCHIP_TIM",
+        "MCU2LCD_MODE", "CAM2LCD_MODE", "LCD2MCU_MODE", "VSYNC_LEVEL_MASK",
+        "ARDUCHIP_FIFO", "FIFO_CLEAR_MASK", "FIFO_START_MASK", "FIFO_RDPTR_RST_MASK", "FIFO_WRPTR_RST_MASK",
+        "ARDUCHIP_GPIO", "GPIO_RESET_MASK", "GPIO_PWDN_MASK", "GPIO_PWREN_MASK",
+        "BURST_FIFO_READ", "SINGLE_FIFO_READ",
+        "ARDUCHIP_REV", "ARDUCHIP_TRIG", "VSYNC_MASK", "CAP_DONE_MASK",
+        "FIFO_SIZE1", "FIFO_SIZE2", "FIFO_SIZE3", "MAX_FIFO_SIZE",
+        "Auto", "Sunny", "Cloudy", "Office", "Home",
+        "Saturation2", "Saturation1", "Saturation0", "Saturation_1", "Saturation_2",
+        "Brightness2", "Brightness1", "Brightness0", "Brightness_1", "Brightness_2",
+        "Contrast2", "Contrast1", "Contrast0", "Contrast_1", "Contrast_2",
+        "Antique", "Bluish", "Greenish", "Reddish", "BW", "Negative", "BWnegative", "Normal"
+      ]
+    },
+    "memorysaver.h": { "file": "sketch/memorysaver.js", "defines": { "OV2640_MINI_2MP": 1 } }
+  },
+  "parts": [
+    {
+      "id": "mini-2mp",
+      "name": "ArduCAM Mini 2MP (OV2640)",
+      "description": "Looks along its lens (the +x side), 47 degrees across. Pins: CS (any pin; sketches use 7), MOSI, MISO, SCLK to the board's SPI pins, SDA, SCL to its I2C pins, VCC 3.3-5 V and GND; its pins take 5 V or 3.3 V signals. #include <ArduCAM.h>; ArduCAM myCAM(OV2640, 7). 70 mA, 20 mA in low power. The little picture on its back (the last photo taken) is a bench extra, not on the real module: it can be switched off.",
+      "swatch": "#1b7a3d",
+      "mass": 20,
+      "params": [{ "key": "preview", "label": "Show the last photo on its back (not on the real one)", "kind": "bool" }],
+      "defaults": { "preview": true },
+      "shape": [
+        { "box": [0.16, 3.41, 2.44], "at": [0, 1.705, 0], "color": "#1b7a3d" },
+        { "box": [0.85, 0.4, 2.03], "at": [-0.425, 0.2, 0], "color": "#17181a" },
+        { "box": [0.5, 1.5, 1.5], "at": [0.33, 2.6, 0], "color": "#111214", "collide": false },
+        { "cyl": [0.6, 0.75], "at": [0.9, 2.6, 0], "rot": [0, 0, 90], "color": "#17181a", "collide": false },
+        { "cyl": [0.7, 0.25], "at": [1.25, 2.6, 0], "rot": [0, 0, 90], "color": "#222428", "collide": false },
+        { "cyl": [0.38, 0.26], "at": [1.26, 2.6, 0], "rot": [0, 0, 90], "color": "#33435f", "collide": false },
+        { "box": [0.14, 0.9, 1.85], "at": [0.15, 1.1, 0], "color": "#202124", "collide": false },
+        { "box": [0.03, 0.26, 0.26], "at": [0.085, 3.2, 1.0], "color": "#d8c060", "collide": false },
+        { "box": [0.03, 0.26, 0.26], "at": [0.085, 3.2, -1.0], "color": "#d8c060", "collide": false },
+        { "screen": { "id": "preview", "mode": "rgb", "size": [2.0, 1.5], "px": [160, 120], "bg": "#000000", "off": "#101214" }, "at": [-0.085, 1.85, 0], "rot": [90, 0, 90] },
+        { "camera": { "id": "eye", "px": [160, 120], "fov": 36, "look": [1, 0, 0], "range": 800 }, "at": [1.42, 2.6, 0] }
+      ],
+      "pinRows": [
+        {
+          "ids": ["CS", "MOSI", "MISO", "SCK", "GND", "VCC", "SDA", "SCL"],
+          "at": [-0.85, 0.2, -0.889],
+          "dir": "z",
+          "header": false,
+          "kinds": { "CS": "in", "MOSI": "in", "MISO": "out", "SCK": "in", "GND": "gnd", "VCC": "vin", "SDA": "i2c", "SCL": "i2c" },
+          "extra": { "SCK": { "label": "SCLK" }, "VCC": { "label": "VCC (3.3-5 V)", "vmin": 3.0, "vmax": 5.5 } }
+        }
+      ],
+      "spi": { "sck": "SCK", "mosi": "MOSI", "miso": "MISO", "cs": "CS" },
+      "device": "arducam-mini-2mp"
+    }
+  ],
+  "examples": [
+    { "name": "Take a photo (JPEG)", "description": "A Nano wired as Arducam's guide shows takes a 320 x 240 JPEG every 3 seconds, reads it out of the camera's buffer and checks its start and end markers. The photo shows on the camera's back. Drag the things in front of it around.", "file": "examples/take-photo.bench" },
+    { "name": "Which side is the red ball?", "description": "An ESP32-S3 reads RGB565 pictures out of the camera, prints a small text map of where it sees red, and says left, middle or right. Drag the ball to move it.", "file": "examples/red-ball.bench" }
+  ]
+}

@@ -344,6 +344,9 @@ lets the C++-style declaration work: `LiquidCrystal lcd(12, 11, 5, 4, 3, 2);`. C
 functions a sketch uses go in `"exports"`: `"exports": ["NEO_GRB", "makeKeymap"]`. Libraries
 included as `.hpp` (`IRremote.hpp`) are listed by that name.
 
+If programs test the real header's macros with `#if` (`#if defined (OV2640_MINI_2MP)`), list those
+(app 0.15.1 and newer): `"defines": { "OV2640_MINI_2MP": 1 }`.
+
 The file is JavaScript, run inside the program's thread, where the Arduino functions are in scope:
 `pinMode`, `digitalWrite`, `digitalRead`, `shiftOut`, `delay`, `Wire`, `Serial`, `HIGH`/`LOW`/`OUTPUT`.
 Port the real library function by function. LiquidCrystal's `send` is the real one, line for line:

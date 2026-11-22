@@ -3,7 +3,7 @@
 //   SD.exists(name), SD.remove(name), SD.mkdir(name);  f.size(), f.position(), f.seek(n), f.peek(),
 //   f.readStringUntil('\n'), f.name();  File root = SD.open("/"); root.openNextFile()
 // FILE_WRITE adds to the end of the file (as Arduino's does). It talks to the module over SPI.
-const FILE_READ = 1, FILE_WRITE = 0x13, O_READ = 1, O_WRITE = 2, O_APPEND = 4, O_CREAT = 0x10;
+const FILE_READ = 1, FILE_WRITE = 0x13, O_READ = 1, O_WRITE = 2, O_APPEND = 4, O_CREAT = 0x10, O_TRUNC = 0x40;
 
 const _sd = { cs: -1, ok: false };
 const _sdCall = (op, name = '', data = []) => {
@@ -127,7 +127,7 @@ const SD = {
     if (!write && !this.exists(n)) return null;
     const f = new File(n, write);
     if (write) {
-      if (!(mode & O_APPEND) && (mode & O_CREAT) && mode !== FILE_WRITE) _sdCall(7, n);
+      if ((mode & O_TRUNC) || (!(mode & O_APPEND) && (mode & O_CREAT) && mode !== FILE_WRITE)) _sdCall(7, n);
       _sdCall(6, n, []);
       f._pos = f.size();
     }

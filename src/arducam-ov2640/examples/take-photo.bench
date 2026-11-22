@@ -1,0 +1,251 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "ArduCAM: take a photo",
+ "parts": [
+  {
+   "uid": "stand",
+   "type": "block",
+   "name": "Stand",
+   "params": {
+    "w": 3,
+    "h": 5,
+    "d": 3,
+    "material": "wood",
+    "color": "#c98a4b"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "cam",
+   "type": "arducam-ov2640/mini-2mp",
+   "name": "Camera",
+   "params": {},
+   "parent": {
+    "uid": "stand",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.5,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "board",
+   "type": "arduino-nano",
+   "name": "Nano",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -9,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "ball",
+   "type": "ball",
+   "name": "Red ball",
+   "params": {
+    "r": 3.5,
+    "material": "plastic",
+    "color": "#e01b24"
+   },
+   "parent": null,
+   "pos": [
+    32,
+    0,
+    -7
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "blue",
+   "type": "block",
+   "name": "Blue block",
+   "params": {
+    "w": 5,
+    "h": 8,
+    "d": 5,
+    "material": "plastic",
+    "color": "#1c5fd0"
+   },
+   "parent": null,
+   "pos": [
+    36,
+    0,
+    2
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "yellow",
+   "type": "block",
+   "name": "Yellow block",
+   "params": {
+    "w": 4,
+    "h": 4,
+    "d": 4,
+    "material": "plastic",
+    "color": "#f0c419"
+   },
+   "parent": null,
+   "pos": [
+    28,
+    0,
+    8
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "5V"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "D7"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "CS"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "D11"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "D12"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "D13"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "A4"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SDA"
+   },
+   "color": "#f2f2f2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "A5"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SCL"
+   },
+   "color": "#9b59b6"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Takes a JPEG photo every 3 seconds and reads it out of the camera's buffer.\n// Wiring (Arduino Nano or UNO): CS 7, MOSI 11, MISO 12, SCLK 13, SDA A4, SCL A5, VCC 5V, GND.\n#include <Wire.h>\n#include <SPI.h>\n#include <ArduCAM.h>\n\nconst int CAM_CS = 7;\nArduCAM myCAM(OV2640, CAM_CS);\n\nvoid setup() {\n  uint8_t vid = 0, pid = 0;\n  Serial.begin(115200);\n  Wire.begin();\n  SPI.begin();\n\n  myCAM.write_reg(0x07, 0x80);   // restart the ArduChip\n  delay(100);\n  myCAM.write_reg(0x07, 0x00);\n  delay(100);\n\n  while (true) {                 // is the SPI side wired right?\n    myCAM.write_reg(ARDUCHIP_TEST1, 0x55);\n    if (myCAM.read_reg(ARDUCHIP_TEST1) == 0x55) break;\n    Serial.println(\"No answer on SPI: check CS, MOSI, MISO, SCLK and power\");\n    delay(1000);\n  }\n  while (true) {                 // and the I2C side?\n    myCAM.wrSensorReg8_8(0xff, 0x01);\n    myCAM.rdSensorReg8_8(OV2640_CHIPID_HIGH, &vid);\n    myCAM.rdSensorReg8_8(OV2640_CHIPID_LOW, &pid);\n    if (vid == 0x26 && (pid == 0x41 || pid == 0x42)) break;\n    Serial.println(\"No OV2640 on I2C: check SDA and SCL\");\n    delay(1000);\n  }\n  Serial.println(\"Camera found\");\n\n  myCAM.set_format(JPEG);\n  myCAM.InitCAM();\n  myCAM.OV2640_set_JPEG_size(OV2640_320x240);   // up to OV2640_1600x1200\n  delay(500);\n}\n\nvoid loop() {\n  myCAM.flush_fifo();\n  myCAM.clear_fifo_flag();\n  myCAM.start_capture();\n  while (!myCAM.get_bit(ARDUCHIP_TRIG, CAP_DONE_MASK)) delay(5);\n\n  uint32_t length = myCAM.read_fifo_length();\n  uint32_t count = 0;\n  uint8_t first = 0, second = 0, now = 0, before = 0;\n  bool ended = false;\n\n  myCAM.CS_LOW();\n  myCAM.set_fifo_burst();\n  while (count < length) {\n    before = now;\n    now = SPI.transfer(0x00);    // the next byte of the photo: save it or send it from here\n    count++;\n    if (count == 1) first = now;\n    if (count == 2) second = now;\n    if (before == 0xFF && now == 0xD9) {\n      ended = true;\n      break;\n    }\n  }\n  myCAM.CS_HIGH();\n  myCAM.clear_fifo_flag();\n\n  Serial.print(\"Photo: \");\n  Serial.print(count);\n  Serial.print(\" bytes\");\n  if (first == 0xFF && second == 0xD8 && ended) Serial.println(\", a whole JPEG (FF D8 ... FF D9)\");\n  else Serial.println(\", broken: check the wiring\");\n  delay(3000);\n}\n"
+  }
+ },
+ "boards": []
+}

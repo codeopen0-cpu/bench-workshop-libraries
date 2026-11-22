@@ -1,0 +1,201 @@
+{
+ "format": "bench-workshop",
+ "version": 1,
+ "name": "ArduCAM: find the red ball",
+ "parts": [
+  {
+   "uid": "stand",
+   "type": "block",
+   "name": "Stand",
+   "params": {
+    "w": 3,
+    "h": 5,
+    "d": 3,
+    "material": "wood",
+    "color": "#c98a4b"
+   },
+   "parent": null,
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  },
+  {
+   "uid": "cam",
+   "type": "arducam-ov2640/mini-2mp",
+   "name": "Camera",
+   "params": {},
+   "parent": {
+    "uid": "stand",
+    "body": "body"
+   },
+   "pos": [
+    0,
+    2.5,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "board",
+   "type": "esp32s3-board",
+   "name": "ESP32-S3",
+   "params": {
+    "usb": true
+   },
+   "parent": null,
+   "pos": [
+    -9,
+    0,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "uid": "ball",
+   "type": "ball",
+   "name": "Red ball",
+   "params": {
+    "r": 3.5,
+    "material": "plastic",
+    "color": "#e01b24"
+   },
+   "parent": null,
+   "pos": [
+    32,
+    0,
+    7
+   ],
+   "rot": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "pinned": true
+  }
+ ],
+ "wires": [
+  {
+   "id": "w1",
+   "a": {
+    "uid": "board",
+    "pin": "3V3"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "VCC"
+   },
+   "color": "#e04848"
+  },
+  {
+   "id": "w2",
+   "a": {
+    "uid": "board",
+    "pin": "GND"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "GND"
+   },
+   "color": "#2b2d33"
+  },
+  {
+   "id": "w3",
+   "a": {
+    "uid": "board",
+    "pin": "IO7"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "CS"
+   },
+   "color": "#f08a24"
+  },
+  {
+   "id": "w4",
+   "a": {
+    "uid": "board",
+    "pin": "IO11"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "MOSI"
+   },
+   "color": "#3cb371"
+  },
+  {
+   "id": "w5",
+   "a": {
+    "uid": "board",
+    "pin": "IO13"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "MISO"
+   },
+   "color": "#e8c547"
+  },
+  {
+   "id": "w6",
+   "a": {
+    "uid": "board",
+    "pin": "IO12"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SCK"
+   },
+   "color": "#4a90e2"
+  },
+  {
+   "id": "w7",
+   "a": {
+    "uid": "board",
+    "pin": "IO8"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SDA"
+   },
+   "color": "#f2f2f2"
+  },
+  {
+   "id": "w8",
+   "a": {
+    "uid": "board",
+    "pin": "IO9"
+   },
+   "b": {
+    "uid": "cam",
+    "pin": "SCL"
+   },
+   "color": "#9b59b6"
+  }
+ ],
+ "programs": {
+  "board": {
+   "lang": "arduino",
+   "source": "// Finds red in the camera's uncompressed (RGB565) picture.\n// Wiring (ESP32-S3): CS 7, MOSI 11, MISO 13, SCLK 12, SDA 8, SCL 9, VCC 3V3, GND.\n#include <Wire.h>\n#include <SPI.h>\n#include <ArduCAM.h>\n\nconst int CAM_CS = 7;\nconst int W = 320;\nconst int H = 240;\nArduCAM myCAM(OV2640, CAM_CS);\n\nuint8_t row[640];   // one line of the picture, 2 bytes a pixel\nint cells[128];     // red pixels in each square of a 16 x 8 map\n\nvoid setup() {\n  Serial.begin(115200);\n  Wire.begin();\n  SPI.begin();\n  myCAM.write_reg(ARDUCHIP_TEST1, 0x55);\n  while (myCAM.read_reg(ARDUCHIP_TEST1) != 0x55) {\n    Serial.println(\"Camera not answering on SPI\");\n    delay(1000);\n    myCAM.write_reg(ARDUCHIP_TEST1, 0x55);\n  }\n  myCAM.set_format(BMP);\n  myCAM.InitCAM();\n  delay(300);\n}\n\nvoid loop() {\n  myCAM.flush_fifo();\n  myCAM.clear_fifo_flag();\n  myCAM.start_capture();\n  while (!myCAM.get_bit(ARDUCHIP_TRIG, CAP_DONE_MASK)) delay(5);\n\n  for (int i = 0; i < 128; i++) cells[i] = 0;\n  long total = 0;\n  long sumX = 0;\n\n  myCAM.CS_LOW();\n  myCAM.set_fifo_burst();\n  for (int y = 0; y < H; y++) {\n    SPI.transfer(row, sizeof(row));\n    int line = y / 30;\n    for (int x = 0; x < W; x++) {\n      int p = (row[x * 2] << 8) | row[x * 2 + 1];   // high byte first\n      int r = (p >> 11) << 3;\n      int g = ((p >> 5) & 63) << 2;\n      int b = (p & 31) << 3;\n      if (r > 60 && r > 2 * g && r > 2 * b) {\n        int column = x / 20;\n        cells[line * 16 + column]++;\n        total++;\n        sumX += x;\n      }\n    }\n  }\n  myCAM.CS_HIGH();\n  myCAM.clear_fifo_flag();\n\n  for (int line = 0; line < 8; line++) {\n    for (int column = 0; column < 16; column++) {\n      if (cells[line * 16 + column] > 150) Serial.print(\"#\");\n      else Serial.print(\".\");\n    }\n    Serial.println();\n  }\n  if (total < 200) Serial.println(\"no red ball\");\n  else {\n    long middle = sumX / total;\n    if (middle < W * 0.4) Serial.println(\"red ball: left\");\n    else if (middle > W * 0.6) Serial.println(\"red ball: right\");\n    else Serial.println(\"red ball: middle\");\n  }\n  delay(500);\n}\n"
+  }
+ },
+ "boards": []
+}

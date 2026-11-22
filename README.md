@@ -104,7 +104,8 @@ Plain JavaScript run inside the program's thread, where the Arduino functions (`
 or functions under `exports`. `linkSend(pin, proto, bytes)` / `linkReceive(pin, proto)` send and
 receive messages along a wire (an LED strip's pixels, a sensor's answer). `SPI` is there too
 (`transfer`, `transfer16`, `writeBytes`), and `setRef(x, v)` / `isRef(x)` fill in variables a sketch
-hands over with `&x`.
+hands over with `&x`. Macros of the real header that programs test with `#if` go under `defines`
+(`{ "OV2640_MINI_2MP": 1 }`, app 0.15.1 and newer).
 
 ## What's on the list
 

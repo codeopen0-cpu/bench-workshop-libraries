@@ -3,7 +3,7 @@
   "formatVersion": 1,
   "id": "sd-card",
   "name": "SD card module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Bench Workshop",
   "owner": "codeopen0-cpu",
   "description": "A micro-SD card module (SPI) for keeping data: log readings to a file, read them back. The card holds its files while the run lasts (stop the run and it's a fresh card; its files are listed in the run panel). Includes SD.h.",
@@ -11,7 +11,7 @@
   "needsApp": "0.4.0",
   "code": "device.js",
   "sketch": {
-    "SD.h": { "classes": ["File"], "exports": ["SD", "FILE_READ", "FILE_WRITE", "O_READ", "O_WRITE", "O_APPEND", "O_CREAT"], "file": "sketch/SD.js" }
+    "SD.h": { "classes": ["File"], "exports": ["SD", "FILE_READ", "FILE_WRITE", "O_READ", "O_WRITE", "O_APPEND", "O_CREAT", "O_TRUNC"], "file": "sketch/SD.js" }
   },
   "parts": [
     {
